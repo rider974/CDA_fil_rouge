@@ -1,10 +1,10 @@
 // src/entity/reference.ts
 import {  Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { Ressource } from './Ressource';
-import { SharingSession } from './SharingSession';
+import { Ressource } from './ressource';
+import { SharingSession } from './sharingSession';
 import type {Relation} from 'typeorm'
 
-@Entity()
+@Entity('reference')
 export class Reference {
   @PrimaryColumn('uuid')
   ressource_uuid!: string;

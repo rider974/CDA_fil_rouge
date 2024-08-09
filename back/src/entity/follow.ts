@@ -1,9 +1,9 @@
 // src/entity/follow.ts
 import {  Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm'
-import { User } from './User'
+import { User } from './user'
 import type {Relation} from 'typeorm'
 
-@Entity()
+@Entity('follow')
 export class Follow {
   @PrimaryColumn('uuid')
   user_uuid!: string;

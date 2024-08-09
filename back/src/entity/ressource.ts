@@ -1,13 +1,13 @@
 // src/entity/ressource.ts
 import {  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn } from 'typeorm';
-import { User } from './User';
-import { RessourceType } from './RessourceType';
-import { RessourceStatus } from './RessourceStatus';
-import { Comment } from './Comment';
-import { Tag } from './Tag';
-import { RessourceStatusHistory } from './RessourceStatusHistory';
+import { User } from './user';
+import { RessourceType } from './ressourceType';
+import { RessourceStatus } from './ressourceStatus';
+import { Comment } from './comment';
+import { Tag } from './tag';
+import { RessourceStatusHistory } from './ressourceStatusHistory';
 import type {Relation} from 'typeorm'
-@Entity()
+@Entity('ressources')
 export class Ressource {
   @PrimaryGeneratedColumn('uuid')
   ressource_uuid!: string;

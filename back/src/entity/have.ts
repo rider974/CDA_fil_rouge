@@ -1,10 +1,10 @@
 // src/entity/have.ts
 import {  Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm'
-import { Tag } from './Tag'
-import { Ressource } from './Ressource'
+import { Tag } from './tag'
+import { Ressource } from './ressource'
 import type {Relation} from 'typeorm'
 
-@Entity()
+@Entity('have')
 export class Have {
   @PrimaryColumn('uuid')
   tag_uuid!: string;

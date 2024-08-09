@@ -1,6 +1,6 @@
 // src/entity/tag.ts
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from 'typeorm'
-import { Ressource } from './Ressource'
+import { Ressource } from './ressource'
 import type {Relation} from 'typeorm'
 
 @Entity()

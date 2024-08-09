@@ -1,8 +1,8 @@
 // src/entity/sharingSession.ts
 import {  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
-import { User } from './User'
-import { Ressource } from './Ressource';
-import { Tag } from './Tag';
+import { User } from './user'
+import { Ressource } from './ressource';
+import { Tag } from './tag';
 import type {Relation} from 'typeorm'
 
 @Entity()

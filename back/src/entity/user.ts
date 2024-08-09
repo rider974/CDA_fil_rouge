@@ -1,10 +1,10 @@
 // src/entity/user.ts
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn } from 'typeorm';
-import { Role } from './Role';
-import { Ressource } from './Ressource';
-import { Comment } from './Comment';
-import { SharingSession } from './SharingSession';
-import { Follow } from './Follow';
+import { Role } from './role';
+import { Ressource } from './ressource';
+import { Comment } from './comment';
+import { SharingSession } from './sharingSession';
+import { Follow } from './follow';
 import type {Relation} from 'typeorm'
 
 @Entity('users')

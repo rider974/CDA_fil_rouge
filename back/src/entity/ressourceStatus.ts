@@ -1,9 +1,9 @@
 // src/entity/ressourceStatus.ts
 import {  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { Ressource } from './Ressource';
+import { Ressource } from './ressource';
 import type {Relation} from 'typeorm'
 
-@Entity()
+@Entity('ressources-status')
 export class RessourceStatus {
   @PrimaryGeneratedColumn('uuid')
   ressource_status_uuid!: string;
