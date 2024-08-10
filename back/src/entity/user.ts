@@ -1,13 +1,15 @@
 // src/entity/user.ts
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn, Unique } from 'typeorm';
 import { Role } from './role';
 import { Ressource } from './ressource';
 import { Comment } from './comment';
 import { SharingSession } from './sharingSession';
 import { Follow } from './follow';
-import type {Relation} from 'typeorm'
+import type { Relation } from 'typeorm';
 
 @Entity('users')
+@Unique(["username"])
+@Unique(["email"])
 export class User {
   @PrimaryGeneratedColumn('uuid')
   user_uuid!: string;

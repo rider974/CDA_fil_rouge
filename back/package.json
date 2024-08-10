@@ -10,7 +10,9 @@
     "typeorm": "typeorm-ts-node-esm"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "next": "14.2.5",
+    "nextjs-cors": "^2.2.0",
     "pg": "^8.12.0",
     "react": "^18",
     "react-dom": "^18",
@@ -19,6 +21,7 @@
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/node": "^20.14.14",
     "@types/react": "^18",
     "@types/react-dom": "^18",

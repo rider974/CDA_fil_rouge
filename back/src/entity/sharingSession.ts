@@ -5,7 +5,7 @@ import { Ressource } from './ressource';
 import { Tag } from './tag';
 import type {Relation} from 'typeorm'
 
-@Entity()
+@Entity('sharring-session')
 export class SharingSession {
   @PrimaryGeneratedColumn('uuid')
   sharing_session_uuid!: string;

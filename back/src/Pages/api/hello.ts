@@ -1,21 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { AppDataSource } from "../../data-source";
 import { User } from "@/entity/user";
+import { initializeDataSource } from '../../data-source';
 
-let dataSourceInitialized = false;
-
-async function initializeDataSource() {
-  if (!dataSourceInitialized) {
-    try {
-      await AppDataSource.initialize();
-      console.log("DataSource initialized");
-      dataSourceInitialized = true;
-    } catch (error) {
-      console.error("Error during DataSource initialization:", error);
-      throw error; 
-    }
-  }
-}
 
 async function getServerSideProps() {
   const toto = await AppDataSource.manager.findOneBy(User, { username: "dzano" });

@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { Ressource } from './ressource'
 import type {Relation} from 'typeorm'
 
-@Entity()
+@Entity('tags')
 export class Tag {
   @PrimaryGeneratedColumn('uuid')
   tag_uuid!: string;
