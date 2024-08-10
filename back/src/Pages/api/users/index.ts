@@ -28,7 +28,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       break;
 
     case "PUT":
-        await userController.updateUserPut(req,res);
+        await userController.replaceUser(req, res);
+        return;  
+
     case "PATCH":
       if (!req.query.user_uuid) {
         return res.status(400).json({ error: "User UUID is required for update" });

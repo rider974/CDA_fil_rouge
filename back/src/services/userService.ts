@@ -4,15 +4,15 @@ import { Role } from "@/entity/role";
 import { EntityNotFoundError, UniqueConstraintViolationError } from "../errors/errors"; 
 
 interface CreateUserDTO {
-    role: Role;
     username: string;
     email: string;
     password: string;
-    is_active?: boolean; 
-    role_uuid: string; 
+    is_active: boolean; 
+    role: Role;
 }
 
 export class UserService {
+
     async getAllUsers(): Promise<User[]> {
         return await AppDataSource.manager.find(User, {
             relations: ['role'], 
@@ -37,35 +37,33 @@ export class UserService {
         }
     }
 
+    async getRoleById(role_uuid: string): Promise<Role | null> {
+        return await AppDataSource.manager.findOne(Role, { where: { role_uuid } });
+    }
+
     async createUser(userData: CreateUserDTO): Promise<User> {
         try {
-            // Vérifiez si le rôle existe
-            const role = await AppDataSource.manager.findOne(Role, { where: { role_uuid: userData.role_uuid } });
+            const role = await this.getRoleById(userData.role.role_uuid);
             if (!role) {
-                throw new EntityNotFoundError('Role', userData.role_uuid);
+                throw new EntityNotFoundError('Role', userData.role.role_uuid);
             }
-
-            // Vérifiez si le username existe déjà
+    
             const existingUserByUsername = await this.getUserByUsername(userData.username);
             if (existingUserByUsername) {
                 throw new UniqueConstraintViolationError('Username already exists');
             }
-
-            // Vérifiez si l'email existe déjà
+    
             const existingUserByEmail = await AppDataSource.manager.findOne(User, { where: { email: userData.email } });
             if (existingUserByEmail) {
                 throw new UniqueConstraintViolationError('Email already exists');
             }
-
-            // Créez l'utilisateur en associant le rôle
+    
             const user = AppDataSource.manager.create(User, {
                 ...userData,
-                role: role 
+                role 
             });
-
-            // Sauvegardez l'utilisateur
+    
             return await AppDataSource.manager.save(user);
-
         } catch (error) {
             if (error instanceof UniqueConstraintViolationError || error instanceof EntityNotFoundError) {
                 throw error; 
@@ -75,18 +73,44 @@ export class UserService {
         }
     }
 
-    async updateUser(user_uuid: string, userData: CreateUserDTO): Promise<User | null> {
+    async replaceUser(user_uuid: string, userData: CreateUserDTO): Promise<User | null> {
         try {
-            // Si le role_uuid est présent, vérifiez si le rôle existe
-            if (userData.role_uuid) {
-                const role = await AppDataSource.manager.findOne(Role, { where: { role_uuid: userData.role_uuid } });
-                if (!role) {
-                    throw new EntityNotFoundError('Role', userData.role_uuid);
-                }
-                userData.role = role; // Associez le rôle trouvé
+            const existingUser = await this.getUserById(user_uuid);
+            if (!existingUser) {
+                throw new EntityNotFoundError('User', user_uuid);
+            }
+    
+            const role = await this.getRoleById(userData.role.role_uuid);
+            if (!role) {
+                throw new EntityNotFoundError('Role', userData.role.role_uuid);
+            }
+    
+            const updatedUser = await AppDataSource.manager.save(User, { ...existingUser, ...userData, role });
+            return updatedUser;
+        } catch (error) {
+            if (error instanceof UniqueConstraintViolationError || error instanceof EntityNotFoundError) {
+                throw error;
+            }
+            console.error("Error replacing user:", error);
+            throw new Error('An error occurred while replacing the user');
+        }
+    }
+
+    async updateUserFields(user_uuid: string, userData: Partial<User>): Promise<User | null> {
+        try {
+            const existingUser = await this.getUserById(user_uuid);
+            if (!existingUser) {
+                throw new EntityNotFoundError('User', user_uuid);
             }
 
-            // Vérifiez si le username est déjà utilisé par un autre utilisateur
+            if (userData.role && userData.role.role_uuid) {
+                const role = await this.getRoleById(userData.role.role_uuid);
+                if (!role) {
+                    throw new EntityNotFoundError('Role', userData.role.role_uuid);
+                }
+                userData.role = role;
+            }
+
             if (userData.username) {
                 const existingUserByUsername = await this.getUserByUsername(userData.username);
                 if (existingUserByUsername && existingUserByUsername.user_uuid !== user_uuid) {
@@ -94,7 +118,6 @@ export class UserService {
                 }
             }
 
-            // Vérifiez si l'email est déjà utilisé par un autre utilisateur
             if (userData.email) {
                 const existingUserByEmail = await AppDataSource.manager.findOne(User, { where: { email: userData.email } });
                 if (existingUserByEmail && existingUserByEmail.user_uuid !== user_uuid) {
@@ -102,18 +125,18 @@ export class UserService {
                 }
             }
 
-            // Mettez à jour l'utilisateur
             await AppDataSource.manager.update(User, { user_uuid }, userData);
             return await this.getUserById(user_uuid);
-
         } catch (error) {
             if (error instanceof UniqueConstraintViolationError || error instanceof EntityNotFoundError) {
-                throw error; 
+                throw error;
             }
-            console.error("Error updating user:", error);
-            throw new Error('An error occurred while updating the user'); 
+            console.error("Error updating user fields:", error);
+            throw new Error('An error occurred while updating the user fields');
         }
     }
+    
+    
 
     async deleteUser(user_uuid: string): Promise<boolean> {
         try {
@@ -125,9 +148,4 @@ export class UserService {
         }
     }
 
-    // Méthode auxiliaire pour vérifier si un rôle existe
-    async verifyRole(role_uuid: string): Promise<boolean> {
-        const role = await AppDataSource.manager.findOne(Role, { where: { role_uuid } });
-        return !!role; 
-    }
 }

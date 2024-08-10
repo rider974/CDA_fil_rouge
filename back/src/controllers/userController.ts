@@ -1,21 +1,53 @@
 // controllers/userController.ts
 import { NextApiRequest, NextApiResponse } from "next";
 import { UserService } from "../services/userService";
+import { sanitize } from 'sanitizer';
+import { hashPassword } from '../utils/authUtils';
+import Joi from 'joi';
 
-
-
+const userSchema = Joi.object({
+  role_uuid: Joi.string().required(),
+  username: Joi.string().required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+  is_active: Joi.boolean().required(),
+});
 
 export class UserController {
   private userService = new UserService();
 
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  private sanitizeInput(input: string): string {
+    return sanitize(input.trim());
+  }
+
   async createUser(req: NextApiRequest, res: NextApiResponse) {
     try {
-      if (!req.body.role_uuid) {
-        res.status(400).json({ error: "role_uuid is required" });
-        return;
+      const { error } = userSchema.validate(req.body);
+      if (error) {
+        return res.status(400).json({ error: error.details[0].message });
       }
 
-      const newUser = await this.userService.createUser(req.body);
+      const { role_uuid, username, email, password, is_active } = req.body;
+
+      const role = await this.userService.getRoleById(role_uuid);
+      if (!role) {
+        return res.status(404).json({ error: "Role not found" });
+      }
+
+      const hashedPassword = await hashPassword(password);
+
+      const newUser = await this.userService.createUser({
+        role,
+        username: this.sanitizeInput(username),
+        email: this.sanitizeInput(email),
+        password: hashedPassword,
+        is_active
+      });
       res.status(201).json(newUser);
     } catch (error) {
       console.error("Error creating user:", error);
@@ -35,7 +67,7 @@ export class UserController {
 
   async getUserById(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { user_uuid } = req.query;
+      const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
       if (typeof user_uuid !== 'string') {
         return res.status(400).json({ error: "Invalid user UUID" });
       }
@@ -54,7 +86,7 @@ export class UserController {
 
   async getUserByUsername(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { username } = req.query;
+      const username = this.sanitizeInput(req.query.username as string);
       if (typeof username !== 'string') {
         return res.status(400).json({ error: "Invalid username" });
       }
@@ -73,21 +105,26 @@ export class UserController {
 
   async updateUserPatch(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { user_uuid } = req.query;
+      const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
+      const { role_uuid, username, email, password } = req.body;
+
       if (typeof user_uuid !== 'string') {
         return res.status(400).json({ error: "Invalid user UUID" });
       }
 
-      if (req.body.role_uuid) {
-        // Vérifiez si le rôle existe avant de mettre à jour l'utilisateur
-        const roleExists = await this.userService.verifyRole(req.body.role_uuid);
-        console.log('test sur roleExists ' + roleExists);
+      if (role_uuid) {
+        const roleExists = await this.userService.getRoleById(role_uuid);
         if (!roleExists) {
           return res.status(404).json({ error: "Role not found" });
         }
       }
 
-      const updatedUser = await this.userService.updateUser(user_uuid, req.body);
+      const updatedFields: any = {};
+      if (username) updatedFields.username = this.sanitizeInput(username);
+      if (email) updatedFields.email = this.sanitizeInput(email);
+      if (password) updatedFields.password = await hashPassword(password);
+
+      const updatedUser = await this.userService.updateUserFields(user_uuid, updatedFields);
       if (updatedUser) {
         res.status(200).json(updatedUser);
       } else {
@@ -99,30 +136,44 @@ export class UserController {
     }
   }
 
-  
-  async updateUserPut(req: NextApiRequest, res: NextApiResponse) {
+  async replaceUser(req: NextApiRequest, res: NextApiResponse) {
     try {
-      console.log(req.body);
+      const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
+      const { username, email, password, is_active, role } = req.body;
 
-      if(!req.body.username || !req.body.email || !req.body.password || !req.body.is_active || !req.body.role){
-
-        return res.status(400).json({ error: "tout les champs sont requis" });
+      if (!user_uuid || typeof user_uuid !== 'string') {
+        return res.status(400).json({ error: "User UUID is required and must be a string" });
       }
 
-      if (typeof req.body.user_uuid !== 'string') {
-        return res.status(400).json({ error: "Invalid user UUID" });
+      if (!username || typeof username !== 'string') {
+        return res.status(400).json({ error: "username is required and must be a string" });
+      }
+      if (!email || typeof email !== 'string' || !this.isValidEmail(email)) {
+        return res.status(400).json({ error: "A valid email is required" });
+      }
+      if (!password || typeof password !== 'string') {
+        return res.status(400).json({ error: "password is required and must be a string" });
+      }
+      if (typeof is_active !== 'boolean') {
+        return res.status(400).json({ error: "is_active is required and must be a boolean" });
       }
 
-      if (req.body.role_uuid) {
-        // Vérifiez si le rôle existe avant de mettre à jour l'utilisateur
-        const roleExists = await this.userService.verifyRole(req.body.role_uuid);
-        console.log('test sur roleExists ' + roleExists);
+      if (role?.role_uuid) {
+        const roleExists = await this.userService.getRoleById(role.role_uuid);
         if (!roleExists) {
           return res.status(404).json({ error: "Role not found" });
         }
       }
 
-      const updatedUser = await this.userService.updateUser(req.body.user_uuid, req.body);
+      const hashedPassword = await hashPassword(password);
+
+      const updatedUser = await this.userService.replaceUser(user_uuid, {
+        username: this.sanitizeInput(username),
+        email: this.sanitizeInput(email),
+        password: hashedPassword,
+        is_active,
+        role
+      });
       if (updatedUser) {
         res.status(200).json(updatedUser);
       } else {
@@ -136,14 +187,14 @@ export class UserController {
 
   async deleteUser(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { user_uuid } = req.query;
+      const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
       if (typeof user_uuid !== 'string') {
         return res.status(400).json({ error: "Invalid user UUID" });
       }
 
       const success = await this.userService.deleteUser(user_uuid);
       if (success) {
-        res.status(204).end(); 
+        res.status(204).end();
       } else {
         res.status(404).json({ error: "User not found" });
       }
