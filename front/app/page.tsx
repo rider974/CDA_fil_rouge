@@ -21,7 +21,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const res = await fetch("http://localhost:3001/api/users");
+        const res = await fetch("/api/users");
         if (!res.ok) {
           throw new Error('Network response was not ok');
         }
