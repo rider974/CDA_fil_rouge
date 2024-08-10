@@ -13,6 +13,7 @@ const userSchema = Joi.object({
   is_active: Joi.boolean().required(),
 });
 
+
 export class UserController {
   private userService = new UserService();
 
