@@ -23,11 +23,11 @@ jobs:
           script: |
             sudo docker stop $(sudo docker ps -a -q) || true
             sudo docker rm $(sudo docker ps -a -q) || true
-            if [ ! -d ~/BeginnersAppDev/CDA_fil_rouge ]; then
-              mkdir -p ~/BeginnersAppDev
-              git clone --branch test https://github.com/LegrandThomas/CDA_fil_rouge.git ~/BeginnersAppDev/CDA_fil_rouge
+            if [ ! -d ~/beginnersAppDev/CDA_fil_rouge ]; then
+              mkdir -p ~/b
+              git clone --branch test https://github.com/LegrandThomas/CDA_fil_rouge.git ~/b/CDA_fil_rouge
             else
-              cd ~/BeginnersAppDev/CDA_fil_rouge
+              cd ~/b/CDA_fil_rouge
               git pull origin test
             fi
 
@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            cd ~/BeginnersAppDev/CDA_fil_rouge
+            cd ~/b/CDA_fil_rouge
             sudo docker-compose down
             sudo docker-compose build --parallel
 
@@ -56,5 +56,5 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            cd ~/BeginnersAppDev/CDA_fil_rouge
+            cd ~/b/CDA_fil_rouge
             sudo docker-compose up -d
