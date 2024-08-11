@@ -7,9 +7,11 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "next lint",
-    "typeorm": "typeorm-ts-node-esm",
-    "migration:generate": "npm run typeorm -- migration:generate ./src/migration/InitialMigration -d ./data-source.ts",
-    "migration:run": "npm run typeorm -- migration:run -d ./data-source.ts"
+    "typeorm": "typeorm",
+    "migration:generate": "typeorm migration:generate -n new_migration",
+    "migration:run": "typeorm migration:run",
+    "migration:revert": "typeorm migration:revert",
+    "seed:roles": "ts-node src/seeder/seedRoles.ts"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
