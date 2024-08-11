@@ -28,8 +28,6 @@ jobs:
               git clone --branch ci-test-repo https://github.com/rider974/CDA_fil_rouge.git ~/beginnersAppDev/CDA_fil_rouge
             else
               cd ~/beginnersAppDev/CDA_fil_rouge
-              git fetch
-              git checkout ci-test-repo
               git pull origin ci-test-repo
             fi
 
