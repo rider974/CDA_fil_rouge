@@ -7,11 +7,9 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "next lint",
-    "typeorm": "ts-node ts-node/esm --require tsconfig-paths/register ./node_modules/.bin/typeorm",
-    "migration:generate": "npm run typeorm migration:generate -n new_migration -d src/data-source.ts",
-    "migration:run": "npm run typeorm migration:run -d src/data-source.ts",
-    "migration:revert": "npm run typeorm migration:revert -d src/data-source.ts",
-    "seed:roles": "ts-node --loader ts-node/esm --require tsconfig-paths/register src/seeder/seedRoles.ts"
+    "typeorm": "typeorm-ts-node-esm",
+    "migration:generate": "npm run typeorm -- migration:generate ./src/migration/InitialMigration -d ./data-source.ts",
+    "migration:run": "npm run typeorm -- migration:run -d ./data-source.ts"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -25,20 +23,25 @@
     "react-dom": "^18",
     "reflect-metadata": "^0.2.2",
     "sanitizer": "^0.1.3",
-    "ts-node": "^10.9.2",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
+    "@types/chai": "^4.3.17",
     "@types/cors": "^2.8.17",
     "@types/joi": "^17.2.3",
+    "@types/mocha": "^10.0.7",
     "@types/node": "^20.14.14",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/sanitizer": "^0.0.31",
+    "chai": "^5.1.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
-    "typescript": "^5"
+    "mocha": "^10.7.3",
+    "sinon": "^18.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
   }
 }
