@@ -11,7 +11,7 @@ COPY . .
 RUN npm run build
 
 # Exécuter les migrations avant de démarrer l'application
-RUN npx ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:run -d src/data-source.ts
+RUN node --loader ts-node/esm --require tsconfig-paths/register ./node_modules/.bin/typeorm migration:run -d src/data-source.ts
 
 # Exécuter le seeder avant de démarrer l'application
 RUN ts-node src/seeder/seedRoles.ts
