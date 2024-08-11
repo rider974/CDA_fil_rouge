@@ -3,7 +3,7 @@ name: Build, Run and Finalize Deploy
 on:
   push:
     branches:
-      - ci/test-repo-pascal
+      - ci-test-repo
 
 jobs:
   deploy-on-vps:
@@ -25,10 +25,10 @@ jobs:
             sudo docker rm $(sudo docker ps -a -q) || true
             if [ ! -d ~/beginnersAppDev/CDA_fil_rouge ]; then
               mkdir -p ~/beginnersAppDev
-              git clone --branch ci/test-repo-pascal https://github.com/rider974/CDA_fil_rouge.git ~/beginnersAppDev/CDA_fil_rouge
+              git clone --branch ci-test-repo https://github.com/rider974/CDA_fil_rouge.git ~/beginnersAppDev/CDA_fil_rouge
             else
               cd ~/beginnersAppDev/CDA_fil_rouge
-              git pull origin ci/test-repo-pascal
+              git pull origin ci-test-repo
             fi
 
   build-and-run-on-vps:
