@@ -1,14 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { AppDataSource } from '../../../data-source';
 import { RoleService } from '@/services/roleService';
 import { RoleController } from '@/controllers/roleController';
+import { initializeDataSource } from '../../../data-source';
 import Cors from 'nextjs-cors';
 
 const roleService = new RoleService();
 const roleController = new RoleController(roleService);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await AppDataSource.initialize(); 
+  await initializeDataSource();
   await Cors(req, res, {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     origin: 'http://localhost:3000'
@@ -16,7 +16,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   switch (req.method) {
     case 'GET':
-      return roleController.getAllRoles(req, res);
+        // Check if the request is for a single role by ID or all roles
+        if (req.query.role_uuid) {
+            return roleController.getRoleById(req, res);
+        } else {
+            return roleController.getAllRoles(req, res);
+        }
     case 'POST':
       return roleController.createRole(req, res);
     case 'PUT':

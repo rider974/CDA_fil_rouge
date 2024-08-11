@@ -15,6 +15,29 @@ export class RoleService {
         return await AppDataSource.manager.find(Role);
     }
 
+     /**
+     * Retrieves a role by its UUID.
+     * @param role_uuid - UUID of the role to be retrieved.
+     * @returns A promise that resolves to the role if found, null otherwise.
+     * @throws EntityNotFoundError - If the role with the given UUID does not exist.
+     */
+     async getRoleById(role_uuid: string): Promise<Role | null> {
+      try {
+          // Find the role by its UUID
+          const role = await AppDataSource.manager.findOne(Role, { where: { role_uuid } });
+          if (!role) {
+              throw new EntityNotFoundError('Role', role_uuid);
+          }
+          return role;
+      } catch (error) {
+          if (error instanceof EntityNotFoundError) {
+              throw error;
+          }
+          console.error("Error fetching role by ID:", error);
+          throw new Error('An error occurred while fetching the role');
+      }
+  }
+
     /**
      * Creates a new role in the database.
      * Checks if the role name already exists and throws an error if it does.

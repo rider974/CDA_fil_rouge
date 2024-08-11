@@ -67,6 +67,36 @@ export class RoleController {
   }
 
   /**
+     * Retrieves a role by its UUID.
+     * @param req - The API request object.
+     * @param res - The API response object.
+     * @returns The role if found or an error response.
+     */
+  async getRoleById(req: NextApiRequest, res: NextApiResponse) {
+    try {
+        // Validate the UUID
+        const { role_uuid } = req.query;
+        if (typeof role_uuid !== 'string') {
+            return res.status(400).json({ error: "Invalid role UUID" });
+        }
+
+        // Retrieve the role
+        const role = await this.roleService.getRoleById(role_uuid);
+        if (role) {
+            return res.status(200).json(role);
+        } else {
+            return res.status(404).json({ error: "Role not found" });
+        }
+    } catch (error) {
+        if (error instanceof EntityNotFoundError) {
+            return res.status(404).json({ error: error.message });
+        }
+        console.error("Error retrieving role by ID:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+  /**
    * Replaces an existing role with new data.
    * @param req - The API request object.
    * @param res - The API response object.
