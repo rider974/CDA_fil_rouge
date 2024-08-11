@@ -3,7 +3,7 @@ name: Build, Run and Finalize Deploy
 on:
   push:
     branches:
-      - test
+      - ci/test-repo-pascal
 
 jobs:
   deploy-on-vps:
