@@ -25,7 +25,7 @@ jobs:
             sudo docker rm $(sudo docker ps -a -q) || true
             if [ ! -d ~/beginnersAppDev/CDA_fil_rouge ]; then
               mkdir -p ~/beginnersAppDev
-              git clone --branch ci/test-repo-pascal https://github.com/rider974/CDA_fil_rouge ~/beginnersAppDev/CDA_fil_rouge
+              git clone --branch ci/test-repo-pascal https://github.com/rider974/CDA_fil_rouge.git ~/beginnersAppDev/CDA_fil_rouge
             else
               cd ~/beginnersAppDev/CDA_fil_rouge
               git pull origin ci/test-repo-pascal
