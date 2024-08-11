@@ -10,11 +10,14 @@ COPY . .
 
 RUN npm run build
 
-# Exécuter les migrations avant de démarrer l'application
-RUN node --loader ts-node/esm --require tsconfig-paths/register ./node_modules/.bin/typeorm migration:run -d src/data-source.ts
+# Installer ts-node et typeorm globalement
+RUN npm install -g ts-node@latest typeorm@latest tsconfig-paths@latest
 
-# Exécuter le seeder avant de démarrer l'application
-RUN ts-node src/seeder/seedRoles.ts
+# Exécuter les migrations
+RUN npx ts-node --require tsconfig-paths/register run-migrations.ts || true
+
+# Exécuter le seeder
+RUN npx ts-node --require tsconfig-paths/register src/seeder/seedRoles.ts || true
 
 EXPOSE 3001
 

@@ -7,11 +7,11 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "next lint",
-    "typeorm": "node --loader ts-node/esm --require tsconfig-paths/register ./node_modules/.bin/typeorm",
-    "migration:generate": "npm run typeorm migration:generate src/migration -d src/data-source.ts",
+    "typeorm": "ts-node ts-node/esm --require tsconfig-paths/register ./node_modules/.bin/typeorm",
+    "migration:generate": "npm run typeorm migration:generate -n new_migration -d src/data-source.ts",
     "migration:run": "npm run typeorm migration:run -d src/data-source.ts",
-    "migration:revert": "npm run typeorm migration:revert",
-    "seed:roles": "ts-node src/seeder/seedRoles.ts"
+    "migration:revert": "npm run typeorm migration:revert -d src/data-source.ts",
+    "seed:roles": "ts-node --loader ts-node/esm --require tsconfig-paths/register src/seeder/seedRoles.ts"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
