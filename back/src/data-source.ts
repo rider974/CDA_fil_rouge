@@ -13,6 +13,7 @@ import {Refer} from "./entity/refer"
 import {RessourceType} from "./entity/ressourceType"
 import {SharingSession} from "./entity/sharingSession"
 import {Reference} from "./entity/reference"
+import {InitMigration1723112057042} from './migration/1723112057042-initMigration'
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -21,10 +22,10 @@ export const AppDataSource = new DataSource({
     username: "user_beginners",
     password: "pass_beginners",
     database: "db_beginners",
-    synchronize: true,
+    synchronize: false,
     logging: "all",
     entities: [User, Role, Comment, Tag, Have, Ressource, RessourceStatus, RessourceStatusHistory, Follow, Refer, Reference, RessourceType, SharingSession],
-    migrations: ["./migration/*.{js,ts}"],
+    migrations: [InitMigration1723112057042],
     subscribers: [],
 })
 

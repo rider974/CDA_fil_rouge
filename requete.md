@@ -26,7 +26,7 @@ VALUES (
     true, 
     NOW(), 
     NOW(), 
-    (SELECT role_uuid FROM role WHERE role_name = 'membre' ORDER BY created_at LIMIT 1)
+    (SELECT role_uuid FROM roles WHERE role_name = 'membre' ORDER BY created_at LIMIT 1)
 );
 
 INSERT INTO users (user_uuid, username, email, password, is_active, created_at, updated_at, role_uuid)

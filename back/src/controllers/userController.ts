@@ -1,9 +1,9 @@
-// controllers/userController.ts
 import { NextApiRequest, NextApiResponse } from "next";
 import { UserService } from "../services/userService";
 import { sanitize } from 'sanitizer';
 import { hashPassword } from '../utils/authUtils';
 import Joi from 'joi';
+import { EntityNotFoundError, UniqueConstraintViolationError } from "@/errors/errors";
 
 const userSchema = Joi.object({
   role_uuid: Joi.string().required(),
@@ -13,49 +13,81 @@ const userSchema = Joi.object({
   is_active: Joi.boolean().required(),
 });
 
-
 export class UserController {
   private userService = new UserService();
 
+  /**
+   * Validates whether the provided email follows a standard format.
+   * @param email - The email string to validate.
+   * @returns Boolean indicating whether the email is valid.
+   */
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
 
+  /**
+   * Sanitizes input strings to remove potential harmful content.
+   * @param input - The input string to sanitize.
+   * @returns The sanitized string.
+   */
   private sanitizeInput(input: string): string {
     return sanitize(input.trim());
   }
 
+  /**
+   * Handles the creation of a new user.
+   * Validates the request body, sanitizes input, and hashes the password before saving the user.
+   * @param req - The API request object.
+   * @param res - The API response object.
+   * @returns The created user or an error response.
+   */
   async createUser(req: NextApiRequest, res: NextApiResponse) {
     try {
-      const { error } = userSchema.validate(req.body);
-      if (error) {
-        return res.status(400).json({ error: error.details[0].message });
-      }
+        const { error } = userSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ error: error.details[0].message });
+        }
 
-      const { role_uuid, username, email, password, is_active } = req.body;
+        const { role_uuid, username, email, password, is_active } = req.body;
 
-      const role = await this.userService.getRoleById(role_uuid);
-      if (!role) {
-        return res.status(404).json({ error: "Role not found" });
-      }
+        const role = await this.userService.getRoleById(role_uuid);
+        if (!role) {
+            return res.status(404).json({ error: "Role not found" });
+        }
 
-      const hashedPassword = await hashPassword(password);
+        const hashedPassword = await hashPassword(password);
 
-      const newUser = await this.userService.createUser({
-        role,
-        username: this.sanitizeInput(username),
-        email: this.sanitizeInput(email),
-        password: hashedPassword,
-        is_active
-      });
-      res.status(201).json(newUser);
+        const newUser = await this.userService.createUser({
+            role,
+            username: this.sanitizeInput(username),
+            email: this.sanitizeInput(email),
+            password: hashedPassword,
+            is_active
+        });
+
+        return res.status(201).json(newUser);
+
     } catch (error) {
-      console.error("Error creating user:", error);
-      res.status(500).json({ error: "Error creating user" });
-    }
-  }
+        if (error instanceof UniqueConstraintViolationError) {
+            return res.status(409).json({ error: error.message });
+        }
 
+        if (error instanceof EntityNotFoundError) {
+            return res.status(404).json({ error: error.message });
+        }
+
+        console.error("Error creating user:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+  /**
+   * Retrieves all users from the database.
+   * @param req - The API request object.
+   * @param res - The API response object.
+   * @returns A list of users or an error response.
+   */
   async getAllUsers(req: NextApiRequest, res: NextApiResponse) {
     try {
       const users = await this.userService.getAllUsers();
@@ -66,6 +98,12 @@ export class UserController {
     }
   }
 
+  /**
+   * Retrieves a user by their UUID.
+   * @param req - The API request object.
+   * @param res - The API response object.
+   * @returns The user if found, or an error response if not.
+   */
   async getUserById(req: NextApiRequest, res: NextApiResponse) {
     try {
       const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
@@ -85,6 +123,12 @@ export class UserController {
     }
   }
 
+  /**
+   * Retrieves a user by their username.
+   * @param req - The API request object.
+   * @param res - The API response object.
+   * @returns The user if found, or an error response if not.
+   */
   async getUserByUsername(req: NextApiRequest, res: NextApiResponse) {
     try {
       const username = this.sanitizeInput(req.query.username as string);
@@ -104,6 +148,12 @@ export class UserController {
     }
   }
 
+  /**
+   * Updates specific fields of a user by their UUID.
+   * @param req - The API request object.
+   * @param res - The API response object.
+   * @returns The updated user or an error response if not found.
+   */
   async updateUserPatch(req: NextApiRequest, res: NextApiResponse) {
     try {
       const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
@@ -137,6 +187,12 @@ export class UserController {
     }
   }
 
+  /**
+   * Replaces a user with new data.
+   * @param req - The API request object.
+   * @param res - The API response object.
+   * @returns The updated user or an error response if not found.
+   */
   async replaceUser(req: NextApiRequest, res: NextApiResponse) {
     try {
       const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
@@ -186,6 +242,12 @@ export class UserController {
     }
   }
 
+  /**
+   * Deletes a user by their UUID.
+   * @param req - The API request object.
+   * @param res - The API response object.
+   * @returns A 204 status if deletion is successful, or an error response if not found.
+   */
   async deleteUser(req: NextApiRequest, res: NextApiResponse) {
     try {
       const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
