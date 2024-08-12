@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { initializeDataSource } from '../../../data-source';
-import { Ressources_typesController } from "@/controllers/Ressources_typesController";
-import { Ressources_typesService } from "@/services/Ressources_typesService";
+import { Ressources_typesController } from "@/controllers/ressources_typesController";
+import { Ressources_typesService } from "@/services/ressources_typesService";
 import Cors from 'nextjs-cors';
 
 const ressources_typesService = new Ressources_typesService();
