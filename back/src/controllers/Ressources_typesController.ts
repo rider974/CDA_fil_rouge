@@ -4,7 +4,7 @@ import Joi from 'joi';
 import { EntityNotFoundError, UniqueConstraintViolationError } from '../errors/errors';
 
 // Schema for validating role creation and updates
-const roleSchema = Joi.object({
+const ressources_typesSchema = Joi.object({
   type_name: Joi.string().required(),
 });
 
