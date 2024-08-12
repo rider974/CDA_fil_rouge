@@ -1,5 +1,5 @@
 import {  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { User } from './User'
+import { User } from './user'
 import type {Relation} from 'typeorm'
 @Entity()
 export class Role {
