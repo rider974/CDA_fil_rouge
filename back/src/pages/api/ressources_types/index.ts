@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { initializeDataSource } from '../../../data-source';
+import { initializeDataSource } from '@/data-source';
 import { Ressources_typesController } from "@/controllers/ressources_typesController";
 import { Ressources_typesService } from "@/services/ressources_typesService";
 import Cors from 'nextjs-cors';
@@ -9,34 +9,36 @@ const ressources_typesController = new Ressources_typesController(ressources_typ
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await initializeDataSource();
+
   await Cors(req, res, {
     methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
-    origin: 'http://localhost:3000'
+    origin: 'http://localhost:3000',
   });
-
-  
 
   switch (req.method) {
     case "POST":
-      
+      // Appelle la méthode pour créer un type de ressource
+      await ressources_typesController.createRessources_types(req, res);
       break;
     
     case "GET":
-     
+      // Récupère tous les types de ressources ou un type par UUID
+      if (req.query.ressource_type_uuid) {
+        await ressources_typesController.getRessources_typesById(req, res);
+      } else {
         await ressources_typesController.getAllRessources_types(req, res);
-      
+      }
       break;
 
     case "PUT":
-       
-        return;  
-
     case "PATCH":
-     
+      // Met à jour un type de ressource par UUID
+      await ressources_typesController.replaceRessources_types(req, res);
       break;
 
     case "DELETE":
-     
+      // Supprime un type de ressource par UUID
+      await ressources_typesController.deleteRessources_types(req, res);
       break;
 
     default:
