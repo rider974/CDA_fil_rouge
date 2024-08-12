@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Ressources_typesService } from '@/services/Ressources_typesService';
+import { Ressources_typesService } from '@/services/ressources_typesService';
 import Joi from 'joi';
 import { EntityNotFoundError, UniqueConstraintViolationError } from '../errors/errors';
 
