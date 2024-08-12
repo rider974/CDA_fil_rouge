@@ -1,11 +1,19 @@
 // src/entity/user.ts
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn, Unique } from 'typeorm';
-import { Role } from './role';
 import { Ressource } from './ressource';
 import { Comment } from './comment';
 import { SharingSession } from './sharingSession';
 import { Follow } from './follow';
 import type { Relation } from 'typeorm';
+
+
+export enum Role {
+  ADMIN = "admin",
+  MODERATOR = "moderator",
+  MEMBER = "member",
+  VISITOR = "visitor"
+}
+
 
 @Entity('users')
 @Unique(["username"])
@@ -32,9 +40,12 @@ export class User {
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updated_at!: Date;
 
-  @ManyToOne(() => Role, (role) => role.users)
-  @JoinColumn({ name: 'role_uuid' })
-  role!: Relation<Role>;
+  @Column({
+    type: "enum",
+    enum: Role,
+  })
+  role!: Role
+
 
   @OneToMany(() => Ressource, (ressource) => ressource.user)
   ressources!: Relation<Ressource[]>;

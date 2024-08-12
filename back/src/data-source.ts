@@ -1,7 +1,6 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 import {User} from "./entity/user"
-import {Role} from "./entity/role"
 import {Comment} from "./entity/comment"
 import {Have} from "./entity/have"
 import {Ressource} from "./entity/ressource"
@@ -23,7 +22,7 @@ export const AppDataSource = new DataSource({
     database: "db_beginners",
     synchronize: true,
     logging: "all",
-    entities: [User, Role, Comment, Tag, Have, Ressource, RessourceStatus, RessourceStatusHistory, Follow, Refer, Reference, RessourceType, SharingSession],
+    entities: [User, Comment, Tag, Have, Ressource, RessourceStatus, RessourceStatusHistory, Follow, Refer, Reference, RessourceType, SharingSession],
     migrations: ["./migration/*.{js,ts}"],
     subscribers: [],
 })
