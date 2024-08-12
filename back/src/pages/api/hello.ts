@@ -2,7 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import {AppDataSource} from "../../data-source"
 import User from "@/entity/user";
-import App from "../_app";
 
 
  async function getServerSideProps() {
