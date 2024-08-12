@@ -36,12 +36,12 @@ jobs:
             # Vérifier si le répertoire existe, sinon le cloner
             if [ ! -d ~/beginnersAppDev/CDA_fil_rouge ]; then
               mkdir -p ~/beginnersAppDev
-              git clone --branch test ${{ secrets.REPO_GIT }} ~/beginnersAppDev/CDA_fil_rouge
+              git clone --branch develop ${{ secrets.REPO_GIT }} ~/beginnersAppDev/CDA_fil_rouge
             else
               cd ~/beginnersAppDev/CDA_fil_rouge
               # Réinitialiser les changements locaux à l'état de la branche distante
               git fetch origin
-              git reset --hard origin/test
+              git reset --hard origin/develop
             fi
 
   build-and-run-on-vps:
