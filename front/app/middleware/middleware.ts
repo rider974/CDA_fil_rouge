@@ -12,4 +12,4 @@ export default withAuth({
   },
 });
 
-export const config = { matcher: ["/hello-page", "/autres-pages-protegees"] };
+export const config = { matcher: ["/hello-page", "/dashboard/:path*"] }; // Protégez les pages de tableau de bord

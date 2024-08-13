@@ -6,6 +6,7 @@ import { User as AppUser } from "../../../../back/src/entity/user";
 import { comparePassword } from "../../../../back/src/utils/authUtils"; 
 import { AppDataSource } from "../../../../back/src/data-source"; 
 
+// import de nos entités et utilitaires du backend pour les utiliser avec NextAuth.js.
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -37,15 +38,9 @@ export const authOptions: NextAuthOptions = {
             id: user.user_uuid,
             name: user.username,
             email: user.email,
-            is_active: user.is_active,
+            role: user.role.role_name,  
             createdAt: user.created_at,
-            updatedAt: user.updated_at,
-            role: user.role,
-            ressources: user.ressources,
-            comments: user.comments,
-            sharingSessions: user.sharingSessions,
-            following: user.following,
-            followers: user.followers,
+            provider: 'credentials',  
           };
         }
 
@@ -58,28 +53,33 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
+      // Si un utilisateur est présent lors de la connexion, ajoute ses informations au token
       if (user) {
-        token.id = user.id;
+        token.id = user.id;      
+        token.role = user.role; 
       }
-      return token;
+      return token;  // avec les nouvelles propriétés
     },
+    
     async session({ session, token }) {
       if (token) {
         session.user = {
-          ...session.user,
-          id: token.id as unknown as string,
+          ...session.user,    // Conserve les autres propriétés de `session.user`
+          id: token.id as string,       // Ajoute l'ID de l'utilisateur à la session
+          role: token.role as string,   // Ajoute le rôle de l'utilisateur à la session
         };
       }
-      return session;
+      return session;  // session avec les nouvelles propriétés
     },
+    
     async redirect({ url, baseUrl }) {
       if (url.startsWith(baseUrl)) {
-        return baseUrl + "/authentification/hello-page";
+        return baseUrl + "/authentification/hello-page";  
       }
-      return baseUrl + "/authentification/signin";
+      return baseUrl + "/authentification/signin";  
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,  // Clé secrète pour signer les tokens JWT
 };
 
 export default NextAuth(authOptions);
