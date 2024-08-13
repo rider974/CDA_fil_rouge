@@ -15,14 +15,27 @@ interface CreateUserDTO {
 export class UserService {
 
     /**
-     * Fetch all users from the database, including their roles.
+     * Fetch all users from the database, including all infos.
      * @returns A list of all users.
      */
     async getAllUsers(): Promise<User[]> {
+        try{
         return await AppDataSource.manager.find(User, {
-            relations: ['role', 'ressources'], 
+            relations: [
+                'role',
+                'ressources',
+                'comments',
+                'sharingSessions',
+                'following',
+                'followers'
+            ], 
         });
+    }catch (error){
+        console.error("Error fetching users:", error);
+        throw new Error('An error occurred while fetching users');
+     
     }
+}
 
     /**
      * Fetch a user by their UUID.
@@ -31,10 +44,20 @@ export class UserService {
      */
     async getUserById(user_uuid: string): Promise<User | null> {
         try {
-            return await AppDataSource.manager.findOne(User, { where: { user_uuid } });
+            return await AppDataSource.manager.findOne(User, {
+                where: { user_uuid },
+                relations: [
+                    'role',
+                    'ressources',
+                    'comments',
+                    'sharingSessions',
+                    'following',
+                    'followers'
+                ],
+            });
         } catch (error) {
             console.error("Error fetching user by UUID:", error);
-            throw error;
+            throw new Error('An error occurred while fetching the user');
         }
     }
 
