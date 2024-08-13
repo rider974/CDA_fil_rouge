@@ -19,7 +19,11 @@ import {InitMigration1723112057042} from './migration/1723112057042-initMigratio
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    url: process.env.DATABASE_URL,
+    host: "postgres",
+    port: 5432,
+    username: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB,
     synchronize: false,
     logging: "all",
     entities: [User, Role, Comment, Tag, Have, Ressource, RessourceStatus, RessourceStatusHistory, Follow, Refer, Reference, RessourceType, SharingSession],
