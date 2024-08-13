@@ -28,10 +28,5 @@
   //pas compilé par typeScript dans le front
   "exclude": [
     "node_modules",
-    "../back/src/services",
-    "../back/src/pages",
-    "../back/src/errors",
-    "../back/src/migration",
-    "../back/src/seeder"
   ]
 }
