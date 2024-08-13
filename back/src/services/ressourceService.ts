@@ -4,6 +4,7 @@ import { EntityNotFoundError, UniqueConstraintViolationError } from "../errors/e
 import { DeepPartial } from "typeorm";
 import User from "@/entity/user";
 import { RessourceStatus } from "@/entity/ressourceStatus";
+import { RessourceType } from "@/entity/ressourceType";
 
 interface CreateRessourceDTO {
   title: string;
@@ -84,25 +85,40 @@ export class RessourceService {
     }
   }
 
-  /**
-   * Creates a new ressource with transaction.
+ /**
+   * Creates a new ressource with related entities.
    * @param ressourceData - The data to create the new ressource.
    * @returns A promise that resolves to the created ressource.
-   * @throws UniqueConstraintViolationError if a unique constraint is violated.
+   * @throws EntityNotFoundError if any related entity is not found.
    */
-  async createRessource(ressourceData: CreateRessourceDTO): Promise<Ressource> {
-    return await AppDataSource.manager.transaction(async (transactionalEntityManager) => {
-      try {
-        const ressource = transactionalEntityManager.create(Ressource, ressourceData);
-        return await transactionalEntityManager.save(ressource);
-      } catch (error) {
-        if (error instanceof UniqueConstraintViolationError) {
-          throw error;
-        }
-        console.error("Error creating ressource:", error);
-        throw new Error('An error occurred while creating the ressource');
+ async createRessource(ressourceData: CreateRessourceDTO): Promise<Ressource> {
+    try {
+      const user = await AppDataSource.manager.findOne(User, { where: { user_uuid: ressourceData.user_uuid } });
+      const ressourceType = await AppDataSource.manager.findOne(RessourceType, { where: { ressource_type_uuid: ressourceData.ressource_type_uuid } });
+      const ressourceStatus = await AppDataSource.manager.findOne(RessourceStatus, { where: { ressource_status_uuid: ressourceData.ressource_status_uuid || 'default-status-uuid' } });
+
+      if (!user) {
+        throw new EntityNotFoundError('User', ressourceData.user_uuid);
       }
-    });
+      if (!ressourceType) {
+        throw new EntityNotFoundError('RessourceType', ressourceData.ressource_type_uuid);
+      }
+      if (!ressourceStatus) {
+        throw new EntityNotFoundError('RessourceStatus', ressourceData.ressource_status_uuid || 'default-status-uuid');
+      }
+
+      const ressource = AppDataSource.manager.create(Ressource, {
+        ...ressourceData,
+        user,
+        ressourceType,
+        ressourceStatus
+      });
+
+      return await AppDataSource.manager.save(ressource);
+    } catch (error) {
+      console.error("Error creating ressource:", error);
+      throw new Error('An error occurred while creating the ressource');
+    }
   }
   /**
    * Replaces an existing ressource with new data.
