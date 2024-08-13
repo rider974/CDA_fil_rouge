@@ -7,16 +7,16 @@ interface CreateTagDTO {
 }
 
 export class TagService {
-
     /**
-     * Fetch all tags from the database, including associated resources and sharing sessions.
+     * Retrieves all tags from the database, including associated resources and sharing sessions.
      * @returns A list of all tags.
+     * @throws Error if an error occurs while fetching the tags.
      */
     async getAllTags(): Promise<Tag[]> {
         try {
             return await AppDataSource.manager.find(Tag, {
                 relations: [
-                    'ressources',
+                    'resources',
                     'sharingSessions'
                 ],
             });
@@ -27,16 +27,17 @@ export class TagService {
     }
 
     /**
-     * Fetch a tag by its UUID.
-     * @param tag_uuid - The UUID of the tag.
-     * @returns The tag if found, or null if not.
+     * Retrieves a specific tag by its UUID.
+     * @param tag_uuid - The UUID of the tag to retrieve.
+     * @returns The tag corresponding to the UUID or null if not found.
+     * @throws Error if an error occurs while fetching the tag.
      */
     async getTagById(tag_uuid: string): Promise<Tag | null> {
         try {
             return await AppDataSource.manager.findOne(Tag, {
                 where: { tag_uuid },
                 relations: [
-                    'ressources',
+                    'resources',
                     'sharingSessions'
                 ],
             });
@@ -47,9 +48,10 @@ export class TagService {
     }
 
     /**
-     * Fetch a tag by its title.
-     * @param tag_title - The title of the tag.
-     * @returns The tag if found, or null if not.
+     * Retrieves a specific tag by its title.
+     * @param tag_title - The title of the tag to retrieve.
+     * @returns The tag corresponding to the title or null if not found.
+     * @throws Error if an error occurs while fetching the tag.
      */
     async getTagByTitle(tag_title: string): Promise<Tag | null> {
         try {
@@ -61,10 +63,11 @@ export class TagService {
     }
 
     /**
-     * Create a new tag in the database.
-     * @param tagData - The data for the new tag.
+     * Creates a new tag in the database.
+     * @param tagData - The data for the new tag to create.
      * @returns The newly created tag.
-     * @throws UniqueConstraintViolationError if the title already exists.
+     * @throws UniqueConstraintViolationError if the tag title already exists.
+     * @throws Error if an error occurs while creating the tag.
      */
     async createTag(tagData: CreateTagDTO): Promise<Tag> {
         try {
@@ -85,12 +88,13 @@ export class TagService {
     }
 
     /**
-     * Replace an existing tag with new data.
+     * Replaces an existing tag with new data.
      * @param tag_uuid - The UUID of the tag to replace.
      * @param tagData - The new data for the tag.
      * @returns The updated tag or null if not found.
      * @throws EntityNotFoundError if the tag is not found.
-     * @throws UniqueConstraintViolationError if the title already exists.
+     * @throws UniqueConstraintViolationError if the tag title already exists.
+     * @throws Error if an error occurs while replacing the tag.
      */
     async replaceTag(tag_uuid: string, tagData: CreateTagDTO): Promise<Tag | null> {
         try {
@@ -116,12 +120,13 @@ export class TagService {
     }
 
     /**
-     * Update specific fields of an existing tag.
+     * Updates specific fields of an existing tag.
      * @param tag_uuid - The UUID of the tag to update.
      * @param tagData - The partial data for the tag.
      * @returns The updated tag or null if not found.
      * @throws EntityNotFoundError if the tag is not found.
-     * @throws UniqueConstraintViolationError if the title already exists.
+     * @throws UniqueConstraintViolationError if the tag title already exists.
+     * @throws Error if an error occurs while updating the tag fields.
      */
     async updateTagFields(tag_uuid: string, tagData: Partial<CreateTagDTO>): Promise<Tag | null> {
         try {
@@ -149,9 +154,10 @@ export class TagService {
     }
     
     /**
-     * Delete a tag by its UUID.
+     * Deletes a tag from the database by its UUID.
      * @param tag_uuid - The UUID of the tag to delete.
-     * @returns A boolean indicating if the tag was successfully deleted.
+     * @returns A boolean indicating if the deletion was successful.
+     * @throws Error if an error occurs while deleting the tag.
      */
     async deleteTag(tag_uuid: string): Promise<boolean> {
         try {

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn, Unique } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn, Unique, JoinTable } from 'typeorm';
 import { User } from './user';
 import { RessourceType } from './ressourceType';
 import { RessourceStatus } from './ressourceStatus';
@@ -6,6 +6,7 @@ import { Comment } from './comment';
 import { Tag } from './tag';
 import { RessourceStatusHistory } from './ressourceStatusHistory';
 import type { Relation } from 'typeorm';
+import { SharingSession } from './sharingSession';
 
 /**
  * Represents a resource with its metadata and relationships.
@@ -71,8 +72,20 @@ export class Ressource {
 
   // Many-to-many relationship with tags associated with the resource
   @ManyToMany(() => Tag, (tag) => tag.ressources)
+  @JoinTable({
+  name: 'have', // Junction table for the relationship
+  joinColumn: { name: 'ressource_uuid', referencedColumnName: 'ressource_uuid' },
+  inverseJoinColumn: { name: 'tag_uuid', referencedColumnName: 'tag_uuid' }
+  })
   tags!: Relation<Tag[]>;
 
-  // Placeholder for sharing sessions related to the resource
-  sharingSessions: any;
+  // Many-to-many relationship with sharing sessions associated with the resource
+  @ManyToMany(() => SharingSession, (sharingSession) => sharingSession.ressources)
+  @JoinTable({
+    name: 'reference', // Junction table for the relationship
+    joinColumn: { name: 'ressource_uuid', referencedColumnName: 'ressource_uuid' },
+    inverseJoinColumn: { name: 'sharing_session_uuid', referencedColumnName: 'sharing_session_uuid' }
+  })
+  sharingSessions!: Relation<SharingSession[]>;
+
 }

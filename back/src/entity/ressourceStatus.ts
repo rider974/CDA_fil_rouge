@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, Unique } from 'typeorm';
 import { Ressource } from './ressource';
 import type { Relation } from 'typeorm';
-import { Unica_One } from 'next/font/google';
 
 /**
  * Represents the status of a resource.

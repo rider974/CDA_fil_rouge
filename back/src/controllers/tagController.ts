@@ -3,6 +3,7 @@ import { TagService } from "../services/tagService";
 import Joi from 'joi';
 import { EntityNotFoundError, UniqueConstraintViolationError } from "@/errors/errors";
 
+// Validation schema for tags
 const tagSchema = Joi.object({
   tag_title: Joi.string().required().max(100).messages({
     'string.max': 'Tag title must be less than or equal to 100 characters long',
@@ -19,9 +20,9 @@ export class TagController {
 
   /**
    * Handles the creation of a new tag.
-   * @param req - The API request object.
-   * @param res - The API response object.
-   * @returns The created tag or an error response.
+   * @param req - The API request object containing the tag data.
+   * @param res - The API response object to send the response to the client.
+   * @returns The created tag or an error message if creation fails.
    */
   async createTag(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -31,20 +32,12 @@ export class TagController {
       }
 
       const { tag_title } = req.body;
-
-      const newTag = await this.tagService.createTag({
-        tag_title: tag_title.trim()
-      });
-
+      const newTag = await this.tagService.createTag({ tag_title: tag_title.trim() });
       return res.status(201).json(newTag);
 
     } catch (error) {
       if (error instanceof UniqueConstraintViolationError) {
         return res.status(409).json({ error: error.message });
-      }
-
-      if (error instanceof EntityNotFoundError) {
-        return res.status(404).json({ error: error.message });
       }
 
       console.error("Error creating tag:", error);
@@ -55,8 +48,8 @@ export class TagController {
   /**
    * Retrieves all tags from the database.
    * @param req - The API request object.
-   * @param res - The API response object.
-   * @returns A list of tags or an error response.
+   * @param res - The API response object to send the list of tags to the client.
+   * @returns The list of tags or an error message if retrieval fails.
    */
   async getAllTags(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -69,10 +62,10 @@ export class TagController {
   }
 
   /**
-   * Retrieves a tag by its UUID.
-   * @param req - The API request object.
-   * @param res - The API response object.
-   * @returns The tag if found, or an error response if not.
+   * Retrieves a specific tag by its UUID.
+   * @param req - The API request object containing the tag UUID.
+   * @param res - The API response object to send the tag to the client.
+   * @returns The tag corresponding to the UUID or an error message if the tag is not found.
    */
   async getTagById(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -94,10 +87,10 @@ export class TagController {
   }
 
   /**
-   * Updates a tag by its UUID.
-   * @param req - The API request object.
-   * @param res - The API response object.
-   * @returns The updated tag or an error response if not found.
+   * Updates an existing tag by its UUID.
+   * @param req - The API request object containing the tag UUID and the data to update.
+   * @param res - The API response object to send the updated tag or an error message.
+   * @returns The updated tag or an error message if the update fails.
    */
   async updateTag(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -107,8 +100,7 @@ export class TagController {
       }
 
       const { tag_title } = req.body;
-
-      const updatedTag = await this.tagService.replaceTag(tag_uuid, {
+      const updatedTag = await this.tagService.updateTagFields(tag_uuid, {
         tag_title: tag_title ? tag_title.trim() : undefined
       });
 
@@ -125,9 +117,9 @@ export class TagController {
 
   /**
    * Deletes a tag by its UUID.
-   * @param req - The API request object.
-   * @param res - The API response object.
-   * @returns A 204 status if deletion is successful, or an error response if not found.
+   * @param req - The API request object containing the UUID of the tag to delete.
+   * @param res - The API response object to indicate success or failure of the deletion.
+   * @returns Status 204 on success or an error message if the deletion fails.
    */
   async deleteTag(req: NextApiRequest, res: NextApiResponse) {
     try {

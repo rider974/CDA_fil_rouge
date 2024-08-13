@@ -216,4 +216,30 @@ export class UserService {
             throw error;
         }
     }
+
+    /**
+   * Toggles the active status of a user by their UUID.
+   * @param req - The API request object.
+   * @param res - The API response object.
+   * @returns The updated user with the new active status, or an error response if not found.
+   */
+    async toggleUserActiveStatus(user_uuid: string, is_active: boolean): Promise<User | null> {
+        try {
+            const user = await this.getUserById(user_uuid);
+            if (!user) {
+                throw new EntityNotFoundError('User', user_uuid);
+            }
+            
+            user.is_active = is_active;
+            await AppDataSource.manager.save(user);
+            return user;
+        } catch (error) {
+            if (error instanceof EntityNotFoundError) {
+                throw error;
+            }
+            console.error("Error toggling user active status:", error);
+            throw new Error('An error occurred while toggling the user active status');
+        }
+    }
+    
 }
