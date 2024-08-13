@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, ManyToMany, JoinColumn, Unique } from 'typeorm';
 import { User } from './user';
 import { RessourceType } from './ressourceType';
 import { RessourceStatus } from './ressourceStatus';
@@ -11,6 +11,7 @@ import type { Relation } from 'typeorm';
  * Represents a resource with its metadata and relationships.
  */
 @Entity('ressources')
+@Unique(['title'])
 export class Ressource {
   // Unique identifier for the resource
   @PrimaryGeneratedColumn('uuid')

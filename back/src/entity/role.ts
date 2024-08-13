@@ -8,7 +8,6 @@ import type { Relation } from 'typeorm';
  */
 @Entity('roles')
 @Unique(["role_name"])
-
 export class Role {
   // Unique identifier for the role
   @PrimaryGeneratedColumn('uuid')

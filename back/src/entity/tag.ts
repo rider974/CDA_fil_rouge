@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, Unique } from 'typeorm';
 import { Ressource } from './ressource';
 import type { Relation } from 'typeorm';
 
@@ -6,6 +6,7 @@ import type { Relation } from 'typeorm';
  * Represents a tag that can be associated with multiple resources and sharing sessions.
  */
 @Entity('tags')
+@Unique(['tag_title'])
 export class Tag {
   // Unique identifier for the tag
   @PrimaryGeneratedColumn('uuid')
