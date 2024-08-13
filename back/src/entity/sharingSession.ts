@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, ManyToMany, JoinTable, Unique } from 'typeorm';
 import { User } from './user';
 import { Ressource } from './ressource';
 import { Tag } from './tag';
@@ -8,6 +8,7 @@ import type { Relation } from 'typeorm';
  * Represents a sharing session where resources and tags are shared by users.
  */
 @Entity('sharring-session')
+@Unique(['title'])
 export class SharingSession {
   // Unique identifier for the sharing session
   @PrimaryGeneratedColumn('uuid')
