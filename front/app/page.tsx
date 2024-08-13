@@ -6,17 +6,18 @@ import { useRouter } from "next/navigation";
 import axios from "./../app/utils/axios"; 
 
 export default function HomePage() {
-  const { data: session, status } = useSession();  // TypeScript sait déjà que `session` est de type `Session`
+  const { data: session, status } = useSession();
   const router = useRouter();
-  const [users, setUsers] = useState<any[]>([]); // Utilisez `any[]` pour simplifier ou définissez un type si nécessaire
+  const [users, setUsers] = useState<any[]>([]);
   const [roles, setRoles] = useState<any[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === "authenticated") {
-      // Redirection en fonction du rôle de l'utilisateur authentifié
-      switch (session?.user?.role) {
+      const roleName = session?.user?.role.role_name; // Extraire le role_name pour la comparaison
+
+      switch (roleName) {
         case "admin":
           router.push("/dashboard/admin");
           break;
@@ -30,8 +31,7 @@ export default function HomePage() {
           router.push("/dashboard");
       }
     } else if (status === "unauthenticated") {
-      // Charger les données pour les utilisateurs non authentifiés
-      const fetchUsers = async() => {
+      const fetchUsers = async () => {
         try {
           const res = await axios.get<any[]>("http://localhost:3001/api/users");
           setUsers(res.data);
@@ -40,9 +40,9 @@ export default function HomePage() {
         } finally {
           setLoadingData(false);
         }
-      }
+      };
 
-      const fetchRoles = async() => {
+      const fetchRoles = async () => {
         try {
           const res = await axios.get<any[]>("http://localhost:3001/api/roles");
           setRoles(res.data);
@@ -51,7 +51,7 @@ export default function HomePage() {
         } finally {
           setLoadingData(false);
         }
-      }
+      };
 
       fetchUsers();
       fetchRoles();

@@ -4,6 +4,7 @@ import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { AuthService } from "@/services/authService"; 
 import { initializeDataSource } from "@/data-source";
+import { Role } from "@/entity/role";
 
 // Initialisez la base de données avant toute autre opération
 async function initDatabase() {
@@ -44,7 +45,7 @@ export const authOptions: NextAuthOptions = {
               id: user.user_uuid,
               name: user.username,
               email: user.email,
-              role: user.role.role_name,
+              role: user.role,
               createdAt: user.created_at,
               provider: "credentials",
             };
@@ -67,7 +68,7 @@ export const authOptions: NextAuthOptions = {
       // Si un utilisateur est présent lors de la connexion, ajoute ses informations au token
       if (user) {
         token.id = user.id;
-        token.role = user.role;
+        token.role = user.role as Role;
       }
       return token; // avec les nouvelles propriétés
     },
@@ -77,7 +78,7 @@ export const authOptions: NextAuthOptions = {
         session.user = {
           ...session?.user, // Conserve les autres propriétés de `session.user`
           id: token.id as string, // Ajoute l'ID de l'utilisateur à la session
-          role: token.role as string, // Ajoute le rôle de l'utilisateur à la session
+          role: token.role as Role, // Ajoute le rôle de l'utilisateur à la session
         };
       }
       return session; // session avec les nouvelles propriétés

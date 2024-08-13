@@ -10,7 +10,7 @@ export default function DashboardRedirect() {
   useEffect(() => {
     if (status === "authenticated" && session?.user) {
       const user = session.user as User; 
-      switch (user.role) {
+      switch (user.role.role_name) { // Utiliser role_name pour la comparaison
         case "admin":
           router.push("/dashboard/admin");
           break;
