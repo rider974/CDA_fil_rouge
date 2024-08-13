@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, Unique } from 'typeorm';
 import { Ressource } from './ressource';
 import type { Relation } from 'typeorm';
 
@@ -6,6 +6,7 @@ import type { Relation } from 'typeorm';
  * Represents the type of a resource.
  */
 @Entity('ressource-type')
+@Unique(['type_name'])
 export class RessourceType {
   // Unique identifier for the resource type
   @PrimaryGeneratedColumn('uuid')

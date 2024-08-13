@@ -1,11 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, Unique } from 'typeorm';
 import { Ressource } from './ressource';
 import type { Relation } from 'typeorm';
+import { Unica_One } from 'next/font/google';
 
 /**
  * Represents the status of a resource.
  */
 @Entity('ressources-status')
+@Unique(['name'])
 export class RessourceStatus {
   // Unique identifier for the resource status
   @PrimaryGeneratedColumn('uuid')
