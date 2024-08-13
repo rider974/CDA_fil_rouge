@@ -1,14 +1,16 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { User } from "next-auth"; 
 
 export default function DashboardRedirect() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "authenticated") {
-      switch (session?.user?.role) {
+    if (status === "authenticated" && session?.user) {
+      const user = session.user as User; 
+      switch (user.role) {
         case "admin":
           router.push("/dashboard/admin");
           break;

@@ -71,7 +71,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token) {
         session.user = {
-          ...session.user, // Conserve les autres propriétés de `session.user`
+          ...session?.user, // Conserve les autres propriétés de `session.user`
           id: token.id as string, // Ajoute l'ID de l'utilisateur à la session
           role: token.role as string, // Ajoute le rôle de l'utilisateur à la session
         };

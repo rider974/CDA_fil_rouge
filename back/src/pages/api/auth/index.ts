@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { UserController } from "../controllers/userController";
-import { UserService } from "../services/userService";
-
+import { UserController } from "../../../controllers/userController";
+import { UserService } from "../../../services/userService"
 // Initialisation du service utilisateur
 const userService = new UserService(); 
 const userController = new UserController(userService); 

@@ -8,10 +8,11 @@ declare module "next-auth" {
     email: string;
     name: string;
     createdAt: Date;
-    role:string;
+    role: Role;
     provider?: string;
   }
 
+  
   // Étend l'interface Session pour inclure l'ID utilisateur et les propriétés de base, ainsi que l'accessToken
   interface Session {
     user: {
@@ -19,7 +20,7 @@ declare module "next-auth" {
       email: string;
       name: string;
       image?: string;
-      role:string;
+      role: Role;
       provider?: string; // Ajoute le provider si nécessaire dans la session
     } & DefaultSession["user"];
     accessToken?: string; // Ajoute accessToken pour gérer l'authentification via OAuth
@@ -30,7 +31,7 @@ declare module "next-auth" {
     id: string;
     email: string;
     name: string;
-    role:string;
+    role: Role;
     provider?: string; // Ajoute le provider si nécessaire dans le JWT
   }
 }
