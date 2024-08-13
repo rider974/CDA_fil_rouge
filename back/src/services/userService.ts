@@ -2,7 +2,6 @@ import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/user";
 import { Role } from "@/entity/role";
 import { EntityNotFoundError, UniqueConstraintViolationError } from "../errors/errors"; 
-import { Ressource } from "@/entity/ressource";
 
 interface CreateUserDTO {
     username: string;
@@ -25,9 +24,7 @@ export class UserService {
                 'role',
                 'ressources',
                 'comments',
-                'sharingSessions',
-                'following',
-                'followers'
+                'sharingSessions'
             ], 
         });
     }catch (error){

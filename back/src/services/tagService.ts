@@ -16,8 +16,7 @@ export class TagService {
         try {
             return await AppDataSource.manager.find(Tag, {
                 relations: [
-                    'resources',
-                    'sharingSessions'
+                  
                 ],
             });
         } catch (error) {
