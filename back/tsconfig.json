@@ -6,6 +6,7 @@
       "esnext",
       "es6"
     ],
+    "target": "es2020",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -31,7 +32,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "../front/app/next-auth.d.ts", "../front/app/utils/authOptions.ts"  ],
+, "src/next-auth.d.ts", "../front/app/utils/authOptions.ts"  ],
   "exclude": [
     "node_modules"
   ]

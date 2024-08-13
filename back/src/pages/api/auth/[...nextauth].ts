@@ -2,9 +2,19 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import axios from "axios";
+import { AuthService } from "@/services/authService"; 
+import { initializeDataSource } from "@/data-source";
 
-// import de nos entités et utilitaires du backend pour les utiliser avec NextAuth.js.
+// Initialisez la base de données avant toute autre opération
+async function initDatabase() {
+  try {
+    await initializeDataSource();
+  } catch (error) {
+    console.error("Failed to initialize the database:", error);
+    throw new Error("Database initialization failed");
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -25,15 +35,9 @@ export const authOptions: NextAuthOptions = {
         if (!credentials) return null;
 
         try {
-          const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-            {
-              email: credentials.email,
-              password: credentials.password,
-            }
-          );
-
-          const user = response.data;
+          await initDatabase(); 
+          const authService = new AuthService();
+          const user = await authService.login(credentials.email, credentials.password);
 
           if (user) {
             return {
