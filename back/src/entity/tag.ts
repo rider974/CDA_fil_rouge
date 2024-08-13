@@ -36,7 +36,7 @@ export class Tag {
 
   @ManyToMany(() => SharingSession, (sharingSession) => sharingSession.tags)
   @JoinTable({
-    name: 'refer', // Nom de la table de jointure
+    name: 'refer', // Junction table for the relationship
     joinColumn: { name: 'tag_uuid', referencedColumnName: 'tag_uuid' },
     inverseJoinColumn: { name: 'sharing_session_uuid', referencedColumnName: 'sharing_session_uuid' }
   })
