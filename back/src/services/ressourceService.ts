@@ -3,6 +3,7 @@ import { Ressource } from "@/entity/ressource";
 import { EntityNotFoundError, UniqueConstraintViolationError } from "../errors/errors";
 import { DeepPartial } from "typeorm";
 import User from "@/entity/user";
+import { RessourceStatus } from "@/entity/ressourceStatus";
 
 interface CreateRessourceDTO {
   title: string;
@@ -17,9 +18,26 @@ interface CreateRessourceDTO {
 
 export class RessourceService {
   /**
-   * Retrieves all ressources.
-   * @returns A promise that resolves to an array of ressources.
+   * Retrieves the ressource status by name.
+   * @param name - The name of the ressource status to retrieve.
+   * @returns A promise that resolves to the ressource status if found.
+   * @throws EntityNotFoundError if the ressource status is not found.
    */
+  async getRessourceStatusByName(name: string): Promise<RessourceStatus> {
+    try {
+      const status = await AppDataSource.manager.findOne(RessourceStatus, { where: { name } });
+      if (!status) {
+        throw new EntityNotFoundError('RessourceStatus', name);
+      }
+      return status;
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        throw error;
+      }
+      console.error("Error fetching ressource status by name:", error);
+      throw new Error('An error occurred while fetching the ressource status');
+    }
+  }
   async getAllRessources(): Promise<Ressource[]> {
     return await AppDataSource.manager.find(Ressource);
   }
@@ -47,25 +65,25 @@ export class RessourceService {
   }
 
   /**
-   * Creates a new ressource.
+   * Creates a new ressource with transaction.
    * @param ressourceData - The data to create the new ressource.
    * @returns A promise that resolves to the created ressource.
    * @throws UniqueConstraintViolationError if a unique constraint is violated.
    */
   async createRessource(ressourceData: CreateRessourceDTO): Promise<Ressource> {
-    try {
-      // You can add checks for uniqueness or other constraints here if necessary
-      const ressource = AppDataSource.manager.create(Ressource, ressourceData);
-      return await AppDataSource.manager.save(ressource);
-    } catch (error) {
-      if (error instanceof UniqueConstraintViolationError) {
-        throw error;
+    return await AppDataSource.manager.transaction(async (transactionalEntityManager) => {
+      try {
+        const ressource = transactionalEntityManager.create(Ressource, ressourceData);
+        return await transactionalEntityManager.save(ressource);
+      } catch (error) {
+        if (error instanceof UniqueConstraintViolationError) {
+          throw error;
+        }
+        console.error("Error creating ressource:", error);
+        throw new Error('An error occurred while creating the ressource');
       }
-      console.error("Error creating ressource:", error);
-      throw new Error('An error occurred while creating the ressource');
-    }
+    });
   }
-
   /**
    * Replaces an existing ressource with new data.
    * @param ressource_uuid - The UUID of the ressource to replace.
