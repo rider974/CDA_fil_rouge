@@ -37,6 +37,20 @@ export class UserService {
         }
     }
 
+        /**
+     * Fetch a user by their email.
+     * @param email - The email of the user.
+     * @returns The user if found, or null if not.
+     */
+        async getUserByEmail(email: string): Promise<User | null> {
+            try {
+                return await AppDataSource.manager.findOne(User, { where: { email } });
+            } catch (error) {
+                console.error("Error fetching user by email:", error);
+                throw error;
+            }
+        }
+
     /**
      * Fetch a user by their username.
      * @param username - The username of the user.

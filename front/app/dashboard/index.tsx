@@ -12,19 +12,23 @@ export default function DashboardRedirect() {
         case "admin":
           router.push("/dashboard/admin");
           break;
-        case "user":
-          router.push("/dashboard/user");
+        case "member":
+          router.push("/dashboard/member");
           break;
-        case "guest":
-          router.push("/dashboard/guest");
+        case "moderator":
+          router.push("/dashboard/moderator");
           break;
         default:
-          router.push("/");
+          router.push("/dashboard");
       }
     } else if (status === "unauthenticated") {
       router.push("/authentification/signin");
     }
   }, [status, session, router]);
 
-  return <p>Loading...</p>;  // Ajoutez un indicateur de chargement si nécessaire
+  return (
+    <div className="w-full flex flex-col items-center justify-center min-h-screen py-2">
+      <p className="mt-10 mb-4 text-4xl font-bold">Hello...</p>;
+    </div>
+  );
 }

@@ -4,9 +4,9 @@ import React from "react";
 import {
   GoogleSignInButton,
   GithubSignInButton,
-} from "@/app/components/SignInButtons"; 
-import { SignUpButton } from "@/app/components/SignUpButton";
-import { CredentialsForm } from "@/app/components/CredentialForm";
+} from "@/app/components/authentification/SignInButtons"; 
+import { SignUpButton } from "@/app/components/authentification/SignUpButton";
+import { CredentialsForm } from "@/app/components/authentification/CredentialForm";
 
 export default function SignInPage() {
   return (

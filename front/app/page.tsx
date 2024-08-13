@@ -1,64 +1,62 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import axios from "./../app/utils/axios"; 
 
-interface User {
-  user_uuid: string;
-  username: string;
-  email: string;
-  password: string;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-  role: Role;
-}
-
-interface Role {
-  role_uuid: string;
-  role_name: string;
-}
-
 export default function HomePage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const { data: session, status } = useSession();  // TypeScript sait déjà que `session` est de type `Session`
   const router = useRouter();
-  const [users, setUsers] = useState<User[]>([]);
-  const [roles, setRoles] = useState<Role[]>([]);
+  const [users, setUsers] = useState<any[]>([]); // Utilisez `any[]` pour simplifier ou définissez un type si nécessaire
+  const [roles, setRoles] = useState<any[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSignIn = () => {
-    setIsLoading(true);
-    router.push("/authentification/signin");
-  };
-
   useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const res = await axios.get<User[]>("/api/users");
-        setUsers(res.data);
-      } catch (error: any) {
-        setError(error.response?.data?.message || error.message);
-      } finally {
-        setLoadingData(false);
+    if (status === "authenticated") {
+      // Redirection en fonction du rôle de l'utilisateur authentifié
+      switch (session?.user?.role) {
+        case "admin":
+          router.push("/dashboard/admin");
+          break;
+        case "member":
+          router.push("/dashboard/member");
+          break;
+        case "moderator":
+          router.push("/dashboard/moderator");
+          break;
+        default:
+          router.push("/dashboard");
       }
-    }
-
-    async function fetchRoles() {
-      try {
-        const res = await axios.get<Role[]>("/api/roles");
-        setRoles(res.data);
-      } catch (error: any) {
-        setError(error.response?.data?.message || error.message);
-      } finally {
-        setLoadingData(false);
+    } else if (status === "unauthenticated") {
+      // Charger les données pour les utilisateurs non authentifiés
+      const fetchUsers = async() => {
+        try {
+          const res = await axios.get<any[]>("http://localhost:3001/api/users");
+          setUsers(res.data);
+        } catch (error: any) {
+          setError(error.response?.data?.message || error.message);
+        } finally {
+          setLoadingData(false);
+        }
       }
-    }
 
-    fetchUsers();
-    fetchRoles();
-  }, []);
+      const fetchRoles = async() => {
+        try {
+          const res = await axios.get<any[]>("http://localhost:3001/api/roles");
+          setRoles(res.data);
+        } catch (error: any) {
+          setError(error.response?.data?.message || error.message);
+        } finally {
+          setLoadingData(false);
+        }
+      }
+
+      fetchUsers();
+      fetchRoles();
+    }
+  }, [status, session, router]);
 
   if (loadingData) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -69,13 +67,13 @@ export default function HomePage() {
         Welcome to BeginnersAppDev
       </h1>
       <button
-        onClick={handleSignIn}
+        onClick={() => router.push("/authentification/signin")}
         className={`w-50 flex items-center font-semibold justify-center h-14 px-6 mt-4 text-xl transition-colors duration-300 ${
-          isLoading ? "bg-gray-200" : "bg-white"
+          status === "loading" ? "bg-gray-200" : "bg-white"
         } border-2 border-black text-black rounded-lg focus:shadow-outline hover:bg-slate-200`}
-        disabled={isLoading}
+        disabled={status === "loading"}
       >
-        {isLoading ? "Loading..." : "Sign In"}
+        {status === "loading" ? "Loading..." : "Sign In"}
       </button>
 
       <main className="flex min-h-screen flex-col items-center justify-between p-24">

@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async (config) => {
     const session = await getSession(); // Récupérer la session utilisateur via NextAuth.js
-    if (session) {
+    if (session && session.accessToken) {
       // Si un token est présent dans la session, l'ajouter aux headers
       config.headers['Authorization'] = `Bearer ${session.accessToken}`;
     }

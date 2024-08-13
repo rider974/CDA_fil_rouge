@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ResetPasswordButton } from "./ResetPasswordButton";
+// import { ResetPasswordButton } from "./ResetPasswordButton";
 import { signIn } from "next-auth/react";
 
 interface CredentialsFormProps {

@@ -12,15 +12,26 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": "./",
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@back-entity/*": ["../back/src/entity/*"],
+      "@back-utils/*": ["../back/src/utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  //pas compilé par typeScript dans le front
+  "exclude": [
+    "node_modules",
+    "../back/src/services",
+    "../back/src/pages",
+    "../back/src/errors",
+    "../back/src/migration",
+    "../back/src/seeder"
+  ]
 }

@@ -11,7 +11,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await initializeDataSource();
   await Cors(req, res, {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    origin: 'http://localhost:3000'
+    origin: 'http://localhost:3000',
+    credentials: true, //permet d’inclure des informations d’identification (comme des cookies) dans les requêtes cross-origin
+    optionsSuccessStatus: 204,
   });
 
   switch (req.method) {
