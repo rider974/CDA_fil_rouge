@@ -20,7 +20,7 @@ export class UserService {
      */
     async getAllUsers(): Promise<User[]> {
         return await AppDataSource.manager.find(User, {
-            relations: ['role', 'ressources','comments','sharringSessions','following','followers'], 
+            relations: ['role', 'ressources','comments','sharingSessions','following','followers'], 
         });
     }
 
