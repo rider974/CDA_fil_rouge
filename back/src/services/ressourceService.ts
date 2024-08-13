@@ -38,8 +38,28 @@ export class RessourceService {
       throw new Error('An error occurred while fetching the ressource status');
     }
   }
-  async getAllRessources(): Promise<Ressource[]> {
-    return await AppDataSource.manager.find(Ressource);
+
+   /**
+   * Retrieves all ressources with their related data.
+   * @returns A promise that resolves to a list of all ressources with relations.
+   */
+   async getAllRessources(): Promise<Ressource[]> {
+    try {
+      return await AppDataSource.manager.find(Ressource, {
+        relations: [
+          'user', 
+          'ressourceType', 
+          'ressourceStatus', 
+          'updatedBy', 
+          'comments', 
+          'statusHistory', 
+          'tags'
+        ],
+      });
+    } catch (error) {
+      console.error("Error fetching ressources:", error);
+      throw new Error('An error occurred while fetching the ressources');
+    }
   }
 
   /**
