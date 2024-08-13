@@ -3,7 +3,7 @@ name: Build, Run and Finalize Deploy
 on:
   push:
     branches:
-      - develop
+      - feat/authentification
 
 jobs:
   deploy-on-vps:
