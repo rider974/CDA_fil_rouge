@@ -62,10 +62,13 @@ export default function HomePage() {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="w-full flex flex-col items-center justify-center min-h-screen py-2">
+
+      <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        <div className="w-full flex flex-col items-center justify-center min-h-screen py-2">
       <h1 className="mt-10 mb-4 text-4xl font-bold text-white">
         Welcome to BeginnersAppDev
       </h1>
+      </div>
       <button
         onClick={() => router.push("/authentification/signin")}
         className={`w-50 flex items-center font-semibold justify-center h-14 px-6 mt-4 text-xl transition-colors duration-300 ${
@@ -75,8 +78,6 @@ export default function HomePage() {
       >
         {status === "loading" ? "Loading..." : "Sign In"}
       </button>
-
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:text-left">
           <div className="mb-6">
             <h2 className="mb-3 text-2xl font-semibold">Users List</h2>
@@ -133,6 +134,6 @@ export default function HomePage() {
           </div>
         </div>
       </main>
-    </div>
+
   );
 }
