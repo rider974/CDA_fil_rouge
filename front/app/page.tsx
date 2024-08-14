@@ -64,7 +64,7 @@ export default function HomePage() {
 
   return (
     <main className="flex flex-col items-center justify-between">
-      <div className="flex flex-col items-center justify-center min-h-screen py-2">
+      <div className="flex flex-col items-center justify-center py-2">
         <h1 className="mt-4 text-4xl font-bold text-white">
           Welcome to BeginnersAppDev
         </h1>

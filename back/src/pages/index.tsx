@@ -19,7 +19,7 @@ export default function Home() {
       <main className={`${styles.main} ${inter.className}`}>
         <div className="w-full flex flex-col items-center justify-center py-2">
           <h1 className="mt-10 mb-4 text-4xl font-bold text-white">
-            Welcome to BeginnersAppDev
+            Enter to BeginnersAppDev
           </h1>
         </div>
       </main>
