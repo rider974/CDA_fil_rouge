@@ -64,11 +64,6 @@ export default function HomePage() {
   return (
 
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div className="w-full flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="mt-10 mb-4 text-4xl font-bold text-white">
-        Welcome to BeginnersAppDev
-      </h1>
-      </div>
       <button
         onClick={() => router.push("/authentification/signin")}
         className={`w-50 flex items-center font-semibold justify-center h-14 px-6 mt-4 text-xl transition-colors duration-300 ${
