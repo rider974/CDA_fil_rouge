@@ -3,7 +3,7 @@ name: Build, Run and Finalize Deploy
 on:
   push:
     branches:
-      - develop
+      - feat/authentification
 
 jobs:
   deploy-on-vps:
@@ -36,7 +36,7 @@ jobs:
             # Vérifier si le répertoire existe, sinon le cloner
             if [ ! -d ~/beginnersAppDev/CDA_fil_rouge ]; then
               mkdir -p ~/beginnersAppDev
-              git clone --branch develop ${{ secrets.REPO_GIT }} ~/beginnersAppDev/CDA_fil_rouge
+              git clone --branch feat/authentification ${{ secrets.REPO_GIT }} ~/beginnersAppDev/CDA_fil_rouge
             else
               cd ~/beginnersAppDev/CDA_fil_rouge
               # Réinitialiser les changements locaux à l'état de la branche distante
