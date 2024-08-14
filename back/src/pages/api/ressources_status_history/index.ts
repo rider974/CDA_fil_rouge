@@ -20,16 +20,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     // Remove the X-Powered-By header to hide Next.js usage
-   res.removeHeader('X-Powered-By');
+    res.removeHeader('X-Powered-By');
 
-   // Set additional security headers (Helmet-like)
-   res.setHeader('Content-Security-Policy', "default-src 'self'");
-   res.setHeader('X-Content-Type-Options', 'nosniff');
-   res.setHeader('X-Frame-Options', 'DENY');
-   res.setHeader('X-XSS-Protection', '1; mode=block');
-  //  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-   res.setHeader('Referrer-Policy', 'no-referrer');
-   res.setHeader('Permissions-Policy', 'geolocation=(self), microphone=()');
+    // Set additional security headers (Helmet-like)
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    //  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+   
 
     // Handle the request based on the method
     switch (req.method) {
