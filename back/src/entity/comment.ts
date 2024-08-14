@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, type Relation } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, type Relation, OneToMany } from 'typeorm';
 import { User } from './user';
 import { Ressource } from './ressource';
 
@@ -43,5 +43,6 @@ export class Comment {
   ressource!: Relation<Ressource>;
 
   // One-to-many relationship for replies to the comment
+  @OneToMany(() => Comment, (comment) => comment.parentComment)
   replies!: Comment[];
 }
