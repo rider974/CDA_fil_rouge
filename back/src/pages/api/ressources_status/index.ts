@@ -9,28 +9,33 @@ const ressourceStatusService = new RessourceStatusService();
 const ressourceStatusController = new RessourceStatusController(ressourceStatusService);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await initializeDataSource();
-  await Cors(req, res, {
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    origin: 'http://localhost:3000',
-  });
+  try {
+    await initializeDataSource();
+    await Cors(req, res, {
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      origin: 'http://localhost:3000',
+    });
 
-  switch (req.method) {
-    case 'GET':
+    switch (req.method) {
+      case 'GET':
         // Check if the request is for a single ressource status by ID or all ressource statuses
         if (req.query.ressource_status_uuid) {
-            return ressourceStatusController.getRessourceStatusById(req, res);
+          return ressourceStatusController.getRessourceStatusById(req, res);
         } else {
-            return ressourceStatusController.getAllRessourceStatuses(req, res);
+          return ressourceStatusController.getAllRessourceStatuses(req, res);
         }
-    case 'POST':
-      return ressourceStatusController.createRessourceStatus(req, res);
-    case 'PUT':
-      return ressourceStatusController.replaceRessourceStatus(req, res);
-    case 'DELETE':
-      return ressourceStatusController.deleteRessourceStatus(req, res);
-    default:
-      res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
-      res.status(405).end(`Method ${req.method} Not Allowed`);
+      case 'POST':
+        return ressourceStatusController.createRessourceStatus(req, res);
+      case 'PUT':
+        return ressourceStatusController.replaceRessourceStatus(req, res);
+      case 'DELETE':
+        return ressourceStatusController.deleteRessourceStatus(req, res);
+      default:
+        res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
+    }
+  } catch (error) {
+    console.error("Handler error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 }
