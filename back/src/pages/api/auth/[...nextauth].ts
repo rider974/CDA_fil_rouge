@@ -95,3 +95,5 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET, // Clé secrète pour signer les tokens JWT
 };
 
+// Exportez NextAuth avec les options configurées
+export default NextAuth(authOptions);
