@@ -71,7 +71,17 @@ export class RessourceService {
    */
   async getRessourceById(ressource_uuid: string): Promise<Ressource | null> {
     try {
-      const ressource = await AppDataSource.manager.findOne(Ressource, { where: { ressource_uuid } });
+      const ressource = await AppDataSource.manager.findOne(Ressource, 
+        { where: { ressource_uuid },
+        relations: [
+        'user', 
+        'ressourceType', 
+        'ressourceStatus', 
+        'updatedBy', 
+        'comments', 
+        'statusHistory', 
+        'tags'
+      ], });
       if (!ressource) {
         throw new EntityNotFoundError('Ressource', ressource_uuid);
       }

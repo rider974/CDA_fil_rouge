@@ -14,14 +14,25 @@ interface CreateUserDTO {
 export class UserService {
 
     /**
-     * Fetch all users from the database, including their roles.
+     * Fetch all users from the database, including all infos.
      * @returns A list of all users.
      */
     async getAllUsers(): Promise<User[]> {
+        try{
         return await AppDataSource.manager.find(User, {
-            relations: ['role'], 
+            relations: [
+                'role',
+                'ressources',
+                'comments',
+                'sharingSessions'
+            ], 
         });
+    }catch (error){
+        console.error("Error fetching users:", error);
+        throw new Error('An error occurred while fetching users');
+     
     }
+}
 
     /**
      * Fetch a user by their UUID.
@@ -30,10 +41,20 @@ export class UserService {
      */
     async getUserById(user_uuid: string): Promise<User | null> {
         try {
-            return await AppDataSource.manager.findOne(User, { where: { user_uuid } });
+            return await AppDataSource.manager.findOne(User, {
+                where: { user_uuid },
+                relations: [
+                    'role',
+                    'ressources',
+                    'comments',
+                    'sharingSessions',
+                    'following',
+                    'followers'
+                ],
+            });
         } catch (error) {
             console.error("Error fetching user by UUID:", error);
-            throw error;
+            throw new Error('An error occurred while fetching the user');
         }
     }
 
@@ -206,4 +227,30 @@ export class UserService {
             throw error;
         }
     }
+
+    /**
+   * Toggles the active status of a user by their UUID.
+   * @param req - The API request object.
+   * @param res - The API response object.
+   * @returns The updated user with the new active status, or an error response if not found.
+   */
+    async toggleUserActiveStatus(user_uuid: string, is_active: boolean): Promise<User | null> {
+        try {
+            const user = await this.getUserById(user_uuid);
+            if (!user) {
+                throw new EntityNotFoundError('User', user_uuid);
+            }
+            
+            user.is_active = is_active;
+            await AppDataSource.manager.save(user);
+            return user;
+        } catch (error) {
+            if (error instanceof EntityNotFoundError) {
+                throw error;
+            }
+            console.error("Error toggling user active status:", error);
+            throw new Error('An error occurred while toggling the user active status');
+        }
+    }
+    
 }

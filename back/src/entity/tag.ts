@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, Unique } from 'typeorm';
 import { Ressource } from './ressource';
+import { SharingSession } from './sharingSession';
 import type { Relation } from 'typeorm';
 
 /**
@@ -33,6 +34,11 @@ export class Tag {
   })
   ressources!: Relation<Ressource[]>;
 
-  // Placeholder for the sharingSessions relationship
-  sharingSessions: any;
+  @ManyToMany(() => SharingSession, (sharingSession) => sharingSession.tags)
+  @JoinTable({
+    name: 'refer', // Junction table for the relationship
+    joinColumn: { name: 'tag_uuid', referencedColumnName: 'tag_uuid' },
+    inverseJoinColumn: { name: 'sharing_session_uuid', referencedColumnName: 'sharing_session_uuid' }
+  })
+  sharingSessions!: Relation<SharingSession[]>;
 }

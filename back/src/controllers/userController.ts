@@ -334,4 +334,44 @@ export class UserController {
       res.status(500).json({ error: "Error deleting user" });
     }
   }
+
+   /**
+   * Toggles the active status of a user by their UUID.
+   * @param req - The API request object.
+   * @param res - The API response object.
+   * @returns The updated user with the new active status, or an error response if not found.
+   */
+   async toggleUserActiveStatus(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      // Sanitize and validate inputs
+      const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
+      const is_active = req.body.is_active;
+
+      if (typeof user_uuid !== 'string') {
+        return res.status(400).json({ error: "Invalid user UUID" });
+      }
+      
+      if (typeof is_active !== 'boolean') {
+        return res.status(400).json({ error: "is_active must be a boolean" });
+      }
+
+      // Call the service method
+      const updatedUser = await this.userService.toggleUserActiveStatus(user_uuid, is_active);
+
+      // Respond with the updated user
+      if (updatedUser) {
+        res.status(200).json(updatedUser);
+      } else {
+        res.status(404).json({ error: "User not found" });
+      }
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        return res.status(404).json({ error: error.message });
+      }
+
+      console.error("Error toggling user active status:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
 }

@@ -11,7 +11,7 @@ const ressourceSchema = Joi.object({
   is_reported: Joi.boolean().optional(),
   user_uuid: Joi.string().required(),
   ressource_type_uuid: Joi.string().required(),
-  ressource_status_uuid: Joi.string().optional(),
+  ressource_status_uuid: Joi.string().required(),
   updatedBy: Joi.string().optional(),
 });
 
