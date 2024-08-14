@@ -27,30 +27,119 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.setHeader('X-Content-Type-Options', 'nosniff');
     //  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
 
-
     // Determine the HTTP method and route accordingly
     switch (req.method) {
+      /**
+       * @swagger
+       * /api/have:
+       *   get:
+       *     description: Retrieve resources by tag UUID or tags by resource UUID
+       *     parameters:
+       *       - name: tag_uuid
+       *         in: query
+       *         description: UUID of the tag to retrieve associated resources
+       *         required: false
+       *         schema:
+       *           type: string
+       *       - name: ressource_uuid
+       *         in: query
+       *         description: UUID of the resource to retrieve associated tags
+       *         required: false
+       *         schema:
+       *           type: string
+       *     responses:
+       *       200:
+       *         description: A list of resources or tags based on the provided UUIDs
+       *         content:
+       *           application/json:
+       *             schema:
+       *               type: object
+       *               properties:
+       *                 resources:
+       *                   type: array
+       *                   items:
+       *                     type: object
+       *                     properties:
+       *                       uuid:
+       *                         type: string
+       *                       name:
+       *                         type: string
+       *                 tags:
+       *                   type: array
+       *                   items:
+       *                     type: object
+       *                     properties:
+       *                       uuid:
+       *                         type: string
+       *                       name:
+       *                         type: string
+       *       400:
+       *         description: Invalid GET request. Specify either tag_uuid or ressource_uuid.
+       */
       case 'GET':
-        // If there's a query for `tag_uuid`, return the resources associated with the tag
         if (req.query.tag_uuid) {
           return haveController.getResourcesByTag(req, res);
         }
-        // If there's a query for `ressource_uuid`, return the tags associated with the resource
         if (req.query.ressource_uuid) {
           return haveController.getTagsByResource(req, res);
         }
         return res.status(400).json({ error: "Invalid GET request. Specify either tag_uuid or ressource_uuid." });
 
+      /**
+       * @swagger
+       * /api/have:
+       *   post:
+       *     description: Create an association between a tag and a resource
+       *     requestBody:
+       *       required: true
+       *       content:
+       *         application/json:
+       *           schema:
+       *             type: object
+       *             properties:
+       *               tag_uuid:
+       *                 type: string
+       *                 description: UUID of the tag
+       *               ressource_uuid:
+       *                 type: string
+       *                 description: UUID of the resource
+       *     responses:
+       *       201:
+       *         description: Association created successfully
+       *       400:
+       *         description: Invalid input
+       */
       case 'POST':
-        // Handle requests to create a tag-resource association
         return haveController.createAssociation(req, res);
 
+      /**
+       * @swagger
+       * /api/have:
+       *   delete:
+       *     description: Delete an association between a tag and a resource
+       *     requestBody:
+       *       required: true
+       *       content:
+       *         application/json:
+       *           schema:
+       *             type: object
+       *             properties:
+       *               tag_uuid:
+       *                 type: string
+       *                 description: UUID of the tag
+       *               ressource_uuid:
+       *                 type: string
+       *                 description: UUID of the resource
+       *     responses:
+       *       204:
+       *         description: Association deleted successfully
+       *       400:
+       *         description: Invalid input
+       */
       case 'DELETE':
-        // Handle requests to delete a tag-resource association
         return haveController.deleteAssociation(req, res);
 
       default:
-        // If the method is not allowed, return a 405 Method Not Allowed response
         res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
         return res.status(405).end(`Method ${req.method} Not Allowed`);
     }

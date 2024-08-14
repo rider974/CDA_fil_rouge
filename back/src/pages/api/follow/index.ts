@@ -27,26 +27,116 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.setHeader('X-Content-Type-Options', 'nosniff');
     //  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
 
-
     // Determine the HTTP method and route accordingly
     switch (req.method) {
+      /**
+       * @swagger
+       * /api/follow:
+       *   get:
+       *     description: Retrieve followers of a user or users followed by a user
+       *     parameters:
+       *       - name: user_uuid
+       *         in: query
+       *         description: UUID of the user to retrieve their followers
+       *         required: true
+       *         schema:
+       *           type: string
+       *       - name: follower_uuid
+       *         in: query
+       *         description: UUID of the user to retrieve the users they are following
+       *         required: true
+       *         schema:
+       *           type: string
+       *     responses:
+       *       200:
+       *         description: A list of followers or users being followed
+       *         content:
+       *           application/json:
+       *             schema:
+       *               type: object
+       *               properties:
+       *                 followers:
+       *                   type: array
+       *                   items:
+       *                     type: object
+       *                     properties:
+       *                       uuid:
+       *                         type: string
+       *                       name:
+       *                         type: string
+       *                 following:
+       *                   type: array
+       *                   items:
+       *                     type: object
+       *                     properties:
+       *                       uuid:
+       *                         type: string
+       *                       name:
+       *                         type: string
+       *       400:
+       *         description: Invalid GET request. Specify either user_uuid or follower_uuid.
+       */
       case 'GET':
-        // If there's a query for `user_uuid`, return the user's followers
         if (req.query.user_uuid) {
           return followController.getFollowers(req, res);
         }
-        // If there's a query for `follower_uuid`, return the users that the user is following
         if (req.query.follower_uuid) {
           return followController.getFollowing(req, res);
         }
         return res.status(400).json({ error: "Invalid GET request. Specify either user_uuid or follower_uuid." });
 
+      /**
+       * @swagger
+       * /api/follow:
+       *   post:
+       *     description: Follow a user
+       *     requestBody:
+       *       required: true
+       *       content:
+       *         application/json:
+       *           schema:
+       *             type: object
+       *             properties:
+       *               user_uuid:
+       *                 type: string
+       *                 description: UUID of the user to follow
+       *               follower_uuid:
+       *                 type: string
+       *                 description: UUID of the follower
+       *     responses:
+       *       201:
+       *         description: User followed successfully
+       *       400:
+       *         description: Invalid input
+       */
       case 'POST':
-        // Handle requests to follow a user
         return followController.followUser(req, res);
 
+      /**
+       * @swagger
+       * /api/follow:
+       *   delete:
+       *     description: Unfollow a user
+       *     requestBody:
+       *       required: true
+       *       content:
+       *         application/json:
+       *           schema:
+       *             type: object
+       *             properties:
+       *               user_uuid:
+       *                 type: string
+       *                 description: UUID of the user to unfollow
+       *               follower_uuid:
+       *                 type: string
+       *                 description: UUID of the follower
+       *     responses:
+       *       204:
+       *         description: User unfollowed successfully
+       *       400:
+       *         description: Invalid input
+       */
       case 'DELETE':
-        // Handle requests to unfollow a user
         return followController.unfollowUser(req, res);
 
       default:

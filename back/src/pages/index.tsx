@@ -109,6 +109,20 @@ export default function Home() {
             </p>
           </a>
         </div>
+
+      
+         <div className={styles.description}>
+         <h2>
+          <a
+            href="http://localhost:3001/api/doc"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.card}
+          >
+            ➡️➡️➡️ Swagger documentation ⬅️⬅️⬅️
+          </a>
+          </h2>
+        </div>
       </main>
     </>
   );
