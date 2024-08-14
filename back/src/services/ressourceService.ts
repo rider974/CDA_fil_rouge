@@ -114,7 +114,7 @@ export class RessourceService {
         throw new EntityNotFoundError('RessourceType', ressourceData.ressource_type_uuid);
       }
       if (!ressourceStatus) {
-        throw new EntityNotFoundError('RessourceStatus', ressourceData.ressource_status_uuid || 'default-status-uuid');
+        throw new EntityNotFoundError('RessourceStatus', ressourceData.ressource_status_uuid);
       }
 
       const ressource = AppDataSource.manager.create(Ressource, {
