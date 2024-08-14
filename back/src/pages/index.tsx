@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 
@@ -15,7 +14,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main className={`${styles.main} ${inter.className}`}>
         <div className="w-full flex flex-col items-center justify-center min-h-screen py-2">
           <h1 className="mt-8 mb-4 text-4xl font-bold text-white">
             Welcome to BeginnersAppDev

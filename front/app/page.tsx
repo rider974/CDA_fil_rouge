@@ -64,15 +64,11 @@ export default function HomePage() {
   return (
 
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <button
-        onClick={() => router.push("/authentification/signin")}
-        className={`w-50 flex items-center font-semibold justify-center h-14 px-6 mt-4 text-xl transition-colors duration-300 ${
-          status === "loading" ? "bg-gray-200" : "bg-white"
-        } border-2 border-black text-black rounded-lg focus:shadow-outline hover:bg-slate-200`}
-        disabled={status === "loading"}
-      >
-        {status === "loading" ? "Loading..." : "Sign In"}
-      </button>
+      <div className="w-full flex flex-col items-center justify-center min-h-screen py-2">
+          <h1 className="mt-8 mb-4 text-4xl font-bold text-white">
+            Welcome to BeginnersAppDev
+          </h1>
+        </div>
         <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:text-left">
           <div className="mb-6">
             <h2 className="mb-3 text-2xl font-semibold">Users List</h2>
