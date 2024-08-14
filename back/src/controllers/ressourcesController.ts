@@ -40,25 +40,8 @@ export class RessourceController {
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
       }
-
-      // Default values
-      const defaultStatusName = 'En attente de modération';
-      const defaultIsReported = false;
-
-      // Retrieve default status UUID
-      const defaultStatus = await this.ressourceService.getRessourceStatusByName(defaultStatusName);
-      if (!defaultStatus) {
-        return res.status(500).json({ error: 'Default ressource status not found' });
-      }
-
-      const ressourceData = {
-        ...req.body,
-        is_reported: req.body.is_reported ?? defaultIsReported,
-        ressource_status_uuid: req.body.ressource_status_uuid ?? defaultStatus.ressource_status_uuid,
-      };
-
       // Create new ressource
-      const newRessource = await this.ressourceService.createRessource(ressourceData);
+      const newRessource = await this.ressourceService.createRessource(req.body);
       return res.status(201).json(newRessource);
     } catch (error) {
       if (error instanceof UniqueConstraintViolationError) {
