@@ -1,6 +1,7 @@
 import { AppDataSource } from "@/data-source";
 import { SharingSession } from "@/entity/sharingSession";
 import { EntityNotFoundError, UniqueConstraintViolationError } from "../errors/errors";
+import User from "@/entity/user";
 
 interface CreateSharingSessionDTO {
     title: string;
@@ -60,8 +61,20 @@ export class SharingSessionService {
             if (existingSession) {
                 throw new UniqueConstraintViolationError('Sharing session title already exists');
             }
-
-            const sharingSession = AppDataSource.manager.create(SharingSession, sharingSessionData);
+    
+            // Récupérer l'utilisateur en utilisant user_uuid
+            const user = await AppDataSource.manager.findOne(User, {
+                where: { user_uuid: sharingSessionData.user_uuid },
+            });
+            if (!user) {
+                throw new EntityNotFoundError('User', sharingSessionData.user_uuid);
+            }
+    
+            const sharingSession = AppDataSource.manager.create(SharingSession, {
+                ...sharingSessionData,
+                user: user 
+            });
+    
             return await AppDataSource.manager.save(sharingSession);
         } catch (error) {
             if (error instanceof UniqueConstraintViolationError) {
@@ -71,6 +84,7 @@ export class SharingSessionService {
             throw new Error('An error occurred while creating the sharing session');
         }
     }
+    
 
     /**
      * Replaces an existing sharing session with new data.
