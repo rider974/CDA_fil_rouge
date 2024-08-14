@@ -27,7 +27,7 @@ export function CredentialsForm(props: CredentialsFormProps) {
     setIsLoading(false); // Fin du chargement
 
     if (signInResponse && !signInResponse.error) {
-      router.push("/authentification/hello-page");
+      router.push("/dashboard");
     } else {
       setError(signInResponse?.error || "Une erreur inattendue s'est produite.");
     }
