@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Ressource } from './ressource';
+import { RessourceStatus } from './ressourceStatus';
 import type { Relation } from 'typeorm';
 
 /**
@@ -15,13 +16,15 @@ export class RessourceStatusHistory {
   @Column({ type: 'timestamptz' })
   status_changed_at!: Date;
 
-  // Preview of the resource status before the change
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  preview_state!: string;
+  // Previous state of the resource status before the change
+  @ManyToOne(() => RessourceStatus)
+  @JoinColumn({ name: 'preview_state_uuid' })
+  preview_state!: Relation<RessourceStatus>;
 
   // New state of the resource status after the change
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  new_state!: string;
+  @ManyToOne(() => RessourceStatus)
+  @JoinColumn({ name: 'new_state_uuid' })
+  new_state!: Relation<RessourceStatus>;
 
   // Timestamp when the resource status history record was created
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
