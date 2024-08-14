@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { initializeDataSource } from '../../../data-source';
+import { initializeDataSource } from "../../../data-source";
 import { UserController } from "@/controllers/userController";
 import { UserService } from "@/services/userService";
-import Cors from 'nextjs-cors';
+import Cors from "nextjs-cors";
 
 const userService = new UserService();
 const userController = new UserController(userService);
@@ -11,8 +11,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try{
   await initializeDataSource();
   await Cors(req, res, {
-    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
-    origin: 'http://localhost:3000'
+    methods: ["GET", "POST", "OPTIONS", "PUT", "PATCH", "DELETE"],
+    origin: "http://localhost:3000",
+    credentials: true, //permet d’inclure des informations d’identification (comme des cookies) dans les requêtes cross-origin
+    optionsSuccessStatus: 204,
   });
 
   const action = req.query.action as string | undefined;
@@ -21,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     case "POST":
       await userController.createUser(req, res);
       break;
-    
+
     case "GET":
       if (req.query.user_uuid) {
         await userController.getUserById(req, res);
@@ -33,8 +35,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       break;
 
     case "PUT":
-        await userController.replaceUser(req, res);
-        return;  
+      await userController.replaceUser(req, res);
+      return;
 
       case "PATCH":
         if (action === 'toggleActiveStatus') {
@@ -52,7 +54,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     case "DELETE":
       if (!req.query.user_uuid) {
-        return res.status(400).json({ error: "User UUID is required for deletion" });
+        return res
+          .status(400)
+          .json({ error: "User UUID is required for deletion" });
       }
       await userController.deleteUser(req, res);
       break;
