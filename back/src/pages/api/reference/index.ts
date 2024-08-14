@@ -1,97 +1,60 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { ReferenceService } from '@/services/referenceServices';
-import { EntityNotFoundError } from '@/errors/errors';
+import { ReferenceController } from '@/controllers/referenceController';
+import { initializeDataSource } from '../../../data-source';
+import Cors from 'nextjs-cors';
 
-/**
- * Controller responsible for handling requests related to the association between resources and sharing sessions.
- */
-export class ReferenceController {
-  private referenceService: ReferenceService;
+// Initialize the service and controller
+const referenceService = new ReferenceService();
+const referenceController = new ReferenceController(referenceService);
 
-  constructor(referenceService: ReferenceService) {
-    this.referenceService = referenceService;
-  }
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    // Initialize the database connection
+    await initializeDataSource();
 
-  /**
-   * Create an association between a resource and a sharing session.
-   * @param req - The API request object.
-   * @param res - The API response object.
-   */
-  async createAssociation(req: NextApiRequest, res: NextApiResponse) {
-    try {
-      const { ressource_uuid, sharing_session_uuid } = req.body;
-      const association = await this.referenceService.createAssociation(ressource_uuid, sharing_session_uuid);
-      return res.status(201).json(association);
-    } catch (error) {
-      console.error("Error creating association:", error);
-      return res.status(500).json({ error: "Internal server error" });
+    // Set up CORS
+    await Cors(req, res, {
+      methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+      origin: 'http://localhost:3000',
+    });
+
+    // Remove the X-Powered-By header to hide Next.js usage
+    res.removeHeader('X-Powered-By');
+
+    // Set additional security headers (Helmet-like)
+    res.setHeader('Content-Security-Policy', "default-src 'self'");
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    // res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+    res.setHeader('Referrer-Policy', 'no-referrer');
+    res.setHeader('Permissions-Policy', 'geolocation=(self), microphone=()');
+
+    // Handle the request based on the method
+    switch (req.method) {
+      case 'GET':
+        // Check if the request is for all sharing sessions by resource or all resources by sharing session
+        if (req.query.ressource_uuid) {
+          return referenceController.getSharingSessionsByRessource(req, res);
+        } else if (req.query.sharing_session_uuid) {
+          return referenceController.getRessourcesBySharingSession(req, res);
+        } else {
+          res.status(400).json({ error: "Missing resource or sharing session UUID" });
+        }
+        break;
+      case 'POST':
+        return referenceController.createAssociation(req, res);
+      case 'DELETE':
+        return referenceController.deleteAssociation(req, res);
+      default:
+        // If the HTTP method is not supported
+        res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
     }
-  }
-
-  /**
-   * Delete an association between a resource and a sharing session.
-   * @param req - The API request object.
-   * @param res - The API response object.
-   */
-  async deleteAssociation(req: NextApiRequest, res: NextApiResponse) {
-    try {
-      const { ressource_uuid, sharing_session_uuid } = req.query;
-      if (typeof ressource_uuid !== 'string' || typeof sharing_session_uuid !== 'string') {
-        return res.status(400).json({ error: "Invalid resource or sharing session UUID" });
-      }
-      const success = await this.referenceService.deleteAssociation(ressource_uuid, sharing_session_uuid);
-      if (success) {
-        return res.status(204).end();
-      } else {
-        return res.status(404).json({ error: "Association not found" });
-      }
-    } catch (error) {
-      console.error("Error deleting association:", error);
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  }
-
-  /**
-   * Retrieve all sharing sessions associated with a specific resource.
-   * @param req - The API request object.
-   * @param res - The API response object.
-   */
-  async getSharingSessionsByRessource(req: NextApiRequest, res: NextApiResponse) {
-    try {
-      const { ressource_uuid } = req.query;
-      if (typeof ressource_uuid !== 'string') {
-        return res.status(400).json({ error: "Invalid resource UUID" });
-      }
-      const sharingSessions = await this.referenceService.getSharingSessionsByRessource(ressource_uuid);
-      return res.status(200).json(sharingSessions);
-    } catch (error) {
-      if (error instanceof EntityNotFoundError) {
-        return res.status(404).json({ error: error.message });
-      }
-      console.error("Error fetching sharing sessions by resource:", error);
-      return res.status(500).json({ error: "Internal server error" });
-    }
-  }
-
-  /**
-   * Retrieve all resources associated with a specific sharing session.
-   * @param req - The API request object.
-   * @param res - The API response object.
-   */
-  async getRessourcesBySharingSession(req: NextApiRequest, res: NextApiResponse) {
-    try {
-      const { sharing_session_uuid } = req.query;
-      if (typeof sharing_session_uuid !== 'string') {
-        return res.status(400).json({ error: "Invalid sharing session UUID" });
-      }
-      const ressources = await this.referenceService.getRessourcesBySharingSession(sharing_session_uuid);
-      return res.status(200).json(ressources);
-    } catch (error) {
-      if (error instanceof EntityNotFoundError) {
-        return res.status(404).json({ error: error.message });
-      }
-      console.error("Error fetching resources by sharing session:", error);
-      return res.status(500).json({ error: "Internal server error" });
-    }
+  } catch (error) {
+    // Handle unexpected errors
+    console.error("Handler error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 }
