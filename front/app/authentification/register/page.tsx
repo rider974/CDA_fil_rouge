@@ -50,6 +50,14 @@ export default function RegisterPage() {
               {error}
             </span>
           )}
+           <input
+            type="name"
+            name="name"
+            placeholder="name"
+            required
+            className="w-full px-4 py-4 mb-4 border border-gray-300 rounded-md"
+            aria-label="name"
+          />
           <input
             type="email"
             name="email"
