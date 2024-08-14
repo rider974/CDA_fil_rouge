@@ -20,7 +20,7 @@ export default function Navbar() {
   const { data: session } = useSession();
 
   return (
-    <nav className="bg-gray-100 p-4">
+    <nav className="bg-gray-800 p-4">
       <ul className="flex space-x-4 text-white">
         <li>
           <Link href="/">Home</Link>
