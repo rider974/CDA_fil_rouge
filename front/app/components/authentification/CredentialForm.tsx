@@ -19,6 +19,7 @@ export function CredentialsForm(props: CredentialsFormProps) {
     const data = new FormData(e.currentTarget);
 
     const signInResponse = await signIn("credentials", {
+      name: data.get("name") as string,
       email: data.get("email") as string,
       password: data.get("password") as string,
       redirect: false,
