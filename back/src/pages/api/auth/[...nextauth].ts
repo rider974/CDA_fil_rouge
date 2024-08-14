@@ -60,6 +60,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
  
+  // Indique que NextAuth utilise JWT pour stocker infos côté client
   session: {
     strategy: "jwt",
   },

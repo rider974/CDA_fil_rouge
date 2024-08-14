@@ -1,3 +1,5 @@
+"use client";
+
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -10,7 +12,11 @@ export default function DashboardRedirect() {
   useEffect(() => {
     if (status === "authenticated" && session?.user) {
       const user = session.user as User; 
-      switch (user.role.role_name) { // Utiliser role_name pour la comparaison
+      
+      // Vérifiez que le rôle existe avant d'accéder à role_name
+      const roleName = user?.role?.role_name;
+
+      switch (roleName) {
         case "admin":
           router.push("/dashboard/admin");
           break;
@@ -21,7 +27,7 @@ export default function DashboardRedirect() {
           router.push("/dashboard/moderator");
           break;
         default:
-          router.push("/dashboard");
+          router.push("/dashboard"); 
       }
     } else if (status === "unauthenticated") {
       router.push("/authentification/signin");
@@ -30,7 +36,7 @@ export default function DashboardRedirect() {
 
   return (
     <div className="w-full flex flex-col items-center justify-center min-h-screen py-2">
-      <p className="mt-10 mb-4 text-4xl font-bold">Hello...</p>;
+      <p className="mt-10 mb-4 text-4xl font-bold">Hello...</p>
     </div>
   );
 }
