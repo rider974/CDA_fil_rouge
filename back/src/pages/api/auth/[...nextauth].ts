@@ -87,7 +87,7 @@ export const authOptions: NextAuthOptions = {
 
     async redirect({ url, baseUrl }) {
       if (url.startsWith(baseUrl)) {
-        return baseUrl + "/authentification/hello-page";
+        return baseUrl + "/dashboard";
       }
       return baseUrl + "/authentification/signin";
     },

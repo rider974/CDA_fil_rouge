@@ -25,10 +25,10 @@ export default function RegisterPage() {
       if (response.status === 201) {
         router.push("/authentification/signin");
       } else {
-        setError("Registration failed. Please try again.");
+        setError("v.");
       }
     } catch (err) {
-      setError("Registration failed. Please try again.");
+      setError("L'enregistrement a échoué. Veuillez réessayer.");
     } finally {
       setIsLoading(false);
     }

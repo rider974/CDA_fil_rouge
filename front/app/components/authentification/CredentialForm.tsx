@@ -24,10 +24,12 @@ export function CredentialsForm(props: CredentialsFormProps) {
       redirect: false,
     });
 
+    setIsLoading(false); // Fin du chargement
+
     if (signInResponse && !signInResponse.error) {
       router.push("/authentification/hello-page");
     } else {
-      setError("Your Email or Password is wrong!");
+      setError(signInResponse?.error || "Une erreur inattendue s'est produite.");
     }
   };
 
@@ -59,8 +61,9 @@ export function CredentialsForm(props: CredentialsFormProps) {
     <button
       type="submit"
       className="w-2/3 h-12 px-4 mt-4 text-lg text-white transition-colors duration-150 bg-blue-600 rounded-lg focus:shadow-outline hover:bg-blue-700 mx-auto"
+      disabled={isLoading}
     >
-      Log in
+      {isLoading ? "Logging in..." : "Log in"}
     </button>
   </form>
 );
