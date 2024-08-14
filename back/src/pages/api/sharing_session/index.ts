@@ -15,18 +15,76 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             origin: 'http://localhost:3000'
         });
 
-    // Remove the X-Powered-By header to hide Next.js usage
-    res.removeHeader('X-Powered-By');
+        // Remove the X-Powered-By header to hide Next.js usage
+        res.removeHeader('X-Powered-By');
 
-    // Set additional security headers (Helmet-like)
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    //  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+        // Set additional security headers (Helmet-like)
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        //  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
 
         switch (req.method) {
+            /**
+             * @swagger
+             * /api/sharing-session:
+             *   post:
+             *     description: Create a new sharing session
+             *     requestBody:
+             *       required: true
+             *       content:
+             *         application/json:
+             *           schema:
+             *             type: object
+             *             properties:
+             *               name:
+             *                 type: string
+             *                 description: The name of the sharing session
+             *               description:
+             *                 type: string
+             *                 description: Description of the sharing session
+             *     responses:
+             *       201:
+             *         description: Sharing session created successfully
+             *       400:
+             *         description: Invalid input
+             */
             case "POST":
                 await sharingSessionController.createSharingSession(req, res);
                 break;
 
+            /**
+             * @swagger
+             * /api/sharing-session:
+             *   get:
+             *     description: Retrieve all sharing sessions or a specific sharing session by ID
+             *     parameters:
+             *       - name: sharing_session_uuid
+             *         in: query
+             *         description: UUID of the sharing session to retrieve
+             *         required: false
+             *         schema:
+             *           type: string
+             *     responses:
+             *       200:
+             *         description: A list of sharing sessions or a specific sharing session
+             *         content:
+             *           application/json:
+             *             schema:
+             *               type: array
+             *               items:
+             *                 type: object
+             *                 properties:
+             *                   sharing_session_uuid:
+             *                     type: string
+             *                     description: The UUID of the sharing session
+             *                   name:
+             *                     type: string
+             *                     description: The name of the sharing session
+             *                   description:
+             *                     type: string
+             *                     description: Description of the sharing session
+             *       404:
+             *         description: Sharing session not found
+             */
             case "GET":
                 if (req.query.sharing_session_uuid) {
                     await sharingSessionController.getSharingSessionById(req, res);
@@ -35,10 +93,59 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
                 break;
 
+            /**
+             * @swagger
+             * /api/sharing-session:
+             *   put:
+             *     description: Replace an existing sharing session
+             *     requestBody:
+             *       required: true
+             *       content:
+             *         application/json:
+             *           schema:
+             *             type: object
+             *             properties:
+             *               sharing_session_uuid:
+             *                 type: string
+             *                 description: UUID of the sharing session to replace
+             *               name:
+             *                 type: string
+             *                 description: The new name of the sharing session
+             *               description:
+             *                 type: string
+             *                 description: New description of the sharing session
+             *     responses:
+             *       200:
+             *         description: Sharing session replaced successfully
+             *       400:
+             *         description: Invalid input
+             *       404:
+             *         description: Sharing session not found
+             */
             case "PUT":
                 await sharingSessionController.replaceSharingSession(req, res);
                 break;
 
+            /**
+             * @swagger
+             * /api/sharing-session:
+             *   delete:
+             *     description: Delete a sharing session by UUID
+             *     parameters:
+             *       - name: sharing_session_uuid
+             *         in: query
+             *         description: UUID of the sharing session to delete
+             *         required: true
+             *         schema:
+             *           type: string
+             *     responses:
+             *       204:
+             *         description: Sharing session deleted successfully
+             *       400:
+             *         description: Invalid UUID
+             *       404:
+             *         description: Sharing session not found
+             */
             case "DELETE":
                 if (!req.query.sharing_session_uuid) {
                     return res.status(400).json({ error: "Sharing session UUID is required for deletion" });
