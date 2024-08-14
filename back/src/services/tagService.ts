@@ -14,11 +14,7 @@ export class TagService {
      */
     async getAllTags(): Promise<Tag[]> {
         try {
-            return await AppDataSource.manager.find(Tag, {
-                relations: [
-                  
-                ],
-            });
+            return await AppDataSource.manager.find(Tag);
         } catch (error) {
             console.error("Error fetching tags:", error);
             throw new Error('An error occurred while fetching tags');
@@ -34,11 +30,7 @@ export class TagService {
     async getTagById(tag_uuid: string): Promise<Tag | null> {
         try {
             return await AppDataSource.manager.findOne(Tag, {
-                where: { tag_uuid },
-                relations: [
-                    'resources',
-                    'sharingSessions'
-                ],
+                where: { tag_uuid }
             });
         } catch (error) {
             console.error("Error fetching tag by UUID:", error);

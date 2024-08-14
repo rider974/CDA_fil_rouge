@@ -7,7 +7,7 @@ import type { Relation } from 'typeorm';
 /**
  * Represents a sharing session where resources and tags are shared by users.
  */
-@Entity('sharring_session')
+@Entity('sharing_session')
 @Unique(['title'])
 export class SharingSession {
   // Unique identifier for the sharing session

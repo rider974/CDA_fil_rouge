@@ -47,9 +47,7 @@ export class UserService {
                     'role',
                     'ressources',
                     'comments',
-                    'sharingSessions',
-                    'following',
-                    'followers'
+                    'sharingSessions'
                 ],
             });
         } catch (error) {
@@ -79,7 +77,14 @@ export class UserService {
      */
     async getUserByUsername(username: string): Promise<User | null> {
         try {
-            return await AppDataSource.manager.findOne(User, { where: { username } });
+            return await AppDataSource.manager.findOne(User, { 
+                where: { username },
+                relations: [
+                    'role',
+                    'ressources',
+                    'comments',
+                    'sharingSessions'
+                ], });
         } catch (error) {
             console.error("Error fetching user by username:", error);
             throw error;
