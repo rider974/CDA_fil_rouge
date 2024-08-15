@@ -22,6 +22,20 @@ export default function Home() {
             Enter to BeginnersAppDev
           </h1>
         </div>
+
+      
+         <div className={styles.description}>
+         <h2>
+          <a
+            href="http://localhost:3001/api/doc"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.card}
+          >
+            ➡️➡️➡️ Swagger documentation ⬅️⬅️⬅️
+          </a>
+          </h2>
+        </div>
       </main>
     </>
   );

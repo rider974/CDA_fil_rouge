@@ -16,14 +16,51 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       origin: 'http://localhost:3000',
     });
 
-    switch (req.method) {
-      case "POST":
-        // Appelle la méthode pour créer un type de ressource
-        await ressources_typesController.createRessources_types(req, res);
-        break;
+    // Remove the X-Powered-By header to hide Next.js usage
+    res.removeHeader('X-Powered-By');
 
+    // Set additional security headers (Helmet-like)
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    //  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+
+    switch (req.method) {
+       /**
+       * @swagger
+       * /api/ressources_types:
+       *   get:
+       *     description: Retrieve all resource types or a specific resource type by UUID
+       *     tags:
+       *       - ressources_types
+       *     parameters:
+       *       - name: ressource_type_uuid
+       *         in: query
+       *         description: UUID of the resource type to retrieve
+       *         required: false
+       *         schema:
+       *           type: string
+       *     responses:
+       *       200:
+       *         description: A list of resource types or a specific resource type
+       *         content:
+       *           application/json:
+       *             schema:
+       *               type: array
+       *               items:
+       *                 type: object
+       *                 properties:
+       *                   ressource_type_uuid:
+       *                     type: string
+       *                     description: UUID of the resource type
+       *                   name:
+       *                     type: string
+       *                     description: Name of the resource type
+       *                   description:
+       *                     type: string
+       *                     description: Description of the resource type
+       *       404:
+       *         description: Resource type not found
+       */
       case "GET":
-        // Récupère tous les types de ressources ou un type par UUID
         if (req.query.ressource_type_uuid) {
           await ressources_typesController.getRessources_typesById(req, res);
         } else {
@@ -31,14 +68,96 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         break;
 
+       /**
+       * @swagger
+       * /api/ressources_types:
+       *   post:
+       *     description: Create a new resource type
+       *     tags:
+       *       - ressources_types
+       *     requestBody:
+       *       required: true
+       *       content:
+       *         application/json:
+       *           schema:
+       *             type: object
+       *             properties:
+       *               name:
+       *                 type: string
+       *                 description: The name of the resource type
+       *               description:
+       *                 type: string
+       *                 description: Description of the resource type
+       *     responses:
+       *       201:
+       *         description: Resource type created successfully
+       *       400:
+       *         description: Invalid input
+       */
+      case "POST":
+        await ressources_typesController.createRessources_types(req, res);
+        break;
+
+       /**
+       * @swagger
+       * /api/ressources_types:
+       *   put:
+       *   patch:
+       *     description: Update an existing resource type by UUID
+       *     tags:
+       *       - ressources_types
+       *     requestBody:
+       *       required: true
+       *       content:
+       *         application/json:
+       *           schema:
+       *             type: object
+       *             properties:
+       *               ressource_type_uuid:
+       *                 type: string
+       *                 description: UUID of the resource type to update
+       *               name:
+       *                 type: string
+       *                 description: New name of the resource type
+       *               description:
+       *                 type: string
+       *                 description: New description of the resource type
+       *     responses:
+       *       200:
+       *         description: Resource type updated successfully
+       *       400:
+       *         description: Invalid input
+       *       404:
+       *         description: Resource type not found
+       */
       case "PUT":
       case "PATCH":
-        // Met à jour un type de ressource par UUID
         await ressources_typesController.replaceRessources_types(req, res);
         break;
 
+       /**
+       * @swagger
+       * /api/ressources_types:
+       *   delete:
+       *     description: Delete a resource type by UUID
+       *     tags:
+       *       - ressources_types
+       *     parameters:
+       *       - name: ressource_type_uuid
+       *         in: query
+       *         description: UUID of the resource type to delete
+       *         required: true
+       *         schema:
+       *           type: string
+       *     responses:
+       *       204:
+       *         description: Resource type deleted successfully
+       *       400:
+       *         description: Invalid UUID
+       *       404:
+       *         description: Resource type not found
+       */
       case "DELETE":
-        // Supprime un type de ressource par UUID
         await ressources_typesController.deleteRessources_types(req, res);
         break;
 
