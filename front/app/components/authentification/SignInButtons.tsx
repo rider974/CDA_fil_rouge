@@ -6,8 +6,8 @@ import githubLogo from '/public/github.png';
 import { signIn } from "next-auth/react";
 
 export function GoogleSignInButton() {
-  const handleClick = () => {
-    signIn("google");
+  const handleClick = async () => {
+    await signIn('google');
   };
 
   return (
@@ -22,9 +22,10 @@ export function GoogleSignInButton() {
 }
 
 export function GithubSignInButton() {
-  const handleClick = () => {
-    signIn("github");
+  const handleClick = async () => {
+    await signIn('github');
   };
+  
 
   return (
     <button
