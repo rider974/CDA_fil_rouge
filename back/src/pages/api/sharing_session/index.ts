@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         //  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
 
         switch (req.method) {
-            /**
+             /**
              * @swagger
              * /api/sharing-session:
              *   post:
@@ -51,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 await sharingSessionController.createSharingSession(req, res);
                 break;
 
-            /**
+             /**
              * @swagger
              * /api/sharing-session:
              *   get:
@@ -93,7 +93,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
                 break;
 
-            /**
+             /**
              * @swagger
              * /api/sharing-session:
              *   put:
@@ -126,7 +126,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 await sharingSessionController.replaceSharingSession(req, res);
                 break;
 
-            /**
+             /**
              * @swagger
              * /api/sharing-session:
              *   delete:

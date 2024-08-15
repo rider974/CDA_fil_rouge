@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     //  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
 
     switch (req.method) {
-      /**
+       /**
        * @swagger
        * /api/ressources_types:
        *   get:
@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         break;
 
-      /**
+       /**
        * @swagger
        * /api/ressources_types:
        *   post:
@@ -94,7 +94,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await ressources_typesController.createRessources_types(req, res);
         break;
 
-      /**
+       /**
        * @swagger
        * /api/ressources_types:
        *   put:
@@ -129,7 +129,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await ressources_typesController.replaceRessources_types(req, res);
         break;
 
-      /**
+       /**
        * @swagger
        * /api/ressources_types:
        *   delete:

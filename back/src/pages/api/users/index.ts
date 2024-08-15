@@ -164,7 +164,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await userController.createUser(req, res);
         break;
 
-      /**
+       /**
        * @swagger
        * /api/user:
        *   put:
@@ -217,7 +217,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await userController.replaceUser(req, res);
         return;
 
-      /**
+       /**
        * @swagger
        * /api/user:
        *   patch:
@@ -285,7 +285,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         break;
 
-      /**
+       /**
        * @swagger
        * /api/user:
        *   delete:

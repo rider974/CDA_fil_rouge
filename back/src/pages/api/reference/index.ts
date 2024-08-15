@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.setHeader('X-Content-Type-Options', 'nosniff');
 
     switch (req.method) {
-      /**
+       /**
        * @swagger
        * /api/reference:
        *   get:
@@ -77,7 +77,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         break;
 
-      /**
+       /**
        * @swagger
        * /api/reference:
        *   post:
@@ -104,7 +104,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'POST':
         return referenceController.createAssociation(req, res);
 
-      /**
+       /**
        * @swagger
        * /api/reference:
        *   delete:
