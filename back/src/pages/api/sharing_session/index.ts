@@ -28,6 +28,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
              * /api/sharing_session:
              *   post:
              *     description: Create a new sharing session
+             *     tags:
+             *       - sharing session
              *     requestBody:
              *       required: true
              *       content:
@@ -56,6 +58,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
              * /api/sharing_session:
              *   get:
              *     description: Retrieve all sharing sessions or a specific sharing session by ID
+             *     tags:
+             *       - sharing session
              *     parameters:
              *       - name: sharing_session_uuid
              *         in: query
@@ -98,6 +102,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
              * /api/sharing_session:
              *   put:
              *     description: Replace an existing sharing session
+             *     tags:
+             *       - sharing session
              *     requestBody:
              *       required: true
              *       content:
@@ -131,6 +137,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
              * /api/sharing_session:
              *   delete:
              *     description: Delete a sharing session by UUID
+             *     tags:
+             *       - sharing session
              *     parameters:
              *       - name: sharing_session_uuid
              *         in: query

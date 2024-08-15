@@ -28,6 +28,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources:
        *   get:
        *     description: Retrieve all ressources or a specific ressource by UUID
+       *     tags:
+       *       - ressources
        *     parameters:
        *       - name: ressource_uuid
        *         in: query
@@ -66,6 +68,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources:
        *   post:
        *     description: Create a new ressource
+       *     tags:
+       *       - ressources
        *     requestBody:
        *       required: true
        *       content:
@@ -90,6 +94,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources:
        *   put:
        *     description: Replace an existing ressource by UUID
+       *     tags:
+       *       - ressources
        *     requestBody:
        *       required: true
        *       content:
@@ -119,6 +125,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources:
        *   delete:
        *     description: Delete a ressource by UUID
+       *     tags:
+       *       - ressources
        *     parameters:
        *       - name: ressource_uuid
        *         in: query

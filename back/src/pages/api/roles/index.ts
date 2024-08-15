@@ -28,6 +28,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/roles:
        *   get:
        *     description: Retrieve all roles or a specific role by UUID
+       *     tags:
+       *       - roles
        *     parameters:
        *       - name: role_uuid
        *         in: query
@@ -68,6 +70,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/roles:
        *   post:
        *     description: Create a new role
+       *     tags:
+       *       - roles
        *     requestBody:
        *       required: true
        *       content:
@@ -94,6 +98,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/roles:
        *   put:
        *     description: Replace an existing role
+       *     tags:
+       *       - roles
        *     requestBody:
        *       required: true
        *       content:
@@ -125,6 +131,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/roles:
        *   delete:
        *     description: Delete a role by UUID
+       *     tags:
+       *       - roles
        *     parameters:
        *       - name: role_uuid
        *         in: query

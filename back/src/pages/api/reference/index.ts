@@ -25,6 +25,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/reference:
        *   get:
        *     description: Retrieve sharing sessions by resource UUID or resources by sharing session UUID
+       *     tags:
+       *       - reference
        *     parameters:
        *       - name: ressource_uuid
        *         in: query
@@ -82,6 +84,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/reference:
        *   post:
        *     description: Create an association between a resource and a sharing session
+       *     tags:
+       *       - reference
        *     requestBody:
        *       required: true
        *       content:
@@ -109,6 +113,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/reference:
        *   delete:
        *     description: Delete an association between a resource and a sharing session
+       *     tags:
+       *       - reference
        *     requestBody:
        *       required: true
        *       content:
