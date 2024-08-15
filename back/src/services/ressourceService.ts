@@ -155,6 +155,43 @@ export class RessourceService {
     }
   }
 
+/**
+   * Updates the status of an existing ressource.
+   * @param ressource_uuid - The UUID of the ressource to update.
+   * @param newStatusUuid - The new UUID of the ressource status.
+   * @returns A promise that resolves to the updated ressource if found and updated, or null if not found.
+   * @throws EntityNotFoundError if the ressource or the new status is not found.
+   */
+async updateRessourceStatus(ressource_uuid: string, newStatusUuid: string): Promise<Ressource | null> {
+  try {
+    // Verify that the ressource exists
+    const ressource = await AppDataSource.manager.findOne(Ressource, { where: { ressource_uuid } });
+    if (!ressource) {
+      throw new EntityNotFoundError('Ressource', ressource_uuid);
+    }
+
+    // Verify that the new status exists
+    const newStatus = await AppDataSource.manager.findOne(RessourceStatus, { where: { ressource_status_uuid: newStatusUuid } });
+    if (!newStatus) {
+      throw new EntityNotFoundError('RessourceStatus', newStatusUuid);
+    }
+
+    // Perform the update to trigger the database trigger
+    const updateResult = await AppDataSource.manager.update(Ressource, { ressource_uuid }, { ressourceStatus: { ressource_status_uuid: newStatusUuid } });
+
+    // If no rows were affected, the ressource wasn't found (edge case)
+    if (updateResult.affected === 0) {
+      throw new EntityNotFoundError('Ressource', ressource_uuid);
+    }
+
+    // Return the updated ressource
+    return await AppDataSource.manager.findOne(Ressource, { where: { ressource_uuid } });
+  } catch (error) {
+    console.error("Error updating ressource status:", error);
+    throw new Error('An error occurred while updating the ressource status');
+  }
+}
+
   /**
    * Deletes a ressource by its UUID.
    * @param ressource_uuid - The UUID of the ressource to delete.
