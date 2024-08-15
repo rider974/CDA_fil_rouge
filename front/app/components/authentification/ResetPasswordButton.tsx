@@ -13,7 +13,7 @@ export function ResetPasswordButton() {
   return (
     <button
       onClick={handleClick}
-      className="inline-block text-sm text-red-600 "
+      className="text-left inline-block text-sm text-red-600 "
     >
       Mot de passe oublié 🤨
     </button>
