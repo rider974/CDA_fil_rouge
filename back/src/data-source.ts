@@ -1,7 +1,6 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 import {User} from "./entity/user"
-
 import {Role} from "./entity/role"
 import {Comment} from "./entity/comment"
 import {Have} from "./entity/have"
