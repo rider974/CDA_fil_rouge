@@ -1,3 +1,4 @@
+// Next a un compilateur interne SWC - babel-eslint peut créer des conflits
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next", "next/core-web-vitals"]
 }
