@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 // import { ResetPasswordButton } from "./ResetPasswordButton";
 import { signIn } from "next-auth/react";
+import { ResetPasswordButton } from "./ResetPasswordButton";
 
 interface CredentialsFormProps {
   csrfToken?: string;
@@ -51,6 +52,7 @@ export function CredentialsForm(props: CredentialsFormProps) {
       required
       className="w-full px-4 py-4 mb-4 border border-gray-300 rounded-md"
     />
+    <ResetPasswordButton />
     <input
       type="password"
       name="password"
