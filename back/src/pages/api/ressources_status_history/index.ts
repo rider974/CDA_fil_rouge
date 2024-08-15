@@ -34,6 +34,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status_history:
        *   get:
        *     description: Retrieve all status history entries or a specific entry by UUID
+       *     tags:
+       *       - ressources_status_history
        *     parameters:
        *       - name: ressource_status_history_uuid
        *         in: query
@@ -76,6 +78,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status_history:
        *   post:
        *     description: Create a new status history entry
+       *     tags:
+       *       - ressources_status_history
        *     requestBody:
        *       required: true
        *       content:
@@ -104,6 +108,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status_history:
        *   put:
        *     description: Replace an existing status history entry by UUID
+       *     tags:
+       *       - ressources_status_history
        *     requestBody:
        *       required: true
        *       content:
@@ -137,6 +143,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status_history:
        *   patch:
        *     description: Update specific fields of an existing status history entry by UUID
+       *     tags:
+       *       - ressources_status_history
        *     requestBody:
        *       required: true
        *       content:
@@ -170,6 +178,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status_history:
        *   delete:
        *     description: Delete a status history entry by UUID
+       *     tags:
+       *       - ressources_status_history
        *     parameters:
        *       - name: ressource_status_history_uuid
        *         in: query

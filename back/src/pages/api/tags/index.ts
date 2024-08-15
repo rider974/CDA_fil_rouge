@@ -32,6 +32,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/tags:
        *   get:
        *     description: Retrieve all tags or a specific tag by ID
+       *     tags:
+       *       - tags
        *     parameters:
        *       - name: tag_uuid
        *         in: query
@@ -69,6 +71,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/tags:
        *   post:
        *     description: Create a new tag
+       *     tags:
+       *       - tags
        *     requestBody:
        *       required: true
        *       content:
@@ -93,6 +97,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/tags:
        *   put:
        *     description: Update an existing tag
+       *     tags:
+       *       - tags
        *     requestBody:
        *       required: true
        *       content:
@@ -122,6 +128,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/tags:
        *   delete:
        *     description: Delete a tag by UUID
+       *     tags:
+       *       - tags
        *     parameters:
        *       - name: tag_uuid
        *         in: query

@@ -34,6 +34,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/follow:
        *   get:
        *     description: Retrieve followers of a user or users followed by a user
+       *     tags:
+       *       - follow
        *     parameters:
        *       - name: user_uuid
        *         in: query
@@ -90,6 +92,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/follow:
        *   post:
        *     description: Follow a user
+       *     tags:
+       *       - follow
        *     requestBody:
        *       required: true
        *       content:
@@ -117,6 +121,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/follow:
        *   delete:
        *     description: Unfollow a user
+       *     tags:
+       *       - follow
        *     requestBody:
        *       required: true
        *       content:

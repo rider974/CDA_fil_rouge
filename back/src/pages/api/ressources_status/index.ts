@@ -30,6 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status:
        *   get:
        *     description: Retrieve all ressource statuses or a specific status by UUID
+       *     tags:
+       *       - ressources_status
        *     parameters:
        *       - name: ressource_status_uuid
        *         in: query
@@ -68,6 +70,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status:
        *   post:
        *     description: Create a new ressource status
+       *     tags:
+       *       - ressources_status
        *     requestBody:
        *       required: true
        *       content:
@@ -92,6 +96,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status:
        *   put:
        *     description: Replace an existing ressource status by UUID
+       *     tags:
+       *       - ressources_status
        *     requestBody:
        *       required: true
        *       content:
@@ -121,6 +127,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status:
        *   delete:
        *     description: Delete a ressource status by UUID
+       *     tags:
+       *       - ressources_status
        *     parameters:
        *       - name: ressource_status_uuid
        *         in: query

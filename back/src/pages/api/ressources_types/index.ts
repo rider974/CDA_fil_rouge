@@ -29,6 +29,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_types:
        *   get:
        *     description: Retrieve all resource types or a specific resource type by UUID
+       *     tags:
+       *       - ressources_types
        *     parameters:
        *       - name: ressource_type_uuid
        *         in: query
@@ -71,6 +73,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_types:
        *   post:
        *     description: Create a new resource type
+       *     tags:
+       *       - ressources_types
        *     requestBody:
        *       required: true
        *       content:
@@ -100,6 +104,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        *   put:
        *   patch:
        *     description: Update an existing resource type by UUID
+       *     tags:
+       *       - ressources_types
        *     requestBody:
        *       required: true
        *       content:
@@ -134,6 +140,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_types:
        *   delete:
        *     description: Delete a resource type by UUID
+       *     tags:
+       *       - ressources_types
        *     parameters:
        *       - name: ressource_type_uuid
        *         in: query
