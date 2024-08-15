@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     switch (req.method) {
        /**
        * @swagger
-       * /api/user:
+       * /api/users:
        *   get:
        *     summary: Retrieve all users or a specific user by UUID or username
        *     tags:
@@ -104,7 +104,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
        /**
        * @swagger
-       * /api/user:
+       * /api/users:
        *   post:
        *     summary: Create a new user
        *     tags:
@@ -166,7 +166,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
        /**
        * @swagger
-       * /api/user:
+       * /api/users:
        *   put:
        *     summary: Replace an existing user
        *     tags:
@@ -219,7 +219,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
        /**
        * @swagger
-       * /api/user:
+       * /api/users:
        *   patch:
        *     summary: Update user fields or toggle user active status
        *     tags:
@@ -287,7 +287,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
        /**
        * @swagger
-       * /api/user:
+       * /api/users:
        *   delete:
        *     summary: Delete a user by UUID
        *     tags:

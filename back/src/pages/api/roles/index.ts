@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     switch (req.method) {
        /**
        * @swagger
-       * /api/role:
+       * /api/roles:
        *   get:
        *     description: Retrieve all roles or a specific role by UUID
        *     parameters:
@@ -65,7 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
        /**
        * @swagger
-       * /api/role:
+       * /api/roles:
        *   post:
        *     description: Create a new role
        *     requestBody:
@@ -91,7 +91,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return roleController.createRole(req, res);
        /**
        * @swagger
-       * /api/role:
+       * /api/roles:
        *   put:
        *     description: Replace an existing role
        *     requestBody:
@@ -122,7 +122,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return roleController.replaceRole(req, res);
        /**
        * @swagger
-       * /api/role:
+       * /api/roles:
        *   delete:
        *     description: Delete a role by UUID
        *     parameters:

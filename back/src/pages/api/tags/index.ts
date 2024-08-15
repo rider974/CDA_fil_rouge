@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     switch (req.method) {
        /**
        * @swagger
-       * /api/tag:
+       * /api/tags:
        *   get:
        *     description: Retrieve all tags or a specific tag by ID
        *     parameters:
@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
        /**
        * @swagger
-       * /api/tag:
+       * /api/tags:
        *   post:
        *     description: Create a new tag
        *     requestBody:
@@ -90,7 +90,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
        /**
        * @swagger
-       * /api/tag:
+       * /api/tags:
        *   put:
        *     description: Update an existing tag
        *     requestBody:
@@ -119,7 +119,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
        /**
        * @swagger
-       * /api/tag:
+       * /api/tags:
        *   delete:
        *     description: Delete a tag by UUID
        *     parameters:

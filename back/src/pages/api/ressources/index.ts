@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     switch (req.method) {
        /**
        * @swagger
-       * /api/ressource:
+       * /api/ressources:
        *   get:
        *     description: Retrieve all ressources or a specific ressource by UUID
        *     parameters:
@@ -63,7 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
        /**
        * @swagger
-       * /api/ressource:
+       * /api/ressources:
        *   post:
        *     description: Create a new ressource
        *     requestBody:
@@ -87,7 +87,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
        /**
        * @swagger
-       * /api/ressource:
+       * /api/ressources:
        *   put:
        *     description: Replace an existing ressource by UUID
        *     requestBody:
@@ -116,7 +116,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
        /**
        * @swagger
-       * /api/ressource:
+       * /api/ressources:
        *   delete:
        *     description: Delete a ressource by UUID
        *     parameters:

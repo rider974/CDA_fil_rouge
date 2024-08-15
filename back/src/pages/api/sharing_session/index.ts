@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         switch (req.method) {
              /**
              * @swagger
-             * /api/sharing-session:
+             * /api/sharing_session:
              *   post:
              *     description: Create a new sharing session
              *     requestBody:
@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
              /**
              * @swagger
-             * /api/sharing-session:
+             * /api/sharing_session:
              *   get:
              *     description: Retrieve all sharing sessions or a specific sharing session by ID
              *     parameters:
@@ -95,7 +95,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
              /**
              * @swagger
-             * /api/sharing-session:
+             * /api/sharing_session:
              *   put:
              *     description: Replace an existing sharing session
              *     requestBody:
@@ -128,7 +128,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
              /**
              * @swagger
-             * /api/sharing-session:
+             * /api/sharing_session:
              *   delete:
              *     description: Delete a sharing session by UUID
              *     parameters:

@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     switch (req.method) {
        /**
        * @swagger
-       * /api/comment:
+       * /api/comments:
        *   get:
        *     description: Retrieve a single comment by ID or all comments
        *     parameters:
@@ -75,7 +75,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
        /**
        * @swagger
-       * /api/comment:
+       * /api/comments:
        *   post:
        *     description: Create a new comment
        *     requestBody:
@@ -102,7 +102,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
        /**
        * @swagger
-       * /api/comment:
+       * /api/comments:
        *   put:
        *     description: Replace an existing comment by ID
        *     requestBody:
@@ -129,7 +129,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
        /**
        * @swagger
-       * /api/comment:
+       * /api/comments:
        *   patch:
        *     description: Update specific fields of an existing comment
        *     requestBody:
@@ -156,7 +156,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
        /**
        * @swagger
-       * /api/comment:
+       * /api/comments:
        *   delete:
        *     description: Delete a comment by ID
        *     requestBody:
