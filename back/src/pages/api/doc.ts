@@ -1,5 +1,3 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import Cors from 'nextjs-cors';
 import { withSwagger } from 'next-swagger-doc';
 
 const swaggerHandler = withSwagger({
@@ -99,11 +97,4 @@ const swaggerHandler = withSwagger({
   apiFolder: 'src/pages/api',
 });
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await Cors(req, res, {
-    methods: ['GET', 'OPTIONS'],
-    origin: 'http://localhost:3000',
-  });
-
-  return swaggerHandler();
-}
+export default swaggerHandler();
