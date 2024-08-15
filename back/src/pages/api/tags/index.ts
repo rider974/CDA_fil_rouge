@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
    
     // Gestion des différentes méthodes HTTP
     switch (req.method) {
-      /**
+       /**
        * @swagger
        * /api/tag:
        *   get:
@@ -64,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         } else {
           return tagController.getAllTags(req, res);
         }
-      /**
+       /**
        * @swagger
        * /api/tag:
        *   post:
@@ -88,7 +88,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'POST':
         return tagController.createTag(req, res);
       
-      /**
+       /**
        * @swagger
        * /api/tag:
        *   put:
@@ -117,7 +117,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'PUT':
         return tagController.updateTag(req, res);
       
-      /**
+       /**
        * @swagger
        * /api/tag:
        *   delete:

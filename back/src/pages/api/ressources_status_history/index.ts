@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Handle the request based on the method
     switch (req.method) {
-      /**
+       /**
        * @swagger
        * /api/ressources_status_history:
        *   get:
@@ -71,7 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return statusHistoryController.getAllStatusHistories(req, res);
         }
 
-      /**
+       /**
        * @swagger
        * /api/ressources_status_history:
        *   post:
@@ -99,7 +99,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'POST':
         return statusHistoryController.createStatusHistory(req, res);
 
-      /**
+       /**
        * @swagger
        * /api/ressources_status_history:
        *   put:
@@ -132,7 +132,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'PUT':
         return statusHistoryController.replaceStatusHistory(req, res);
 
-      /**
+       /**
        * @swagger
        * /api/ressources_status_history:
        *   patch:
@@ -165,7 +165,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'PATCH':
         return statusHistoryController.updateStatusHistoryFields(req, res);
 
-      /**
+       /**
        * @swagger
        * /api/ressources_status_history:
        *   delete:

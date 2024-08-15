@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
  
 
     switch (req.method) {
-      /**
+       /**
        * @swagger
        * /api/ressource_status:
        *   get:
@@ -63,7 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return ressourceStatusController.getAllRessourceStatuses(req, res);
         }
 
-      /**
+       /**
        * @swagger
        * /api/ressource_status:
        *   post:
@@ -87,7 +87,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'POST':
         return ressourceStatusController.createRessourceStatus(req, res);
 
-      /**
+       /**
        * @swagger
        * /api/ressource_status:
        *   put:
@@ -116,7 +116,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'PUT':
         return ressourceStatusController.replaceRessourceStatus(req, res);
 
-      /**
+       /**
        * @swagger
        * /api/ressource_status:
        *   delete:

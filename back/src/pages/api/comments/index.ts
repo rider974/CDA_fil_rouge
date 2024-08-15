@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Handle the request based on the method
     switch (req.method) {
-      /**
+       /**
        * @swagger
        * /api/comment:
        *   get:
@@ -73,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return commentController.getAllComments(req, res);
         }
 
-      /**
+       /**
        * @swagger
        * /api/comment:
        *   post:
@@ -100,7 +100,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'POST':
         return commentController.createComment(req, res);
 
-      /**
+       /**
        * @swagger
        * /api/comment:
        *   put:
@@ -127,7 +127,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'PUT':
         return commentController.replaceComment(req, res);
 
-      /**
+       /**
        * @swagger
        * /api/comment:
        *   patch:
@@ -154,7 +154,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'PATCH':
         return commentController.updateCommentFields(req, res);
 
-      /**
+       /**
        * @swagger
        * /api/comment:
        *   delete:

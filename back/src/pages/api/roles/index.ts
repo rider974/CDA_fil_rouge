@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     //  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
 
     switch (req.method) {
-      /**
+       /**
        * @swagger
        * /api/role:
        *   get:
@@ -63,7 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         } else {
           return roleController.getAllRoles(req, res);
         }
-      /**
+       /**
        * @swagger
        * /api/role:
        *   post:
@@ -89,7 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        */
       case 'POST':
         return roleController.createRole(req, res);
-      /**
+       /**
        * @swagger
        * /api/role:
        *   put:
@@ -120,7 +120,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        */
       case 'PUT':
         return roleController.replaceRole(req, res);
-      /**
+       /**
        * @swagger
        * /api/role:
        *   delete:

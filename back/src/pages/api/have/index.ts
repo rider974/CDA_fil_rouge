@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Determine the HTTP method and route accordingly
     switch (req.method) {
-      /**
+       /**
        * @swagger
        * /api/have:
        *   get:
@@ -85,7 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         return res.status(400).json({ error: "Invalid GET request. Specify either tag_uuid or ressource_uuid." });
 
-      /**
+       /**
        * @swagger
        * /api/have:
        *   post:
@@ -112,7 +112,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'POST':
         return haveController.createAssociation(req, res);
 
-      /**
+       /**
        * @swagger
        * /api/have:
        *   delete:

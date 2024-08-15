@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Determine the HTTP method and route accordingly
     switch (req.method) {
-      /**
+       /**
        * @swagger
        * /api/follow:
        *   get:
@@ -85,7 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         return res.status(400).json({ error: "Invalid GET request. Specify either user_uuid or follower_uuid." });
 
-      /**
+       /**
        * @swagger
        * /api/follow:
        *   post:
@@ -112,7 +112,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'POST':
         return followController.followUser(req, res);
 
-      /**
+       /**
        * @swagger
        * /api/follow:
        *   delete:

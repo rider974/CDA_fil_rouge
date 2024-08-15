@@ -31,16 +31,20 @@ const swaggerHandler = withSwagger({
     },
     servers: [
       {
-        url: 'http://45.81.84.133:9015/api',
+        url: 'http://45.81.84.133:9015/',
         description: 'Production server (VPS Florence)'
       },
       {
-        url: 'http://45.81.84.133:9019/api',
+        url: 'http://45.81.84.133:9019/',
         description: 'Production server (VPS Pascal)'
       },
       {
-        url: 'https://staging-api.example.com',
+        url: 'http://45.81.84.133:9069/',
         description: 'Production server (VPS Thomas)'
+      },
+      {
+        url: 'http://localhost:3001/',
+        description: 'stagging local'
       }
     ],
     tags: [
