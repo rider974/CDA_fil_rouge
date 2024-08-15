@@ -53,31 +53,35 @@ const swaggerHandler = withSwagger({
         description: 'Endpoints related to roles'
       },
       {
-        name: 'Users',
+        name: 'users',
         description: 'Endpoints related to user management'
       },
       {
-        name: 'Follows',
+        name: 'follow',
         description: 'Endpoints related to user follow relationships'
       },
       {
-        name: 'Comments',
+        name: 'comments',
         description: 'Endpoints related to comments'
       },
       {
-        name: 'RessourceTypes',
+        name: 'ressources_types',
         description: 'Endpoints related to resource types'
       },
       {
-        name: 'RessourceStatus',
+        name: 'ressources_status',
         description: 'Endpoints related to resource statuses'
       },
       {
-        name: 'Ressources',
+        name: 'ressources_status_history',
+        description: 'Endpoints related history change of ressource status'
+      },
+      {
+        name: 'ressources',
         description: 'Endpoints related to resources'
       },
       {
-        name: 'Tags',
+        name: 'tags',
         description: 'Endpoints related to tags'
       },
       {
@@ -89,11 +93,11 @@ const swaggerHandler = withSwagger({
         description: 'Endpoints related to associations between a tag and a sharing session'
       },
       {
-        name: 'References',
+        name: 'reference',
         description: 'Endpoints related to references between resources'
       },
       {
-        name: 'Sharing session',
+        name: 'sharing_session',
         description: 'Endpoints related to sharing sessions'
       }
     ],
