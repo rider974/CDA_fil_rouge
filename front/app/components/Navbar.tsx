@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
 
@@ -42,7 +42,14 @@ export default function Navbar() {
               <li>
                 <Link href="/dashboard/moderator">Moderator Dashboard</Link>
               </li>
-            )}
+            )}<li>
+            <button
+              onClick={() => signOut({ callbackUrl: "/authentification/signin"})}
+              className="text-white"
+            >
+              Sign Out
+            </button>
+          </li>
           </>
         ) : (
           <li>

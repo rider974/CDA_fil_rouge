@@ -86,19 +86,31 @@ export const authOptions: NextAuthOptions = {
     },
 
     async redirect({ url, baseUrl }) {
-      if (url.startsWith(baseUrl)) {
-        return baseUrl + "/dashboard";
+      // Extraire le rôle de l'utilisateur depuis l'URL, si disponible
+      const role = new URL(url).searchParams.get("role");
+
+      if (role) {
+        if (role === 'admin') {
+          return `${baseUrl}/dashboard/admin`;
+        } else if (role === 'member') {
+          return `${baseUrl}/dashboard/member`;
+        } else if (role === 'moderator') {
+          return `${baseUrl}/dashboard/moderator`;
+        } else {
+          return `${baseUrl}/dashboard/visitor`;
+        }
       }
+
       return baseUrl + "/authentification/signin";
     },
-    
   },
+
   pages: {
     signIn: '/authentification/signin',  
+    signOut: '/authentification/signin',
   },
 
-  secret: process.env.NEXTAUTH_SECRET, // Clé secrète pour signer les tokens JWT
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
-// Exportez NextAuth avec les options configurées
 export default NextAuth(authOptions);
