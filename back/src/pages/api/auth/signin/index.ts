@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { initializeDataSource } from '@/data-source';
 import Cors from 'nextjs-cors';
-import { AuthController } from '@/controllers/authController'
 import { UserService } from '@/services/userService';
+import { UserController } from '@/controllers/userController';
 // Initialize the services and controllers
 const userService = new UserService();
-const authController = new AuthController(userService);
+const userController = new UserController(userService);
 
 
 // The main API handler for the follow routes
@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             case 'POST':
 
-                return authController.login(req, res)
+                return userController.login(req, res)
             default:
                 // If the method is not allowed, return a 405 Method Not Allowed response
                 res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
