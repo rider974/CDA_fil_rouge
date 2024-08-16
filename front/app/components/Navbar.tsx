@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 
 // Définir le type exact de role_name pour éviter les erreurs de typage
@@ -15,7 +16,6 @@ interface CustomUser {
 }
 
 export default function Navbar() {
-
   return (
     <nav className="bg-gray-800 p-4">
       <ul className="flex space-x-4 text-white">
