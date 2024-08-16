@@ -27,19 +27,15 @@ export function CredentialsForm(props: CredentialsFormProps) {
 
       const response = await axios.post("/api/auth/signin", { email, password });
 
-
-      // Simule la validation de l'utilisateur
-      // const isValidUser = email === "test@example.com" && password === "password123";
-
-    //   if (isValidUser) {
-    //     router.push("/dashboard");
-    //   } else {
-    //     setError("Invalid email or password.");
-    //   }
+      if (response) {
+        router.push("/dashboard");
+      } else {
+        setError("Invalid email or password.");
+      }
     } catch (error) {
       setError("An unexpected error occurred.");
     } finally {
-      setIsLoading(false); // Fin du chargement dans tous les cas
+      setIsLoading(false); 
     }
   };
 
