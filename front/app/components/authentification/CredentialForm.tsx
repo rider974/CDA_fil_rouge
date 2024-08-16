@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ResetPasswordButton } from "./ResetPasswordButton";
+import axios from "axios";
 
 interface CredentialsFormProps {
   csrfToken?: string;
@@ -24,14 +25,17 @@ export function CredentialsForm(props: CredentialsFormProps) {
       const email = data.get("email") as string;
       const password = data.get("password") as string;
 
-      // Simule la validation de l'utilisateur
-      const isValidUser = email === "test@example.com" && password === "password123";
+      const response = await axios.post("/api/auth/signin", { email, password });
 
-      if (isValidUser) {
-        router.push("/dashboard");
-      } else {
-        setError("Invalid email or password.");
-      }
+
+      // Simule la validation de l'utilisateur
+      // const isValidUser = email === "test@example.com" && password === "password123";
+
+    //   if (isValidUser) {
+    //     router.push("/dashboard");
+    //   } else {
+    //     setError("Invalid email or password.");
+    //   }
     } catch (error) {
       setError("An unexpected error occurred.");
     } finally {

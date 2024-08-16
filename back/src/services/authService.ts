@@ -8,11 +8,8 @@ export interface CreateAuthDTO {
 }
 
 export class AuthService {
-  private userService: UserService;
+  userService!: UserService;
 
-  constructor(userService: UserService) {
-    this.userService = userService;
-  }
 
   async login(email: string, password: string): Promise<User> {
     try {

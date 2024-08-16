@@ -5,9 +5,9 @@ import { UserService } from "@/services/userService";
 export class AuthController {
   private authService: AuthService;
 
-  constructor() {
-    const userService = new UserService();
-    this.authService = new AuthService(userService);
+  constructor(authService: AuthService) {
+    
+    this.authService = authService;
   }
 
   async login(req: NextApiRequest, res: NextApiResponse) {
