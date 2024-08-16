@@ -20,7 +20,7 @@ export default function RegisterPage() {
     const password = data.get("password") as string;
 
     try {
-      const response = await axios.post("http://localhost:3001/auth/register", { name, email, password });
+      const response = await axios.post("/api/auth/register", { name, email, password });
 
       if (response.status === 201) {
         router.push("/authentification/signin");
