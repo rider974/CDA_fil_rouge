@@ -130,30 +130,38 @@ export class RessourceService {
       throw new Error('An error occurred while creating the ressource');
     }
   }
-  /**
-   * Replaces an existing ressource with new data.
-   * @param ressource_uuid - The UUID of the ressource to replace.
-   * @param ressourceData - The new data for the ressource.
-   * @returns A promise that resolves to the updated ressource if found and updated, or null if not found.
-   * @throws EntityNotFoundError if the ressource is not found.
-   */
-  async replaceRessource(ressource_uuid: string, ressourceData: Partial<CreateRessourceDTO>): Promise<Ressource | null> {
-    try {
-      const existingRessource = await AppDataSource.manager.findOne(Ressource, { where: { ressource_uuid } });
-      if (!existingRessource) {
-        throw new EntityNotFoundError('Ressource', ressource_uuid);
-      }
-
-      const updatedRessource = await AppDataSource.manager.save(Ressource, { ...existingRessource, ...ressourceData });
-      return updatedRessource;
-    } catch (error) {
-      if (error instanceof UniqueConstraintViolationError || error instanceof EntityNotFoundError) {
-        throw error;
-      }
-      console.error("Error replacing ressource:", error);
-      throw new Error('An error occurred while replacing the ressource');
+/**
+ * Replaces an existing ressource with new data.
+ * @param ressource_uuid - The UUID of the ressource to replace.
+ * @param ressourceData - The new data for the ressource.
+ * @returns A promise that resolves to the updated ressource if found and updated, or null if not found.
+ * @throws EntityNotFoundError if the ressource is not found.
+ */
+async replaceRessource(
+  ressource_uuid: string, 
+  ressourceData: Partial<CreateRessourceDTO>
+): Promise<Ressource | null> {
+  try {
+    const existingRessource = await AppDataSource.manager.findOne(Ressource, { where: { ressource_uuid } });
+    if (!existingRessource) {
+      throw new EntityNotFoundError('Ressource', ressource_uuid);
     }
+
+    // Perform the update to trigger the database trigger
+    await AppDataSource.manager.update(Ressource, { ressource_uuid }, ressourceData);
+
+    // Return the updated ressource
+    const updatedRessource = await AppDataSource.manager.findOne(Ressource, { where: { ressource_uuid } });
+    return updatedRessource;
+  } catch (error) {
+    if (error instanceof UniqueConstraintViolationError || error instanceof EntityNotFoundError) {
+      throw error;
+    }
+    console.error("Error replacing ressource:", error);
+    throw new Error('An error occurred while replacing the ressource');
   }
+}
+
 
 /**
    * Updates the status of an existing ressource.
