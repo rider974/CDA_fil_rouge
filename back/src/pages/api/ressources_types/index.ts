@@ -101,7 +101,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        /**
        * @swagger
        * /api/ressources_types:
-       *   put:
        *   patch:
        *     description: Update an existing resource type by UUID
        *     tags:
@@ -130,7 +129,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        *       404:
        *         description: Resource type not found
        */
-      case "PUT":
       case "PATCH":
         await ressources_typesController.replaceRessources_types(req, res);
         break;
