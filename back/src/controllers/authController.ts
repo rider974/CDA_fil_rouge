@@ -10,9 +10,19 @@ const userLoginSchema = Joi.object({
     "any.required": "Email is required",
     "string.empty": "Email cannot be empty",
   }),
-  password: Joi.string().required().messages({
-    "string.empty": "Password is required",
-  }),
+  password: Joi.string()
+    .min(12)
+    .pattern(/[A-Z]/, "uppercase")
+    .pattern(/[a-z]/, "lowercase")
+    .pattern(/[0-9]/, "digit")
+    .pattern(/[!@#$%^&*(),.?":{}|<>]/, "special character")
+    .required()
+    .messages({
+      "string.min": "Password must be at least 12 characters long",
+      "string.pattern.base":
+        "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character",
+      "string.empty": "Password is required",
+    }),
 });
 
 export class AuthController {
@@ -21,15 +31,6 @@ export class AuthController {
 
   constructor(userService: UserService) {
     this.userService = userService;
-  }
-
-   /**
-   * Sanitizes input strings to remove potential harmful content.
-   * @param input - The input string to sanitize.
-   * @returns The sanitized string.
-   */
-   private sanitizeInput(input: string): string {
-    return sanitize(input.trim());
   }
 
   async login(req: NextApiRequest, res: NextApiResponse) {
@@ -42,11 +43,19 @@ export class AuthController {
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
       }
+        
+      
+      // Check if user exists
+      const user = await this.userService.getUserByEmail(email);
   
-      const sanitizedEmail = this.sanitizeInput(email);
-      const user = await this.userService.getUserByEmail(sanitizedEmail);
+      if (!user) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
   
-      if (!user || !(await comparePassword(password, user.password))) {
+      // Check if password matches
+      const isPasswordValid = await comparePassword(password, user.password);
+  
+      if (!isPasswordValid) {
         return res.status(401).json({ error: "Invalid email or password" });
       }
   
@@ -62,5 +71,6 @@ export class AuthController {
       return res.status(500).json({ error: "Internal server error" });
     }
   }
+  
   
 }
