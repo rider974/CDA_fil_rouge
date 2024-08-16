@@ -15,12 +15,12 @@ export default function RegisterPage() {
     setError(null);
 
     const data = new FormData(e.currentTarget);
-    const name = data.get("name") as string;
+    const username = data.get("name") as string;
     const email = data.get("email") as string;
     const password = data.get("password") as string;
 
     try {
-      const response = await axios.post("/api/auth/register", { name, email, password });
+      const response = await axios.post("/api/auth/register", { username, email, password });
 
       if (response.status === 201) {
         router.push("/authentification/signin");
