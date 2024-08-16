@@ -133,9 +133,10 @@ export class UserService {
       if (existingUserByEmail) {
         throw new UniqueConstraintViolationError("Email already exists");
       }
-
+      console.log(userData.password);
       const hashedPassword = await hashPassword(userData.password);
-
+      console.log(userData.password);
+      
       const user = AppDataSource.manager.create(User, {
         ...userData,
         role,
@@ -376,9 +377,11 @@ async login(email: string, password: string): Promise<User> {
     if (!user) {
       throw new EntityNotFoundError("User", email);
     }
-
+    console.log(email +'  '+password);
     // Vérifie si le mot de passe est correct
     const isPasswordValid = await comparePassword(password, user.password);
+
+    console.log(isPasswordValid);
     if (!isPasswordValid) {
       throw new Error("Invalid password");
     }
