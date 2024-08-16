@@ -1,23 +1,39 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 
 export default function HelloPage() {
-  const { data: session, status } = useSession();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<{ name?: string; email?: string } | null>(null);
 
-  if (status === "loading") {
-    return <p>Loading...</p>; // Afficher un indicateur de chargement pendant que la session est récupérée
+  useEffect(() => {
+    // Simuler la vérification de l'authentification
+    const simulateAuthCheck = () => {
+      setTimeout(() => {
+        const fakeUser = { name: "John Doe", email: "john.doe@example.com" };
+        setUser(fakeUser);
+        setIsAuthenticated(true);
+        setIsLoading(false);
+      }, 1000); 
+    };
+
+    simulateAuthCheck();
+  }, []);
+
+  if (isLoading) {
+    return <p>Loading...</p>; 
   }
 
-  if (!session) {
-    return <p>Accès refusé. Vous devez être authentifié pour voir cette page</p>; // Gérer l'accès refusé
+  if (!isAuthenticated) {
+    return <p>Accès refusé. Vous devez être authentifié pour voir cette page</p>; 
   }
 
   return (
     <div className="w-full flex items-center min-h-screen p-4 lg:justify-center">
       <div className="w-full max-w-md border-2 rounded-lg shadow-lg p-6">
         <h1 className="text-lime-200 text-lg">
-          Hello, {session.user?.name || session.user?.email}! Welcome to the protected page!
+          Hello, {user?.name || user?.email}! Welcome to the protected page!
         </h1>
       </div>
     </div>

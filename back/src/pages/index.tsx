@@ -1,7 +1,5 @@
-//
 import "reflect-metadata";
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 
@@ -23,17 +21,16 @@ export default function Home() {
           </h1>
         </div>
 
-      
-         <div className={styles.description}>
-         <h2>
-          <a
-            href="http://localhost:3001/api/doc"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.card}
-          >
-            ➡️➡️➡️ Swagger documentation ⬅️⬅️⬅️
-          </a>
+        <div className={styles.description}>
+          <h2>
+            <a
+              href="http://localhost:3001/api/doc"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.card}
+            >
+              ➡️➡️➡️ Swagger documentation ⬅️⬅️⬅️
+            </a>
           </h2>
         </div>
       </main>

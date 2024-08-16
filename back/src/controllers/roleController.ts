@@ -131,29 +131,29 @@ export class RoleController {
     }
   }
 
-  /**
+/**
    * Deletes a role by its UUID.
    * @param req - The API request object.
    * @param res - The API response object.
    * @returns A 204 status if deletion is successful or an error response.
    */
-  async deleteRole(req: NextApiRequest, res: NextApiResponse) {
-    try {
-      const { role_uuid } = req.query;
-      if (typeof role_uuid !== 'string') {
-        return res.status(400).json({ error: "Invalid role UUID" });
-      }
-
-      // Delete the role
-      const success = await this.roleService.deleteRole(role_uuid);
-      if (success) {
-        return res.status(204).end();
-      } else {
-        return res.status(404).json({ error: "Role not found" });
-      }
-    } catch (error) {
-      console.error("Error deleting role:", error);
-      return res.status(500).json({ error: "Internal server error" });
+async deleteRole(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const { role_uuid } = req.query;
+    if (typeof role_uuid !== 'string') {
+      return res.status(400).json({ error: "Invalid role UUID" });
     }
+
+    // Delete the role
+    const success = await this.roleService.deleteRole(role_uuid);
+    if (success) {
+      return res.status(204).end();
+    } else {
+      return res.status(404).json({ error: "Role not found" });
+    }
+  } catch (error) {
+    console.error("Error deleting role:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
   }
 }
