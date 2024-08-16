@@ -1,12 +1,12 @@
 import { AppDataSource } from "@/data-source";
 import { User } from "@/entity/user";
 import { Role } from "@/entity/role";
-import bcrypt from 'bcrypt';
+
 import {
   EntityNotFoundError,
   UniqueConstraintViolationError,
 } from "../errors/errors";
-import { comparePassword } from "@/utils/authUtils";
+import { comparePassword,hashPassword } from "@/utils/authUtils";
 
 interface CreateUserDTO {
   username: string;
@@ -134,7 +134,7 @@ export class UserService {
         throw new UniqueConstraintViolationError("Email already exists");
       }
 
-      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      const hashedPassword = await hashPassword(userData.password);
 
       const user = AppDataSource.manager.create(User, {
         ...userData,
@@ -178,7 +178,7 @@ export class UserService {
         throw new EntityNotFoundError("Role", userData.role.role_uuid);
       }
 
-      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      const hashedPassword = await hashPassword(userData.password);
 
       const updatedUser = await AppDataSource.manager.save(User, {
         ...existingUser,
@@ -250,7 +250,7 @@ export class UserService {
       }
 
       if (userData.password) {
-        userData.password = await bcrypt.hash(userData.password, 10);
+        userData.password = await hashPassword(userData.password);
       }
 
       await AppDataSource.manager.update(User, { user_uuid }, userData);
@@ -348,7 +348,7 @@ export class UserService {
         throw new EntityNotFoundError("User", email);
       }
 
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      const hashedPassword = await hashPassword(newPassword);
       user.password = hashedPassword;
 
       return await AppDataSource.manager.save(user);
@@ -360,4 +360,34 @@ export class UserService {
       throw new Error("An error occurred while resetting the password");
     }
   }
+
+/**
+   * Vérifie les informations d'identification de l'utilisateur.
+   * @param email - L'email de l'utilisateur.
+   * @param password - Le mot de passe de l'utilisateur.
+   * @returns L'utilisateur si les informations sont correctes.
+   * @throws EntityNotFoundError si l'utilisateur n'est pas trouvé.
+   * @throws Error si le mot de passe est incorrect.
+   */
+async login(email: string, password: string): Promise<User> {
+  try {
+    // Cherche l'utilisateur par email
+    const user = await this.getUserByEmail(email);
+    if (!user) {
+      throw new EntityNotFoundError("User", email);
+    }
+
+    // Vérifie si le mot de passe est correct
+    const isPasswordValid = await comparePassword(password, user.password);
+    if (!isPasswordValid) {
+      throw new Error("Invalid password");
+    }
+
+    return user;
+  } catch (error) {
+    console.error("Error during login:", error);
+    throw error;
+  }
+}
+
 }
