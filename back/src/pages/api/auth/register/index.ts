@@ -13,7 +13,7 @@ const userController = new UserController(userService);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Initialize the data source (database connection)
-    // await initializeDataSource();
+    await initializeDataSource();
 
     // Enable CORS for cross-origin requests
     await Cors(req, res, {
@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        
       case 'POST':
 
-        return userController.createUser(req,res)
+        return userController.register(req,res)
       default:
         // If the method is not allowed, return a 405 Method Not Allowed response
         res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
