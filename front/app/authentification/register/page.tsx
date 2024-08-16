@@ -25,12 +25,12 @@ export default function RegisterPage() {
       if (response.status === 201) {
         router.push("/authentification/signin");
       } else {
-        setError("v.");
+        setError("Une erreur s'est produite lors de l'inscription.");
       }
     } catch (err) {
       setError("L'enregistrement a échoué. Veuillez réessayer.");
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Assurez-vous que l'état de chargement est désactivé dans tous les cas
     }
   };
 
@@ -45,18 +45,18 @@ export default function RegisterPage() {
             <span 
               className="p-4 mb-2 text-lg font-semibold text-white bg-red-500 rounded-md"
               role="alert" 
-              aria-live="assertive" // accessibilité pour les utilisateurs de lecteurs d’écran
+              aria-live="assertive"
             >
               {error}
             </span>
           )}
            <input
-            type="name"
+            type="text"
             name="name"
-            placeholder="name"
+            placeholder="Name"
             required
             className="w-full px-4 py-4 mb-4 border border-gray-300 rounded-md"
-            aria-label="name"
+            aria-label="Name"
           />
           <input
             type="email"

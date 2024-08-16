@@ -13,7 +13,7 @@ const userController = new UserController(userService);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Initialize the data source (database connection)
-    // await initializeDataSource();
+    await initializeDataSource();
 
     // Enable CORS for cross-origin requests
     await Cors(req, res, {
