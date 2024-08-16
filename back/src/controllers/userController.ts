@@ -9,7 +9,7 @@ import {
 } from "@/errors/errors";
 
 const userSchema = Joi.object({
-  role_uuid: Joi.string().required(),
+
   username: Joi.string().required(),
   email: Joi.string().email().required().messages({
     "string.email": "Email must be a valid email",
@@ -29,7 +29,7 @@ const userSchema = Joi.object({
         "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character",
       "string.empty": "Password is required",
     }),
-  is_active: Joi.boolean().required(),
+ 
 });
 
 export class UserController {
@@ -51,8 +51,7 @@ export class UserController {
 
       // Validate the registration schema
       const { error } = userSchema.validate(
-        { username, email, password, is_active: true },
-        { abortEarly: false, allowUnknown: true, presence: "required" }
+        { username, email, password}
       );
 
       if (error) {
