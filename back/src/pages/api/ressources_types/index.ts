@@ -130,7 +130,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        *       404:
        *         description: Resource type not found
        */
-      case "PUT":
       case "PATCH":
         await ressources_typesController.replaceRessources_types(req, res);
         break;
