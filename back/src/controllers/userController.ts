@@ -96,16 +96,15 @@ export class UserController {
     try {
       const { username, email, password } = req.body;
 
-      // Validate the registration schema
-      const { error } = userRegisterSchema.validate(
-        { username, email, password}
-      );
-
+      // Validation des données
+      const { error } = userRegisterSchema.validate({ username, email, password });
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
       }
 
-      const hashedPassword = await hashPassword(password);
+      // Sanitize les entrées
+      const sanitizedUsername = sanitize(username);
+      const sanitizedEmail = sanitize(email);
 
       // Search for the "member" role
       const memberRole = await this.userService.getRoleByName("member");
@@ -115,13 +114,13 @@ export class UserController {
           .json({ error: "Default role 'member' not found" });
       }
 
-      // Create a new user with the "member" role
+      // Enregistrement de l'utilisateur via le service
       const newUser = await this.userService.createUser({
+        username: sanitizedUsername,
+        email: sanitizedEmail,
+        password, 
         role: memberRole,
-        username: this.sanitizeInput(username),
-        email: this.sanitizeInput(email),
-        password: hashedPassword,
-        is_active: true,
+        is_active:true,
       });
 
       return res.status(201).json(newUser);
@@ -129,7 +128,6 @@ export class UserController {
       if (error instanceof UniqueConstraintViolationError) {
         return res.status(409).json({ error: error.message });
       }
-
       console.error("Error during user registration:", error);
       return res.status(500).json({ error: "Internal server error" });
     }
@@ -145,24 +143,30 @@ export class UserController {
     try {
       const { email, password } = req.body;
 
-      // Validate the login schema
-      const { error } = userLoginSchema.validate(
-        { email, password }
-      );
-
+      // Validation des données
+      const { error } = userLoginSchema.validate({ email, password });
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
       }
 
-      // Delegate the login logic to the service
-      const user = await this.userService.login(email, password);
-  
-      // If authentication is successful, return user information
-      return res.status(200).json(user);
+      // Sanitize l'email
+      const sanitizedEmail = sanitize(email);
+
+      // Connexion via le service
+      const user = await this.userService.login(sanitizedEmail, password);
+
+      // Retourne les informations de l'utilisateur après authentification
+      return res.status(200).json({
+        id: user.user_uuid,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      });
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         return res.status(401).json({ error: "Invalid email or password" });
       }
+      console.error("Error during login:", error);
       return res.status(500).json({ error: "Internal server error" });
     }
   }
