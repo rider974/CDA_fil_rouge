@@ -9,7 +9,7 @@ import {
 } from "@/errors/errors";
 
 const userSchema = Joi.object({
-
+  role_uuid: Joi.string().required(),
   username: Joi.string().required(),
   email: Joi.string().email().required().messages({
     "string.email": "Email must be a valid email",
@@ -29,7 +29,32 @@ const userSchema = Joi.object({
         "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character",
       "string.empty": "Password is required",
     }),
- 
+  is_active: Joi.boolean().required(),
+});
+
+
+const userRegisterSchema = Joi.object({
+
+  username: Joi.string().required(),
+  email: Joi.string().email().required().messages({
+    "string.email": "Email must be a valid email",
+    "any.required": "Email is required",
+    "string.empty": "Email cannot be empty",
+  }),
+  password: Joi.string()
+    .min(12)
+    .pattern(/[A-Z]/, "uppercase")
+    .pattern(/[a-z]/, "lowercase")
+    .pattern(/[0-9]/, "digit")
+    .pattern(/[!@#$%^&*(),.?":{}|<>]/, "special character")
+    .required()
+    .messages({
+      "string.min": "Password must be at least 12 characters long",
+      "string.pattern.base":
+        "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character",
+      "string.empty": "Password is required",
+    })
+
 });
 
 export class UserController {
@@ -50,7 +75,7 @@ export class UserController {
       const { username, email, password } = req.body;
 
       // Validate the registration schema
-      const { error } = userSchema.validate(
+      const { error } = userRegisterSchema.validate(
         { username, email, password}
       );
 
@@ -100,8 +125,8 @@ export class UserController {
 
       // Validate the login schema
       const { error } = userSchema.validate(
-        { email, password },
-        { abortEarly: false, allowUnknown: true, presence: "required" }
+        { email, password }
+       
       );
 
       if (error) {
