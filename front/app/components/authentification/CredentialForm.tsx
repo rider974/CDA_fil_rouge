@@ -29,7 +29,7 @@ export function CredentialsForm(props: CredentialsFormProps) {
 
       if (response) {
         alert('redirection dashboard');
-        router.push("/dashboard/admin");
+         router.push("/dashboard/member");
       } else {
         setError("Invalid email or password.");
       }
