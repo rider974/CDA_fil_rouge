@@ -53,7 +53,7 @@ const swaggerHandler = withSwagger({
         description: 'Endpoints related to roles'
       },
       {
-        name: 'Users',
+        name: 'users',
         description: 'Endpoints related to user management'
       },
       {

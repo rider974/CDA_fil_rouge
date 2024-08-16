@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          *   post:
          *     summary: Create a new user
          *     tags:
-         *       - Users
+         *       - users
          *     requestBody:
          *       required: true
          *       content:
@@ -85,7 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         *   get:
         *     summary: Retrieve all users or a specific user by UUID or username
         *     tags:
-        *       - Users
+        *       - users
         *     parameters:
         *       - name: user_uuid
         *         in: query
@@ -161,7 +161,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        *   put:
        *     summary: Replace an existing user
        *     tags:
-       *       - Users
+       *       - users
        *     requestBody:
        *       required: true
        *       content:
@@ -214,7 +214,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       *   patch:
       *     summary: Update user fields or toggle user active status
       *     tags:
-      *       - Users
+      *       - users
       *     parameters:
       *       - name: action
       *         in: query
@@ -281,7 +281,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        *   delete:
        *     summary: Delete a user by UUID
        *     tags:
-       *       - Users
+       *       - users
        *     parameters:
        *       - name: user_uuid
        *         in: query

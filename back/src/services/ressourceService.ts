@@ -145,6 +145,8 @@ export class RessourceService {
       }
 
       const updatedRessource = await AppDataSource.manager.save(Ressource, { ...existingRessource, ...ressourceData });
+      // Utilisation de update pour déclencher les triggers
+      await AppDataSource.manager.update(Ressource, { ressource_uuid }, { ressourceStatus: { ressource_status_uuid: ressourceData.ressource_status_uuid } });
       return updatedRessource;
     } catch (error) {
       if (error instanceof UniqueConstraintViolationError || error instanceof EntityNotFoundError) {

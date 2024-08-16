@@ -101,7 +101,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        /**
        * @swagger
        * /api/ressources_types:
-       *   put:
        *   patch:
        *     description: Update an existing resource type by UUID
        *     tags:
