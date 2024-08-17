@@ -40,7 +40,7 @@ function runCorsMiddleware(req: NextApiRequest, res: NextApiResponse) {
   return new Promise((resolve, reject) => {
     Cors({
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      origin: 'http://localhost:3000', // Adjust this to match your frontend origin
+      origin: 'http://localhost:3000', 
     })(req, res, (result: any) => {
       if (result instanceof Error) {
         return reject(result);
@@ -50,8 +50,71 @@ function runCorsMiddleware(req: NextApiRequest, res: NextApiResponse) {
   });
 }
 
-// API route for generating the JWT token
-export default async function generateToken(this: any, req: NextApiRequest, res: NextApiResponse) {
+/**
+ * @swagger
+ * /api/auth/token:
+ *   post:
+ *     summary: Generate a JWT token
+ *     description: Authenticate a user using email and password, and return a JWT token.
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: The email address of the user
+ *                 example: "user@example.com"
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: The password of the user
+ *                 example: "Password123!@#"
+ *     responses:
+ *       200:
+ *         description: JWT token generated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: The generated JWT token
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *       400:
+ *         description: Invalid input data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message indicating what went wrong
+ *                   example: "Email is required"
+ *       401:
+ *         description: Authentication failed due to invalid email or password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message indicating what went wrong
+ *                   example: "Invalid email or password"
+ *       405:
+ *         description: Method Not Allowed
+ *       500:
+ *         description: Internal server error
+ */
+export default async function generateToken(req: NextApiRequest, res: NextApiResponse) {
   // Initialize the database connection
   await initializeDataSource();
 
@@ -81,7 +144,7 @@ export default async function generateToken(this: any, req: NextApiRequest, res:
     // Sanitize the email to prevent injection attacks
     const sanitizedEmail = sanitize(email);
 
-    // Simulate user login via a service (assumed to be bound to `this`)
+    // Simulate user login via a service
     const user = await userService.login(sanitizedEmail, password);
 
     // Generate the JWT token
