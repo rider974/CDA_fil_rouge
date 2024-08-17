@@ -162,9 +162,8 @@ export class UserController {
         email: user.email,
         role: user.role,
       });
-  //désactivation du http only pour test a remettre aprés !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  HttpOnly;
 
-      res.setHeader('Set-Cookie', `authToken=${token}; Path=/; Max-Age=3600; SameSite=Strict; Secure`);
+      res.setHeader('Set-Cookie', `authToken=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=Strict`);
   
 
       // Retourne les informations de l'utilisateur après authentification
@@ -173,8 +172,6 @@ export class UserController {
         username: user.username,
         email: user.email,
         role: user.role,
-        message: 'Login successful',
-        token: token,
       });
     } catch (error) {
       if (error instanceof EntityNotFoundError) {

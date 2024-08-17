@@ -28,7 +28,6 @@ export function CredentialsForm(props: CredentialsFormProps) {
       const response = await axios.post("/api/auth/signin", { email, password });
 
       if (response) {
-        alert(`Message: ${response.data.message}\nToken: ${response.data.token}`);
          router.push("/dashboard/member");
       } else {
         setError("Invalid email or password.");
