@@ -16,12 +16,14 @@ export function authenticateToken(handler: NextApiHandler) {
     if (!token) {
       return res.status(401).json({ error: 'No token provided' });
     }
-
+    console.log('authHeader', authHeader);
+    console.log('Token:', token);
     try {
       const decoded = jwt.verify(token.split('=')[1], JWT_SECRET) as any;
-      req.body.user = decoded; 
+      (req as any).user = decoded; 
       return handler(req, res);
     } catch (error) {
+    console.error('Token verification error:', error);
       return res.status(403).json({ error: 'Invalid token' });
     }
   };
