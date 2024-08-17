@@ -1,21 +1,26 @@
-
 "use client";
 
 import { useRouter } from "next/navigation";
+import React from "react";
 
 export function SignUpButton() {
   const router = useRouter();
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault(); 
     router.push("/authentification/register");
   };
 
   return (
-    <button
-      onClick={handleClick}
-      className="w-full h-8 px-6 mt-4 text-lg text-white transition-colors duration-150 bg-green-600 rounded-lg focus:shadow-outline hover:bg-green-700"
-    >
-      Doesn&#39;t have an account ? - Sign up
-    </button>
+    <p className="text-center font-semibold">
+      Don&rsquo;t have an account?
+      <a
+        href="#"
+        onClick={handleClick}
+        className="text-green-500 ml-2 hover:underline cursor-pointer"
+      >
+        Sign up
+      </a>
+    </p>
   );
 }
