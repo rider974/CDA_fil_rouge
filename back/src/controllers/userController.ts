@@ -7,6 +7,7 @@ import {
   EntityNotFoundError,
   UniqueConstraintViolationError,
 } from "@/errors/errors";
+import { generateJwtToken } from "@/utils/generateToken";
 
 const userSchema = Joi.object({
   role_uuid: Joi.string().required(),
@@ -154,6 +155,17 @@ export class UserController {
 
       // Connexion via le service
       const user = await this.userService.login(sanitizedEmail, password);
+      //Generate token
+      const token = generateJwtToken({
+        id: user.user_uuid,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      });
+  //désactivation du http only pour test a remettre aprés !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  HttpOnly;
+
+      res.setHeader('Set-Cookie', `authToken=${token}; Path=/; Max-Age=3600; SameSite=Strict; Secure`);
+  
 
       // Retourne les informations de l'utilisateur après authentification
       return res.status(200).json({
@@ -161,6 +173,8 @@ export class UserController {
         username: user.username,
         email: user.email,
         role: user.role,
+        message: 'Login successful',
+        token: token,
       });
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
