@@ -48,7 +48,6 @@ services:
     networks:
       - network-beginners
 
-
 networks:
   network-beginners:
     driver: bridge
