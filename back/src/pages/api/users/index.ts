@@ -3,11 +3,12 @@ import { initializeDataSource } from "../../../data-source";
 import { UserController } from "@/controllers/userController";
 import { UserService } from "@/services/userService";
 import Cors from 'nextjs-cors';
+import { authenticateToken } from "@/utils/verifToken";
 
 const userService = new UserService();
 const userController = new UserController(userService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await initializeDataSource();
     await Cors(req, res, {
@@ -310,3 +311,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)
