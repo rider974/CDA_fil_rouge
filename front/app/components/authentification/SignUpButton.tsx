@@ -15,7 +15,7 @@ export function SignUpButton() {
       onClick={handleClick}
       className="w-full h-8 px-6 mt-4 text-lg text-white transition-colors duration-150 bg-green-600 rounded-lg focus:shadow-outline hover:bg-green-700"
     >
-      Sign Up
+      Doesn&#39;t have an account ? - Sign up
     </button>
   );
 }

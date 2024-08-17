@@ -376,9 +376,9 @@ async login(email: string, password: string): Promise<User> {
     if (!user) {
       throw new EntityNotFoundError("User", email);
     }
-
     // Vérifie si le mot de passe est correct
     const isPasswordValid = await comparePassword(password, user.password);
+
     if (!isPasswordValid) {
       throw new Error("Invalid password");
     }

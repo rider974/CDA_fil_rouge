@@ -7,6 +7,7 @@ import {
   EntityNotFoundError,
   UniqueConstraintViolationError,
 } from "@/errors/errors";
+import { generateJwtToken } from "@/utils/generateToken";
 
 const userSchema = Joi.object({
   role_uuid: Joi.string().required(),
@@ -57,6 +58,28 @@ const userRegisterSchema = Joi.object({
 
 });
 
+
+const userLoginSchema = Joi.object({
+  email: Joi.string().email().required().messages({
+    "string.email": "Email must be a valid email",
+    "any.required": "Email is required",
+    "string.empty": "Email cannot be empty",
+  }),
+  password: Joi.string()
+    .min(12)
+    .pattern(/[A-Z]/, "uppercase")
+    .pattern(/[a-z]/, "lowercase")
+    .pattern(/[0-9]/, "digit")
+    .pattern(/[!@#$%^&*(),.?":{}|<>]/, "special character")
+    .required()
+    .messages({
+      "string.min": "Password must be at least 12 characters long",
+      "string.pattern.base":
+      "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character",
+      "string.empty": "Password is required",
+    }),
+});
+
 export class UserController {
   private userService: UserService;
 
@@ -74,16 +97,15 @@ export class UserController {
     try {
       const { username, email, password } = req.body;
 
-      // Validate the registration schema
-      const { error } = userRegisterSchema.validate(
-        { username, email, password}
-      );
-
+      // Validation des données
+      const { error } = userRegisterSchema.validate({ username, email, password });
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
       }
 
-      const hashedPassword = await hashPassword(password);
+      // Sanitize les entrées
+      const sanitizedUsername = sanitize(username);
+      const sanitizedEmail = sanitize(email);
 
       // Search for the "member" role
       const memberRole = await this.userService.getRoleByName("member");
@@ -93,13 +115,13 @@ export class UserController {
           .json({ error: "Default role 'member' not found" });
       }
 
-      // Create a new user with the "member" role
+      // Enregistrement de l'utilisateur via le service
       const newUser = await this.userService.createUser({
+        username: sanitizedUsername,
+        email: sanitizedEmail,
+        password, 
         role: memberRole,
-        username: this.sanitizeInput(username),
-        email: this.sanitizeInput(email),
-        password: hashedPassword,
-        is_active: true,
+        is_active:true,
       });
 
       return res.status(201).json(newUser);
@@ -107,7 +129,6 @@ export class UserController {
       if (error instanceof UniqueConstraintViolationError) {
         return res.status(409).json({ error: error.message });
       }
-
       console.error("Error during user registration:", error);
       return res.status(500).json({ error: "Internal server error" });
     }
@@ -123,24 +144,29 @@ export class UserController {
     try {
       const { email, password } = req.body;
 
-      // Validate the login schema
-      const { error } = userSchema.validate(
-        { email, password }
-       
-      );
-
+      // Validation des données
+      const { error } = userLoginSchema.validate({ email, password });
       if (error) {
         return res.status(400).json({ error: error.details[0].message });
       }
 
-      const sanitizedEmail = this.sanitizeInput(email);
-      const user = await this.userService.getUserByEmail(sanitizedEmail);
+      // Sanitize l'email
+      const sanitizedEmail = sanitize(email);
 
-      if (!user || !(await comparePassword(password, user.password))) {
-        return res.status(401).json({ error: "Invalid email or password" });
-      }
+      // Connexion via le service
+      const user = await this.userService.login(sanitizedEmail, password);
+      //Generate token
+      const token = generateJwtToken({
+        id: user.user_uuid,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      });
 
-      // If authentication is successful, return user information
+      res.setHeader('Set-Cookie', `authToken=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=Strict`);
+  
+
+      // Retourne les informations de l'utilisateur après authentification
       return res.status(200).json({
         id: user.user_uuid,
         username: user.username,
@@ -148,30 +174,15 @@ export class UserController {
         role: user.role,
       });
     } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
       console.error("Error during login:", error);
       return res.status(500).json({ error: "Internal server error" });
     }
   }
 
-  /**
-   * Validates whether the provided email follows a standard format.
-   * @param email - The email string to validate.
-   * @returns Boolean indicating whether the email is valid.
-   */
-  private isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  /**
-   * Sanitizes input strings to remove potential harmful content.
-   * @param input - The input string to sanitize.
-   * @returns The sanitized string.
-   */
-  private sanitizeInput(input: string): string {
-    return sanitize(input.trim());
-  }
-
+ 
   /**
    * Handles the creation of a new user.
    * Validates the request body, sanitizes input, and hashes the password before saving the user.
@@ -515,5 +526,25 @@ export class UserController {
         return res.status(500).json({ error: "An unknown error occurred" });
       }
     }
+    
   }
+   /**
+   * Validates whether the provided email follows a standard format.
+   * @param email - The email string to validate.
+   * @returns Boolean indicating whether the email is valid.
+   */
+   private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  /**
+   * Sanitizes input strings to remove potential harmful content.
+   * @param input - The input string to sanitize.
+   * @returns The sanitized string.
+   */
+  private sanitizeInput(input: string): string {
+    return sanitize(input.trim());
+  }
+
 }
