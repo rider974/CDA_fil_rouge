@@ -23,7 +23,7 @@ export function generateJwtToken(user: UserPayload): string {
   };
 
   const options = {
-    expiresIn: '1h',
+    expiresIn: '7d',
   };
 
   return jwt.sign(payload, JWT_SECRET, options);

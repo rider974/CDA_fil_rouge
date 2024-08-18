@@ -19,64 +19,66 @@ const userController = new UserController(userService);
     const action = req.query.action as string | undefined;
 
     switch (req.method) {
-      /**
-         * @swagger
-         * /api/user:
-         *   post:
-         *     summary: Create a new user
-         *     tags:
-         *       - users
-         *     requestBody:
-         *       required: true
-         *       content:
-         *         application/json:
-         *           schema:
-         *             type: object
-         *             properties:
-         *               username:
-         *                 type: string
-         *                 description: The username of the new user
-         *                 example: "johndoe"
-         *               email:
-         *                 type: string
-         *                 description: The email of the new user
-         *                 example: "johndoe@example.com"
-         *               password:
-         *                 type: string
-         *                 description: The password of the new user
-         *                 example: "Password123!@#"
-         *               role_uuid:
-         *                 type: string
-         *                 description: The UUID of the role assigned to the user
-         *                 example: "role-uuid-1234"
-         *               is_active:
-         *                 type: boolean
-         *                 description: The active status of the new user
-         *                 example: true
-         *     responses:
-         *       201:
-         *         description: User created successfully
-         *         content:
-         *           application/json:
-         *             schema:
-         *               type: object
-         *               properties:
-         *                 user_uuid:
-         *                   type: string
-         *                   description: The UUID of the newly created user
-         *                 username:
-         *                   type: string
-         *                 email:
-         *                   type: string
-         *                 role:
-         *                   type: string
-         *                 is_active:
-         *                   type: boolean
-         *       400:
-         *         description: Invalid input
-         *       409:
-         *         description: Conflict with existing resource
-         */
+       /**
+       * @swagger
+       * /api/user:
+       *   post:
+       *     summary: Create a new user
+       *     security:
+       *       - bearerAuth: []
+       *     tags:
+       *       - users
+       *     requestBody:
+       *       required: true
+       *       content:
+       *         application/json:
+       *           schema:
+       *             type: object
+       *             properties:
+       *               username:
+       *                 type: string
+       *                 description: The username of the new user
+       *                 example: "johndoe"
+       *               email:
+       *                 type: string
+       *                 description: The email of the new user
+       *                 example: "johndoe@example.com"
+       *               password:
+       *                 type: string
+       *                 description: The password of the new user
+       *                 example: "Password123!@#"
+       *               role_uuid:
+       *                 type: string
+       *                 description: The UUID of the role assigned to the user
+       *                 example: "role-uuid-1234"
+       *               is_active:
+       *                 type: boolean
+       *                 description: The active status of the new user
+       *                 example: true
+       *     responses:
+       *       201:
+       *         description: User created successfully
+       *         content:
+       *           application/json:
+       *             schema:
+       *               type: object
+       *               properties:
+       *                 user_uuid:
+       *                   type: string
+       *                   description: The UUID of the newly created user
+       *                 username:
+       *                   type: string
+       *                 email:
+       *                   type: string
+       *                 role:
+       *                   type: string
+       *                 is_active:
+       *                   type: boolean
+       *       400:
+       *         description: Invalid input
+       *       409:
+       *         description: Conflict with existing resource
+       */
       case "POST":
         await userController.createUser(req, res);
         break;
