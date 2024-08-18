@@ -1,21 +1,62 @@
 "use client";
 
-import React from "react";
-
-import { SignUpButton } from "@/app/components/authentification/SignUpButton";
 import { CredentialsForm } from "@/app/components/authentification/CredentialForm";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function SignInPage() {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await axios.get("/api/auth/csrf-token");
+        setCsrfToken(response.data.csrfToken);
+      } catch (error) {
+        setError("");
+      }
+    };
+    fetchCsrfToken();
+  }, []);
+
+  const handleSubmit = async (email: string, password: string) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.post("/api/auth/signin", {
+        email,
+        password,
+        csrfToken,
+      });
+
+      if (response.status === 200) {
+        router.push("/dashboard/member");
+      } else {
+        setError("Invalid email or password.");
+      }
+    } catch (error) {
+      setError("An unexpected error occurred.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
+
   return (
-      <div className="w-full flex items-center justify-center min-h-screen p-4">
-        <div className="w-full max-w-md border-2 rounded-lg shadow-lg p-6">
-          <h1 className="text-center text-4xl text-gray-400 font-bold">Sign In</h1>
-          <CredentialsForm />
-          <div className="w-full mt-2 block justify-between">
-            <SignUpButton />
-          </div>
-        </div>
-      </div>
-  
+    <div>
+    
+      <CredentialsForm
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+        error={error}
+        csrfToken={csrfToken}
+      />
+    </div>
   );
 }
