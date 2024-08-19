@@ -73,6 +73,7 @@ export class RoleController {
      * @returns The role if found or an error response.
      */
   async getRoleById(req: NextApiRequest, res: NextApiResponse) {
+    console.log(process.env.TOTO);
     try {
         // Validate the UUID
         const { role_uuid } = req.query;
