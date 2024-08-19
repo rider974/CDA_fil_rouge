@@ -5,7 +5,7 @@ import type { Relation } from 'typeorm';
 /**
  * Represents the type of a resource.
  */
-@Entity('ressource-type')
+@Entity('ressource_type')
 @Unique(['type_name'])
 export class RessourceType {
   // Unique identifier for the resource type
