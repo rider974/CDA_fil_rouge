@@ -1,10 +1,10 @@
 // src/__tests__/followController.test.js
-const { FollowController } = require("@/controllers/FollowController");
-const { FollowService } = require("@/services/followServices");
-const { EntityNotFoundError } = require("@/errors/errors");
+const { FollowController } = require("../controllers/FollowController");
+const { FollowService } = require("../services/followServices");
+const { EntityNotFoundError } = require("../errors/errors");
 
 // Mock FollowService
-jest.mock("@/services/followServices");
+jest.mock("../services/followServices");
 
 describe("FollowController", () => {
   let req;

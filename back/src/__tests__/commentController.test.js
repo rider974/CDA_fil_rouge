@@ -1,11 +1,11 @@
 // src/__tests__/commentController.test.js
-const { CommentController } = require("@/controllers/CommentController");
-const { CommentService } = require("@/services/commentServices");
+const { CommentController } = require("../controllers/CommentController");
+const { CommentService } = require("../services/commentServices");
 const { EntityNotFoundError } = require("../errors/errors");
 const Joi = require("joi");
 
 // Mock CommentService
-jest.mock("@/services/commentServices");
+jest.mock("../services/commentServices");
 
 // Configuration de base pour les tests
 describe("CommentController", () => {
