@@ -37,7 +37,7 @@ export const ArticlesSection: React.FC = () => {
     },
     {
       url: "https://www.tensorflow.org/learn",
-      imageUrl: "/tensorflow.png",
+      imageUrl: "/tensorFlow.png",
       title: "Machine Learning with TensorFlow",
       description:
         "Discover the power of TensorFlow for building and deploying machine learning models.",
