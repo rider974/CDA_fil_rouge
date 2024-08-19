@@ -49,18 +49,6 @@ const swaggerHandler = withSwagger({
     ],
     tags: [
       {
-        name: 'auth/token',
-        description: 'Endpoints for token'
-      },
-      {
-        name: 'auth/register',
-        description: 'Endpoints related to registration'
-      },
-      {
-        name: 'auth/sign',
-        description: 'Endpoints for sign in'
-      },
-      {
         name: 'users',
         description: 'Endpoints related to user management'
       },

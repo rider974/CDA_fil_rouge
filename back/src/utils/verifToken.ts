@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+const JWT_SECRET = process.env.JWT_SECRET || 'votre_secret_jwt';
 
 export function authenticateToken(handler: NextApiHandler) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
