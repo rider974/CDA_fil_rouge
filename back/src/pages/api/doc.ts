@@ -114,11 +114,6 @@ const swaggerHandler = withSwagger({
         },
       },
     },
-    security: [
-      {
-        bearerAuth: [], 
-      },
-    ],
   },
   apiFolder: 'src/pages/api',
 });

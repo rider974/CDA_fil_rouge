@@ -47,7 +47,7 @@ CREATE OR REPLACE FUNCTION log_status_update()
 RETURNS TRIGGER AS $$
 BEGIN
     IF OLD.ressource_status_uuid IS DISTINCT FROM NEW.ressource_status_uuid THEN
-        INSERT INTO "ressources-status-history" (
+        INSERT INTO "ressources_status_history" (
             ressource_status_history_uuid,
             status_changed_at,
             created_at,
