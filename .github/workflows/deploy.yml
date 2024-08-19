@@ -71,6 +71,6 @@ jobs:
           script: |
             cd ~/beginnersAppDev/CDA_fil_rouge
             echo "TOTO=${TOTO}"
-            sudo TOTO=${{ secrets.TOTO }} docker-compose up -d
+            sudo -E env "TOTO=${TOTO}" docker-compose up -d
         env:
           TOTO: ${{ secrets.TOTO }}
