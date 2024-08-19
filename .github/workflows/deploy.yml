@@ -59,8 +59,7 @@ jobs:
           script: |
             cd ~/beginnersAppDev/CDA_fil_rouge
             sudo docker-compose down
-            sudo docker-compose build --build-arg TOTO=${{ secrets.TOTO }} --parallel || { echo 'Build failed'; exit 1; }
-            sudo docker-compose logs || { echo 'Failed to get logs'; exit 1; }
+            sudo docker-compose build --parallel
         env:
           TOTO: ${{ secrets.TOTO }}
 
