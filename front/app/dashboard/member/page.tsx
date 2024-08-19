@@ -1,18 +1,18 @@
 "use client";
 
-import CommentsSection from "@/app/components/statistics/member/CommentsSection";
-import Header from "@/app/components/statistics/member/Header";
-import SocialInteractionPanel from "@/app/components/statistics/member/SocialInteractionPanel";
-import StatCard from "@/app/components/statistics/member/StatCard";
-import VideoSection from "@/app/components/statistics/member/VideoSection";
-import WhoToFollowSection from "@/app/components/statistics/member/WhoToFollowSection";
-import { FaHeart, FaThumbsUp, FaDownload, FaUserFriends } from "react-icons/fa";
+import CommentsSection from "@/app/components/dashboard/member/CommentsSection";
+import NavbarMember from "@/app/components/dashboard/member/NavBarMember";
+import SocialInteractionPanel from "@/app/components/dashboard/member/SocialInteractionPanel";
+import StatCard from "@/app/components/dashboard/member/StatCard";
+import VideoSection from "@/app/components/dashboard/member/VideoSection";
+import WhoToFollowSection from "@/app/components/dashboard/member/WhoToFollowSection";
+import { FaHeart, FaThumbsUp, FaDownload, FaUserFriends, FaComment } from "react-icons/fa";
 
 export default function MemberDashboard() {
   return (
-    <div className="bg-[#ECEFF1] min-h-screen w-screen pt-10">
-      <div className="mt-24 sm:mt-20 md:mt-16 lg:mt-8">
-        <Header />
+    <div className="bg-[#ECEFF1] min-h-screen w-screen pt-0 md:pt-8 lg:pt-6">
+      <div className="mt-4 sm:mt-4 md:mt-2 lg:mt-10">
+        <NavbarMember />
       </div>
 
       <section className="px-8 pb-4 flex flex-col lg:flex-row gap-4">
@@ -26,6 +26,13 @@ export default function MemberDashboard() {
 
       <section className="grid lg:grid-cols-12 gap-6 px-8 pb-8">
         <div className="lg:col-span-2 space-y-4 mt-5">
+        <StatCard
+            icon={<FaComment className="w-5 h-5 text-purple-500" />}
+            title="Comments"
+            value="89"
+            percentage="24"
+            increase={true}
+          />
           <StatCard
             icon={<FaHeart className="w-5 h-5 text-red-500" />}
             title="Favorites"
