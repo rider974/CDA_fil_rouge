@@ -70,7 +70,6 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd ~/beginnersAppDev/CDA_fil_rouge
-            echo "TOTO=${{ secrets.TOTO }}"
             sudo -E env "TOTO=${{ secrets.TOTO }}" docker-compose up -d
         env:
           TOTO: ${{ secrets.TOTO }}

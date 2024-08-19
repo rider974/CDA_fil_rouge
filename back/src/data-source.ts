@@ -13,7 +13,7 @@ import {Refer} from "./entity/refer"
 import {RessourceType} from "./entity/ressourceType"
 import {SharingSession} from "./entity/sharingSession"
 import {Reference} from "./entity/reference"
-import {InitMigration1723112057042} from './migration/1723112057042-initMigration'
+import {InitMigration1723112057042} from './migrations/1723112057042-initMigration'
 
 
 export const AppDataSource = new DataSource({

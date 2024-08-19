@@ -12,4 +12,4 @@ RUN npm run build
 
 EXPOSE 3001
 
-CMD ["sh", "-c", "echo TOTO=$TOTO && npm run start"]
+CMD ["npm" ,"run" ,"start"]

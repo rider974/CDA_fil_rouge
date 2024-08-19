@@ -7,8 +7,9 @@ async function seedRoles() {
   
   // Création des rôles à insérer
   const roles = [
-    { role_name: 'test' }
-   
+    { role_name: 'admin' },
+    { role_name: 'moderator' },
+    { role_name: 'member' }   
   ];
 
   // Obtenir le gestionnaire d'entité
