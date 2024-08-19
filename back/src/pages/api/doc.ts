@@ -49,6 +49,10 @@ const swaggerHandler = withSwagger({
     ],
     tags: [
       {
+        name: 'Authentication',
+        description: 'Endpoints related to authentification'
+      },
+      {
         name: 'users',
         description: 'Endpoints related to user management'
       },
