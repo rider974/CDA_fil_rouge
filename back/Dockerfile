@@ -1,7 +1,5 @@
 FROM node:20-alpine
 
-ARG TOTO
-
 ENV TOTO=${TOTO}
 
 WORKDIR /usr/src/app
