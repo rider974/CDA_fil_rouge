@@ -59,8 +59,7 @@ jobs:
           script: |
             cd ~/beginnersAppDev/CDA_fil_rouge
             sudo docker-compose down
-            sudo docker-compose build --build-arg TOTO=${{ secrets.TOTO }} --parallel
-
+            sudo docker-compose build --parallel
         env:
           TOTO: ${{ secrets.TOTO }}
 
