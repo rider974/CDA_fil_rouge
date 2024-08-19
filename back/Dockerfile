@@ -1,7 +1,5 @@
 FROM node:20-alpine
 
-ENV TOTO=${TOTO}
-
 WORKDIR /usr/src/app
 
 COPY package*.json ./
