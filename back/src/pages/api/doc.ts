@@ -49,12 +49,16 @@ const swaggerHandler = withSwagger({
     ],
     tags: [
       {
-        name: 'roles',
-        description: 'Endpoints related to roles'
+        name: 'Authentication',
+        description: 'Endpoints related to authentification'
       },
       {
         name: 'users',
         description: 'Endpoints related to user management'
+      },
+      {
+        name: 'roles',
+        description: 'Endpoints related to roles'
       },
       {
         name: 'follow',
@@ -101,6 +105,15 @@ const swaggerHandler = withSwagger({
         description: 'Endpoints related to sharing sessions'
       }
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT', 
+        },
+      },
+    },
   },
   apiFolder: 'src/pages/api',
 });
