@@ -52,7 +52,7 @@ function runCorsMiddleware(req: NextApiRequest, res: NextApiResponse) {
 
 /**
  * @swagger
- * /api/auth/token:
+ * /api/auth/generateToken:
  *   post:
  *     summary: Generate a JWT token
  *     description: Authenticate a user using email and password, and return a JWT token.
