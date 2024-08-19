@@ -60,7 +60,9 @@ jobs:
             cd ~/beginnersAppDev/CDA_fil_rouge
             sudo docker-compose down
             sudo docker-compose build --parallel
-
+        env:
+          TOTO: ${{ secrets.TOTO }}
+          
       - name: Start Docker Containers
         uses: appleboy/ssh-action@v0.1.8
         with:
