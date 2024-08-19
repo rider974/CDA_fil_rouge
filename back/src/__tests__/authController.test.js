@@ -1,4 +1,4 @@
-const { AuthController } = require("../controllers/AuthController");
+const { AuthController } = require("@/controllers/AuthController");
 const { AuthService } = require("@/services/authService");
 const { UserService } = require("@/services/userService");
 
