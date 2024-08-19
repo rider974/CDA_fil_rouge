@@ -6,6 +6,7 @@ import { generateJwtToken } from "@/utils/generateToken";
 import { initializeDataSource } from '@/data-source';
 import Cors from 'cors';
 import { UserService } from "@/services/userService";
+import { corsMiddleware } from '@/utils/corsMiddleware';
 
 // Initialize the services and controllers
 const userService = new UserService();
@@ -34,21 +35,6 @@ const userLoginSchema = Joi.object({
 
 // Secret key for signing the JWT
 const JWT_SECRET = process.env.JWT_SECRET || 'votre_secret_jwt';
-
-// Middleware to enable CORS
-function runCorsMiddleware(req: NextApiRequest, res: NextApiResponse) {
-  return new Promise((resolve, reject) => {
-    Cors({
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      origin: 'http://localhost:3000', 
-    })(req, res, (result: any) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-}
 
 /**
  * @swagger
@@ -119,7 +105,7 @@ export default async function generateToken(req: NextApiRequest, res: NextApiRes
   await initializeDataSource();
 
   // Run CORS middleware
-  await runCorsMiddleware(req, res);
+  await corsMiddleware(req, res);
 
   // Remove the X-Powered-By header to improve security
   res.removeHeader('X-Powered-By');

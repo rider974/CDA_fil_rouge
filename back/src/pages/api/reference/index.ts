@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { ReferenceService } from '@/services/referenceServices';
 import { ReferenceController } from '@/controllers/referenceController';
 import { initializeDataSource } from '../../../data-source';
-import Cors from 'nextjs-cors';
+import { corsMiddleware } from '@/utils/corsMiddleware';
 
 const referenceService = new ReferenceService();
 const referenceController = new ReferenceController(referenceService);
@@ -11,10 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     await initializeDataSource();
 
-    await Cors(req, res, {
-      methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
-      origin: 'http://localhost:3000',
-    });
+    await corsMiddleware(req, res);
 
     res.removeHeader('X-Powered-By');
     res.setHeader('X-Content-Type-Options', 'nosniff');

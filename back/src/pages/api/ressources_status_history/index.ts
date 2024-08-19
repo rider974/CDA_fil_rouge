@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { RessourceStatusHistoryService } from '@/services/ressources_status_historyService';
 import { RessourceStatusHistoryController } from '@/controllers/ressources_status_historyController';
 import { initializeDataSource } from '../../../data-source';
-import Cors from 'nextjs-cors';
+import { corsMiddleware } from '@/utils/corsMiddleware';
 
 // Initialize the service and controller
 const statusHistoryService = new RessourceStatusHistoryService();
@@ -14,10 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await initializeDataSource();
 
     // Set up CORS
-    await Cors(req, res, {
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      origin: 'http://localhost:3000', // Adjust this to your front-end URL or use `*` for all origins
-    });
+    await corsMiddleware(req, res);
 
     // Remove the X-Powered-By header to hide Next.js usage
     res.removeHeader('X-Powered-By');
