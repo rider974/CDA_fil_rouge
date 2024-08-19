@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { initializeDataSource } from '../../../data-source';
 import { SharingSessionController } from "@/controllers/sharing_sessionController";
 import { SharingSessionService } from "@/services/sharing_sessionService";
-import Cors from 'nextjs-cors';
+import { corsMiddleware } from "@/utils/corsMiddleware";
 
 const sharingSessionService = new SharingSessionService();
 const sharingSessionController = new SharingSessionController(sharingSessionService);
@@ -10,10 +10,7 @@ const sharingSessionController = new SharingSessionController(sharingSessionServ
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         await initializeDataSource();
-        await Cors(req, res, {
-            methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-            origin: 'http://localhost:3000'
-        });
+        await corsMiddleware(req, res);
 
         // Remove the X-Powered-By header to hide Next.js usage
         res.removeHeader('X-Powered-By');
