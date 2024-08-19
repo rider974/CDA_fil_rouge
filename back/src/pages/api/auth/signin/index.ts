@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         switch (req.method) {
             /**
              * @swagger
-             * /api/users/login:
+             * /api/auth/signin:
              *   post:
              *     description: Authenticate a user with email and password
              *     tags:

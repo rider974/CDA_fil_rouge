@@ -21,7 +21,7 @@ const userController = new UserController(userService);
     switch (req.method) {
        /**
        * @swagger
-       * /api/user:
+       * /api/users:
        *   post:
        *     summary: Create a new user
        *     security:
@@ -84,7 +84,7 @@ const userController = new UserController(userService);
         break;
       /**
         * @swagger
-        * /api/user:
+        * /api/users:
         *   get:
         *     summary: Retrieve all users or a specific user by UUID or username
         *     tags:
@@ -160,7 +160,7 @@ const userController = new UserController(userService);
         break;
       /**
        * @swagger
-       * /api/user:
+       * /api/users:
        *   put:
        *     summary: Replace an existing user
        *     tags:
@@ -280,7 +280,7 @@ const userController = new UserController(userService);
         break;
       /**
        * @swagger
-       * /api/user:
+       * /api/users:
        *   delete:
        *     summary: Delete a user by UUID
        *     tags:

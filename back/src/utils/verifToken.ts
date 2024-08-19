@@ -11,14 +11,17 @@ export function authenticateToken(handler: NextApiHandler) {
 
     if (authHeader && authHeader.startsWith('Bearer ')) {
       // Extract the token from the Authorization header
+      console.log(authHeader + '        '+authHeader.startsWith('Bearer '));
       token = authHeader.split(' ')[1];
     } else {
       // If not found in Authorization header, look for the token in cookies
       const cookieHeader = req.headers.cookie;
+      console.log(cookieHeader);
       if (cookieHeader) {
         const cookieToken = cookieHeader.split('; ').find(row => row.startsWith('authToken='));
         if (cookieToken) {
           token = cookieToken.split('=')[1];
+          console.log(token);
         }
       }
     }

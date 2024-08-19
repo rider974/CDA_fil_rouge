@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     switch (req.method) {
       /**
        * @swagger
-       * /api/users/register:
+       * /api/auth/register:
        *   post:
        *     description: Register a new user
        *     tags:
