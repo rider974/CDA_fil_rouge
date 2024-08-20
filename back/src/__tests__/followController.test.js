@@ -1,5 +1,5 @@
 // src/__tests__/followController.test.js
-const { FollowController } = require("../controllers/FollowController");
+const { FollowController } = require("@/controllers/FollowController");
 const { FollowService } = require("@/services/followServices");
 const { EntityNotFoundError } = require("@/errors/errors");
 

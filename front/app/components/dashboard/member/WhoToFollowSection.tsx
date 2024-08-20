@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { FaDownload } from "react-icons/fa";
+import { FaDownload, FaShare } from "react-icons/fa";
 
 const newsFeedItems = [
   {
@@ -14,6 +14,7 @@ const newsFeedItems = [
     likes: 291,
     date: "2024-08-18",
     downloadIcon: <FaDownload className="h-5 w-5 text-green-500" />,
+    shareIcon : <FaShare className="h-5 w-5 text-blue-500" />,
   },
   {
     id: 2,
@@ -25,6 +26,7 @@ const newsFeedItems = [
     likes: 323,
     date: "2024-07-06",
     downloadIcon: <FaDownload className="h-5 w-5 text-green-500" />,
+    shareIcon : <FaShare className="h-5 w-5 text-blue-500" />,
   },
   {
     id: 3,
@@ -35,6 +37,7 @@ const newsFeedItems = [
     likes: 45,
     date: "2024-06-22",
     downloadIcon: <FaDownload className="h-5 w-5 text-green-500" />,
+    shareIcon : <FaShare className="h-5 w-5 text-blue-500" />,
   },
 ];
 
@@ -140,6 +143,9 @@ const WhoToFollowSection: React.FC = () => {
                           </span>
                           <span className="ml-4">
                             {item.downloadIcon}
+                          </span>
+                          <span className="ml-4">
+                            {item.shareIcon}
                           </span>
                         </div>
                       </div>

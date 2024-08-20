@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { initializeDataSource } from "../../../data-source";
 import { UserController } from "@/controllers/userController";
 import { UserService } from "@/services/userService";
-import Cors from 'nextjs-cors';
 import { authenticateToken } from "@/utils/verifToken";
+import { corsMiddleware } from "@/utils/corsMiddleware";
 
 const userService = new UserService();
 const userController = new UserController(userService);
@@ -11,10 +11,7 @@ const userController = new UserController(userService);
  async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await initializeDataSource();
-    await Cors(req, res, {
-      methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
-      origin: 'http://localhost:3000'
-    });
+    await corsMiddleware(req, res);
 
     const action = req.query.action as string | undefined;
 

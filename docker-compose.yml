@@ -23,6 +23,7 @@ services:
       - "3001:3001"
     environment:
       DATABASE_URL: postgres://user_beginners:password@pass_beginners:5432/db_beginners
+      TOTO: ${TOTO}
     depends_on:
       - postgres
     networks:

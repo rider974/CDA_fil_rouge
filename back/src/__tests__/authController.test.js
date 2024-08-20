@@ -1,6 +1,5 @@
-const { AuthController } = require("../controllers/AuthController");
+const { AuthController } = require("@/controllers/AuthController");
 const { AuthService } = require("@/services/authService");
-const { UserService } = require("@/services/userService");
 
 jest.mock("@/services/authService"); // Mock AuthService
 jest.mock("@/services/userService"); // Mock UserService

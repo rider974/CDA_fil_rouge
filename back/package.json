@@ -7,11 +7,12 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "next lint",
-    "typeorm": "typeorm-ts-node-esm",
-    "migration:generate": "npm run typeorm -- migration:generate ./src/migration/InitialMigration -d ./data-source.ts",
-    "migration:run": "npm run typeorm -- migration:run -d ./data-source.ts",
-    "test": "jest --watch --verbose --coverage --coverageReporters=html"
-
+    "typeorm": "ts-node ./node_modules/typeorm/cli",
+    "typeorm:run-migrations": "npm run typeorm migration:run -- -d ./src/data-source.ts",
+    "typeorm:generate-migration": "npm run typeorm -- -d ./src/data-source.ts migration:generate ./src/migrations/$npm_config_name",
+    "typeorm:create-migration": "npm run typeorm -- migration:create ./src/migrations/$npm_config_name",
+    "typeorm:revert-migration": "npm run typeorm -- -d ./src/data-source.ts migration:revert",
+    "test": "jest --verbose --coverage --coverageReporters=html"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
