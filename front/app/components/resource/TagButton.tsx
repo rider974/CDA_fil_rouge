@@ -1,12 +1,13 @@
-import Link from 'next/link';
-import React from 'react';
+import Link from "next/link";
+import React from "react";
 
-export const TagButton = () => {
+export function TagButton() {
   return (
-    <Link href="/tags">
-      <button className="bg-transparent text-white font-normal w-10 h-10 border-2 border-white flex items-center justify-center rounded hover:bg-white hover:text-gray-900 transition duration-200 ml-8">
-        Tag
-      </button>
+    <Link
+      href="/resources/tag"
+      className="bg-transparent text-white font-normal w-10 h-10 border-2 border-white flex items-center justify-center rounded hover:bg-white hover:text-gray-900 transition duration-200 ml-8"
+    >
+      TAG
     </Link>
   );
-};
+}

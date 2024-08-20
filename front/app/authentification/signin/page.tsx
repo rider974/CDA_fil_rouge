@@ -18,7 +18,8 @@ export default function SignInPage() {
         const response = await axios.get("/api/auth/csrf-token");
         setCsrfToken(response.data.csrfToken);
       } catch (error) {
-        setError("Failed to fetch CSRF token.");
+        console.error('Error fetching CSRF token:', error); 
+        setError("An error occurred. Please try again later.");
       }
     };
 
