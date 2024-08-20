@@ -163,7 +163,7 @@ export class UserController {
         role: user.role,
       });
 
-      res.setHeader('Set-Cookie', `authToken=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=Strict`);
+      res.setHeader('Set-Cookie', `authToken=${token}; Path=/; Max-Age=3600`);
   
 
       // Retourne les informations de l'utilisateur après authentification
