@@ -1,4 +1,3 @@
-# Utiliser l'image Node.js officielle
 FROM node:20-alpine
 
 # Définir le répertoire de travail
@@ -13,8 +12,8 @@ RUN npm install
 # Copier le reste des fichiers du projet
 COPY . .
 
-# Installer ts-node et typescript
-RUN npm install ts-node typescript
+# Installer ts-node, typescript et tsconfig-paths
+RUN npm install ts-node typescript tsconfig-paths
 
 # Compiler le code TypeScript
 RUN npm run build
@@ -23,4 +22,4 @@ RUN npm run build
 EXPOSE 3001
 
 # Exécuter la commande pour les migrations et démarrer l'application
-CMD ["sh", "-c", "npx ts-node --loader ts-node/esm ./run-migrations.ts && npm start"]
+CMD ["sh", "-c", "npx ts-node -r tsconfig-paths/register ./run-migrations.ts && npm start"]
