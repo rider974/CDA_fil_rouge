@@ -9,35 +9,6 @@ export default function SignInPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false); // Correction de l'orthographe
-
-  useEffect(() => {
-    const fetchCsrfToken = async () => {
-      try {
-        const response = await axios.get("/api/auth/csrf-token");
-        setCsrfToken(response.data.csrfToken);
-      } catch (error) {
-        console.error('Error fetching CSRF token:', error); 
-        setError("An error occurred. Please try again later.");
-      }
-    };
-
-    const checkAuthentication = async () => {
-      try {
-        const response = await axios.get("/api/auth/session");
-        if (response.status === 200 && response.data.isAuthenticated) {
-          setIsAuthenticated(true);
-          router.push("/dashboard/member"); // Rediriger les utilisateurs connectés vers la page membre
-        }
-      } catch (error) {
-        setIsAuthenticated(false);
-      }
-    };
-
-    fetchCsrfToken();
-    checkAuthentication();
-  }, [router]); // Correction : la dépendance à `router` doit être dans le tableau de dépendances
 
   const handleSubmit = async (email: string, password: string) => {
     setIsLoading(true);
@@ -47,7 +18,6 @@ export default function SignInPage() {
       const response = await axios.post("/api/auth/signin", {
         email,
         password,
-        csrfToken,
       });
 
       if (response.status === 200) {
@@ -62,17 +32,12 @@ export default function SignInPage() {
     }
   };
 
-  if (isAuthenticated) {
-    return null; // Optionnel : Vous pouvez retourner null ou un loader si vous attendez une redirection
-  }
-
   return (
     <div>
       <CredentialsForm
         onSubmit={handleSubmit}
         isLoading={isLoading}
         error={error}
-        csrfToken={csrfToken}
       />
     </div>
   );

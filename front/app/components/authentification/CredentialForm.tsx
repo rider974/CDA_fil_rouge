@@ -7,14 +7,12 @@ interface CredentialsFormProps {
   onSubmit: (email: string, password: string) => void;
   isLoading: boolean;
   error: string | null;
-  csrfToken: string | null;
 }
 
 export function CredentialsForm({
   onSubmit,
   isLoading,
   error,
-  csrfToken,
 }: CredentialsFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -82,7 +80,6 @@ export function CredentialsForm({
             onSubmit={handleSubmit}
           >
             {error && <p className="text-red-500 mb-4">{error}</p>}
-            <input type="hidden" name="csrfToken" value={csrfToken || ""} />
             <div className="mb-6">
               <label className="block text-gray-500 font-normal">Email</label>
               <input
