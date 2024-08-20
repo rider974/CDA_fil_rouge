@@ -5,7 +5,7 @@ import { EntityNotFoundError } from '../errors/errors';
 
 // Schema for validating comment creation and updates
 const commentSchema = Joi.object({
-  content: Joi.string().optional(),
+  content: Joi.string().required(),
   is_reported: Joi.boolean().optional(),
   parentCommentUuid: Joi.string().uuid().optional(),
   userUuid: Joi.string().uuid().required(),
@@ -15,11 +15,11 @@ const commentSchema = Joi.object({
 export class CommentController {
   private commentService: CommentService;
 
-  constructor(commentService: CommentService) {
+  public constructor(commentService: CommentService) {
     this.commentService = commentService;
   }
 
-  async createComment(req: NextApiRequest, res: NextApiResponse) {
+  public async createComment(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { error } = commentSchema.validate(req.body);
       if (error) {
@@ -34,7 +34,7 @@ export class CommentController {
     }
   }
 
-  async getAllComments(req: NextApiRequest, res: NextApiResponse) {
+  public async getAllComments(req: NextApiRequest, res: NextApiResponse) {
     try {
       const comments = await this.commentService.getAllComments();
       return res.status(200).json(comments);
@@ -44,7 +44,7 @@ export class CommentController {
     }
   }
 
-  async getCommentById(req: NextApiRequest, res: NextApiResponse) {
+  public async getCommentById(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { comment_uuid } = req.query;
       if (typeof comment_uuid !== 'string') {
@@ -66,7 +66,7 @@ export class CommentController {
     }
   }
 
-  async replaceComment(req: NextApiRequest, res: NextApiResponse) {
+  public async replaceComment(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { comment_uuid } = req.query;
       if (typeof comment_uuid !== 'string') {
@@ -93,7 +93,7 @@ export class CommentController {
     }
   }
 
-  async updateCommentFields(req: NextApiRequest, res: NextApiResponse) {
+  public async updateCommentFields(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { comment_uuid } = req.query;
       if (typeof comment_uuid !== 'string') {
@@ -120,7 +120,7 @@ export class CommentController {
     }
   }
 
-  async deleteComment(req: NextApiRequest, res: NextApiResponse) {
+  public async deleteComment(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { comment_uuid } = req.query;
       if (typeof comment_uuid !== 'string') {
