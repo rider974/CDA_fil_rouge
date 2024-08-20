@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { ReferService } from '@/services/referServices';
 import { ReferController } from '@/controllers/referControllers';
 import { initializeDataSource } from '@/data-source';
-import Cors from 'nextjs-cors';
+import { corsMiddleware } from '@/utils/corsMiddleware';
 
 // Initialize the services and controllers
 const referService = new ReferService();
@@ -15,10 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await initializeDataSource();
 
     // Enable CORS for cross-origin requests
-    await Cors(req, res, {
-      methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
-      origin: 'http://localhost:3000', // Adjust the origin as needed
-    });
+    await corsMiddleware(req, res);
 
     // Remove the X-Powered-By header to hide Next.js usage
      res.removeHeader('X-Powered-By');

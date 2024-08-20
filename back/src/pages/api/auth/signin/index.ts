@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { initializeDataSource } from '@/data-source';
-import Cors from 'nextjs-cors';
 import { UserService } from '@/services/userService';
 import { UserController } from '@/controllers/userController';
+import { corsMiddleware } from '@/utils/corsMiddleware';
 
 // Initialize the services and controllers
 const userService = new UserService();
@@ -15,10 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await initializeDataSource();
 
         // Enable CORS for cross-origin requests
-        await Cors(req, res, {
-            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-            origin: 'http://localhost:3000', // Adjust the origin as needed
-        });
+        await corsMiddleware(req, res);
 
         // Remove the X-Powered-By header to hide Next.js usage
         res.removeHeader('X-Powered-By');
@@ -31,11 +28,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         switch (req.method) {
             /**
              * @swagger
-             * /api/users/login:
+             * /api/users:
              *   post:
              *     description: Authenticate a user with email and password
              *     tags:
-             *       - users
+             *       - Authentication
              *     requestBody:
              *       required: true
              *       content:

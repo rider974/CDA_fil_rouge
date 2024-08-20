@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { RoleService } from '@/services/roleService';
 import { RoleController } from '@/controllers/roleController';
 import { initializeDataSource } from '../../../data-source';
-import Cors from 'nextjs-cors';
+import { corsMiddleware } from '@/utils/corsMiddleware';
 
 const roleService = new RoleService();
 const roleController = new RoleController(roleService);
@@ -10,10 +10,7 @@ const roleController = new RoleController(roleService);
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await initializeDataSource();
-    await Cors(req, res, {
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      origin: 'http://localhost:3000'
-    });
+    await corsMiddleware (req, res);
 
     // Remove the X-Powered-By header to hide Next.js usage
     res.removeHeader('X-Powered-By');

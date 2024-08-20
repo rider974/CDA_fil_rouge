@@ -5,7 +5,7 @@ import type { Relation } from 'typeorm';
 /**
  * Represents the status of a resource.
  */
-@Entity('ressources-status')
+@Entity('ressources_status')
 @Unique(['name'])
 export class RessourceStatus {
   // Unique identifier for the resource status
