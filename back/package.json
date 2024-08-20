@@ -31,7 +31,8 @@
     "react-dom": "^18",
     "reflect-metadata": "^0.2.2",
     "sanitizer": "^0.1.3",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "winston": "^3.14.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

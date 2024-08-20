@@ -1,36 +1,24 @@
 import { AppDataSource } from '../data-source';
-import { Role } from '../entity/role';
+import { Role} from '../entity/role';
 
-async function seedRoles() {
-  // Connexion à la base de données
-  const dataSource = await AppDataSource.initialize();
-  
-  // Création des rôles à insérer
+const seedRoles = async () => {
+    try{
+  const roleRepository = AppDataSource.getRepository(Role);
   const roles = [
-    { role_name: 'admin' },
-    { role_name: 'moderator' },
-    { role_name: 'member' }   
+    { role_name: 'Admin' },
+    { role_name: 'User' },
+    { role_name: 'Guest' },
   ];
 
-  // Obtenir le gestionnaire d'entité
-  const roleRepository = dataSource.getRepository(Role);
-
-  for (const roleData of roles) {
-    // Créer une nouvelle instance de Role
-    const role = roleRepository.create({
-      role_name: roleData.role_name,
-      created_at: new Date(),
-      updated_at: new Date()
-    });
-
-    // Sauvegarder le rôle dans la base de données
-    await roleRepository.save(role);
-    console.log(`Role "${roleData.role_name}" has been inserted`);
+  for (const role of roles) {
+    const newRole = roleRepository.create(role);
+    console.log(newRole);
+    await roleRepository.save(newRole);
   }
-
-  await dataSource.destroy(); // Fermer la connexion
+  console.log('Roles seeded');
+}catch (error) {
+    console.error('Error seeding roles:', error);
 }
+};
 
-seedRoles().catch(error => {
-  console.error('Error during seeding:', error);
-});
+export default seedRoles;
