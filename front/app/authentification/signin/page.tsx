@@ -24,24 +24,24 @@ export default function SignInPage() {
       });
 
       if (response.status === 200) {
-        let token = Cookies.get("authToken") || '';
+        const token = Cookies.get("authToken") || '';
         console.log(token);
-        console.log(Cookies);
-       
-        // if (token) {
-          console.log('je suis passé par là');
-          const decodedToken = jwtDecode(token);
-          console.log(decodedToken);
-          // const userRole = decodedToken;
-          // console.log(userRole);
+        // console.log(Cookies);
 
-          // if (userRole === "admin") {
-          //   router.push("/dashboard/admin");
-          // } else if (userRole === "moderator") {
-          //   router.push("/dashboard/moderator");
-          // } else {
-          //   router.push("/dashboard/member");
-          // }
+        // if (token) {
+        console.log('je suis passé par là');
+        const decodedToken = jwtDecode(token);
+        console.log(decodedToken);
+        // const userRole = decodedToken;
+        // console.log(userRole);
+
+        // if (userRole === "admin") {
+        //   router.push("/dashboard/admin");
+        // } else if (userRole === "moderator") {
+        //   router.push("/dashboard/moderator");
+        // } else {
+        //   router.push("/dashboard/member");
+        // }
         // } else {
         //   setError("JWT token not found in cookies.");
         // }
