@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -14,13 +15,13 @@ export function SignUpButton() {
   return (
     <p className="text-center font-semibold">
       Don&rsquo;t have an account?
-      <a
+      <Link
         href="#"
         onClick={handleClick}
         className="text-green-500 ml-2 hover:underline cursor-pointer"
       >
         Sign up
-      </a>
+      </Link>
     </p>
   );
 }

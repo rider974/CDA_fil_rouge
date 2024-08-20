@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { TagButton } from "./resource/TagButton";
 import { PdfButton } from "./resource/PdfButton";
 import { CheatSheetButton } from "./resource/CheatSheetButton";
+import { VideoButton } from "./resource/VideoButton";
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,6 +56,7 @@ export default function Navbar() {
         </form>
         <TagButton />
         <PdfButton />
+        <VideoButton />
         <CheatSheetButton />
       </div>
 
@@ -109,6 +111,7 @@ export default function Navbar() {
           <div className="flex flex-col space-y-4 items-start w-full px-4 mt-4">
             <TagButton />
             <PdfButton />
+            <VideoButton />
             <CheatSheetButton />
           </div>
 
