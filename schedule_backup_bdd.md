@@ -11,6 +11,9 @@ mkdir -p  /home/adminlocal/db_beginners/backup_bdd;
 create extension if not exists pg_cron; 
 
 # create schedule backup 
+
+mkdir -p  /home/adminlocal/db_beginners/backup_bdd;
+
 date=$(date '+%Y_%m_%d')
 
 pg_dump -U user_beginners -d db_beginners  > /home/db_beginners/backup_bdd/backup_$date.sql
