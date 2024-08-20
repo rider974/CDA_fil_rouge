@@ -24,15 +24,15 @@ export default function SignInPage() {
       });
 
       if (response.status === 200) {
-        let token = Cookies.get("authToken");
+        let token = Cookies.get("authToken") || '';
         console.log(token);
         console.log(Cookies);
        
-        if (token) {
+        // if (token) {
           console.log('je suis passé par là');
           const decodedToken = jwtDecode(token);
           console.log(decodedToken);
-          // const userRole = decodedToken.;
+          // const userRole = decodedToken;
           // console.log(userRole);
 
           // if (userRole === "admin") {
@@ -42,9 +42,9 @@ export default function SignInPage() {
           // } else {
           //   router.push("/dashboard/member");
           // }
-        } else {
-          setError("JWT token not found in cookies.");
-        }
+        // } else {
+        //   setError("JWT token not found in cookies.");
+        // }
       } else {
         setError("Invalid email or password.");
       }
