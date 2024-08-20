@@ -5,8 +5,8 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
-const jwtDecode = require("jwt-decode");
 
 export default function SignInPage() {
   const router = useRouter();
@@ -27,20 +27,21 @@ export default function SignInPage() {
         let token = Cookies.get("authToken");
         console.log(token);
         console.log(Cookies);
-        token = "toto";
+       
         if (token) {
+          console.log('je suis passé par là');
           const decodedToken = jwtDecode(token);
           console.log(decodedToken);
-          const userRole = decodedToken.role.role_name;
-          console.log(userRole);
+          // const userRole = decodedToken.;
+          // console.log(userRole);
 
-          if (userRole === "admin") {
-            router.push("/dashboard/admin");
-          } else if (userRole === "moderator") {
-            router.push("/dashboard/moderator");
-          } else {
-            router.push("/dashboard/member");
-          }
+          // if (userRole === "admin") {
+          //   router.push("/dashboard/admin");
+          // } else if (userRole === "moderator") {
+          //   router.push("/dashboard/moderator");
+          // } else {
+          //   router.push("/dashboard/member");
+          // }
         } else {
           setError("JWT token not found in cookies.");
         }
