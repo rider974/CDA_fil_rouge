@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaDownload, FaHeart, FaRegHeart, FaShare } from "react-icons/fa";
+import Badge from "../../resource/Badge";
 
 interface ArticleCardProps {
   url: string;
@@ -9,6 +10,7 @@ interface ArticleCardProps {
   description: string;
   imageUrl: string;
   date: string;
+  badge?: string;
 }
 
 export const ArticleCard: React.FC<ArticleCardProps> = ({
@@ -17,13 +19,14 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   description,
   imageUrl,
   date,
+  badge,
 }) => {
   const [isFavorited, setIsFavorited] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
   const [isShared, setisShared] = useState(false);
 
   const toggleShare = () => {
-    setisShared(!isFavorited);
+    setisShared(!isShared);
   };
 
   const toggleFavorite = () => {
@@ -35,7 +38,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+    <div className="relative bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+      {badge && <Badge label={badge} />} {/* Place the badge at the top right */}
       <Link href={url}>
         <div className="p-4">
           <Image

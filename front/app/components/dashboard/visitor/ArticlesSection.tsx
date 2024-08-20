@@ -10,6 +10,7 @@ export const ArticlesSection: React.FC = () => {
       description:
         "Learn the basics of JavaScript, the most popular programming language for web development.",
       date: "18/08/2024",
+      badge: "JS",
     },
     {
       url: "https://blog.stackademic.com/exploring-advanced-component-patterns-in-react-render-props-component-composition-and-hooks-8a20132cde6b",
@@ -18,6 +19,7 @@ export const ArticlesSection: React.FC = () => {
       description:
         "Master advanced patterns and techniques in React for building scalable web applications.",
       date: "11/08/2024",
+      badge: "React",
     },
     {
       url: "https://medium.com/@rs4528090/understanding-typescript-a-comprehensive-guide-851697a8e424",
@@ -26,6 +28,7 @@ export const ArticlesSection: React.FC = () => {
       description:
         "Deep dive into TypeScript, a powerful tool for building robust and maintainable web applications.",
       date: "22/07/2024",
+      badge: "TS",
     },
     {
       url: "https://www.etic-insa.com/datascience-ia/python",
@@ -34,6 +37,7 @@ export const ArticlesSection: React.FC = () => {
       description:
         "Explore Python’s capabilities in data science, from basic data manipulation to advanced analysis.",
       date: "05/06/2024",
+      badge: "Python",
     },
     {
       url: "https://www.tensorflow.org/learn",
@@ -42,6 +46,7 @@ export const ArticlesSection: React.FC = () => {
       description:
         "Discover the power of TensorFlow for building and deploying machine learning models.",
       date: "05/05/2024",
+      badge: "Tools",
     },
     {
       url: "https://www.deeplearning.ai/learn",
@@ -50,6 +55,7 @@ export const ArticlesSection: React.FC = () => {
       description:
         "Learn the fundamentals of deep learning and explore its applications across various domains.",
       date: "28/04/2024",
+      badge: "DeepLearning",
     },
     {
       url: "https://huggingface.co/learn/nlp",
@@ -58,6 +64,7 @@ export const ArticlesSection: React.FC = () => {
       description:
         "Dive into natural language processing (NLP) using Hugging Face's state-of-the-art models and libraries.",
       date: "22/04/2024",
+      badge: "HuggingFace",
     },
     {
       url: "https://martinfowler.com/architecture",
@@ -66,6 +73,7 @@ export const ArticlesSection: React.FC = () => {
       description:
         "Learn the principles of software architecture, including design patterns, system structures, and best practices for building maintainable and scalable applications.",
       date: "26/03/2024",
+      badge: "Architecte",
     },
     {
       url: "https://www-phonandroid-com.cdn.ampproject.org/c/s/www.phonandroid.com/cette-ia-echappe-au-controle-des-chercheurs-en-reecrivant-son-propre-code-pour-etendre-ses-capacites.html/amp",
@@ -74,6 +82,7 @@ export const ArticlesSection: React.FC = () => {
       description:
         "Learn how an AI managed to modify its own code to extend its capabilities, raising questions about the safety and ethics of artificial intelligence.",
       date: "02/03/2024",
+      badge: "AI",
     },
   ];
 
@@ -90,6 +99,7 @@ export const ArticlesSection: React.FC = () => {
               title={article.title}
               description={article.description}
               date={article.date}
+              badge={article.badge}
             />
           ))}
         </div>

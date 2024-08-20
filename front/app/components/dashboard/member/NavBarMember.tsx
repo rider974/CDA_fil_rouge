@@ -11,6 +11,7 @@ import NotificationsButton from "./NotificationsButton";
 import ProfileDropdown from "./ProfileDropdown";
 import NewPostButton from "./NewPostButton";
 import ReportButton from "./ReportButton";
+import { VideoButton } from "../../resource/VideoButton";
 
 export default function NavbarMember() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -52,6 +53,7 @@ export default function NavbarMember() {
         </form>
         <TagButton />
         <PdfButton />
+        <VideoButton />
         <CheatSheetButton />
       </div>
 
