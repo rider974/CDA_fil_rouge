@@ -24,7 +24,10 @@ export default function SignInPage() {
       });
 
       if (response.status === 200) {
-        const token = Cookies.get("authToken");
+        let token = Cookies.get("authToken");
+        console.log(token);
+        console.log(Cookies);
+        token = "toto";
         if (token) {
           const decodedToken = jwtDecode(token);
           console.log(decodedToken);
