@@ -25,31 +25,29 @@ export default function SignInPage() {
 
       if (response.status === 200) {
         const token = Cookies.get("authToken") || '';
-        console.log(token);
-        // console.log(Cookies);
 
-        // if (token) {
-        console.log('je suis passé par là');
-        const decodedToken = jwtDecode(token);
-        console.log(decodedToken);
-        // const userRole = decodedToken;
-        // console.log(userRole);
+        if (token) {
+          const decodedToken: any = jwtDecode(token);
 
-        // if (userRole === "admin") {
-        //   router.push("/dashboard/admin");
-        // } else if (userRole === "moderator") {
-        //   router.push("/dashboard/moderator");
-        // } else {
-        //   router.push("/dashboard/member");
-        // }
-        // } else {
-        //   setError("JWT token not found in cookies.");
-        // }
+          // Extract the role name
+          const userRole = decodedToken.role?.role_name || '';
+          console.log("User role:", userRole);
+
+          if (userRole === "admin") {
+            router.push("/dashboard/admin");
+          } else if (userRole === "moderator") {
+            router.push("/dashboard/moderator");
+          } else {
+            router.push("/dashboard/member");
+          }
+        } else {
+          setError("JWT token not found in cookies.");
+        }
       } else {
         setError("Invalid email or password.");
       }
     } catch (error) {
-      setError("An unexpected error occurred.");
+      setError("An unexpected error occurred: " + error);
     } finally {
       setIsLoading(false);
     }
