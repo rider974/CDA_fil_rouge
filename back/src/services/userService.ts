@@ -56,7 +56,10 @@ export class UserService {
    */
   async getUserByEmail(email: string): Promise<User | null> {
     try {
-      return await AppDataSource.manager.findOne(User, { where: { email } });
+      return await AppDataSource.manager.findOne(User, {
+        where: { email },
+        relations: ["role", "ressources", "comments", "sharingSessions"],
+      });
     } catch (error) {
       console.error("Error fetching user by email:", error);
       throw new Error("An error occurred while fetching the user by email");
