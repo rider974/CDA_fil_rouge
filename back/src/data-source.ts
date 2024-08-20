@@ -14,16 +14,28 @@ import {RessourceType} from "./entity/ressourceType"
 import {SharingSession} from "./entity/sharingSession"
 import {Reference} from "./entity/reference"
 import {InitMigration1723112057042} from './migrations/1723112057042-initMigration'
+import { config } from "dotenv";
 
+config();
+
+const dbType = process.env.DB_TYPE as "postgres" | "mysql" | "mariadb" | "sqlite" | "mssql" | "oracle";
+if (!dbType) {
+    throw new Error("DB_TYPE is not set or is invalid");
+}
+
+const db_name = process.env.DB_DB as "postgres" | "mysql" | "mariadb" | "sqlite" | "mssql" | "oracle";
+if (!db_name) {
+    throw new Error("DB_TYPE is not set or is invalid");
+}
 
 export const AppDataSource = new DataSource({
-    type: "postgres",
-    host: "postgres",
+    type: dbType,
+    host: process.env.DB_HOST,
     port: 5432,
-    username: "user_beginners",
-    password: "pass_beginners",
-    database: "db_beginners",
-    synchronize: true,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: db_name,
+    synchronize: false,
     logging: "all",
     entities: [User, Role, Comment, Tag, Have, Ressource, RessourceStatus, RessourceStatusHistory, Follow, Refer, Reference, RessourceType, SharingSession],
     migrations: [InitMigration1723112057042],
