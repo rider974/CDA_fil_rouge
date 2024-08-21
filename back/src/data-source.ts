@@ -36,7 +36,7 @@ export const AppDataSource = new DataSource({
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: db_name,
-    synchronize: false,
+    synchronize: true,
     logging: "all",
     entities: [User, Role, Comment, Tag, Have, Ressource, RessourceStatus, RessourceStatusHistory, Follow, Refer, Reference, RessourceType, SharingSession],
     migrations: [InitialSchema1641211240000,AddStatusUpdateTrigger1641211250000],
