@@ -14,6 +14,7 @@ import {RessourceType} from "./entity/ressourceType"
 import {SharingSession} from "./entity/sharingSession"
 import {Reference} from "./entity/reference"
 import {InitialSchema1641211240000} from './migrations/1723112057042-initMigration'
+import {AddStatusUpdateTrigger1641211250000} from './migrations/1641211250000-AddStatusUpdateTrigger'
 import { config } from "dotenv";
 
 config();
@@ -38,7 +39,7 @@ export const AppDataSource = new DataSource({
     synchronize: false,
     logging: "all",
     entities: [User, Role, Comment, Tag, Have, Ressource, RessourceStatus, RessourceStatusHistory, Follow, Refer, Reference, RessourceType, SharingSession],
-    migrations: [InitialSchema1641211240000],
+    migrations: [InitialSchema1641211240000,AddStatusUpdateTrigger1641211250000],
     subscribers: [],
 })
 
