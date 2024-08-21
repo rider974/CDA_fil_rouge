@@ -26,6 +26,7 @@ export default function RegisterPage() {
         password,
       });
 
+  
       if (response.status === 201) {
         router.push(
           "/authentification/signin?message=Inscription réussie. Veuillez vous connecter."
