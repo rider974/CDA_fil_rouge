@@ -52,6 +52,19 @@ services:
     networks:
       - network-beginners
 
+  backup:
+    image: alpine:latest
+    volumes:
+      - ./backup_db.sh:/usr/src/app/backup_db.sh
+      - ./backups:/backups
+    entrypoint: >
+      sh -c "apk add --no-cache bash curl && \
+      crond -f -L /var/log/cron.log && \
+      echo '30 3 * * * /usr/src/app/backup_db.sh' | crontab - && \
+      tail -f /dev/null"
+    networks:
+      - network-beginners
+
 networks:
   network-beginners:
     driver: bridge

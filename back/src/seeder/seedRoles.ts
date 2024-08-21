@@ -5,9 +5,9 @@ const seedRoles = async () => {
     try{
   const roleRepository = AppDataSource.getRepository(Role);
   const roles = [
-    { role_name: 'Admin' },
-    { role_name: 'User' },
-    { role_name: 'Guest' },
+    { role_name: 'admin' },
+    { role_name: 'moderator' },
+    { role_name: 'member' },
   ];
 
   for (const role of roles) {

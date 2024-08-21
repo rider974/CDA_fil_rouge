@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "../../utils/axios";
 import { RegisterForm } from "@/app/components/authentification/RegisterForm";
+import { sendEmail } from "@/app/utils/emailService";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -25,6 +26,13 @@ export default function RegisterPage() {
         email,
         password,
       });
+
+      await sendEmail(
+        email,
+        'Inscription réussie',
+        'Merci pour votre inscription ! Votre compte a été créé avec succès.'
+      );
+
 
       if (response.status === 201) {
         router.push(

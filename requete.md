@@ -81,3 +81,8 @@ EXECUTE FUNCTION log_status_update();
 UPDATE ressources
 SET ressource_status_uuid = '73292f30-7cb1-4c14-81d0-cd570826a859'
 WHERE ressource_uuid = 'aca10f08-9076-45ed-9619-d05e25d0cf79';
+
+
+BeginnersAppDev@outlook.com
+
+BAD2024flopastom

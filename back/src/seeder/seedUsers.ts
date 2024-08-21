@@ -9,19 +9,19 @@ const seedUsers = async () => {
     const roleRepository = AppDataSource.getRepository(Role);
 
     // récupération des roles
-    const adminRole = await roleRepository.findOneBy({ role_name: 'Admin' });
-    const userRole = await roleRepository.findOneBy({ role_name: 'User' });
-    const guestRole = await roleRepository.findOneBy({ role_name: 'Guest' });
+    const adminRole = await roleRepository.findOneBy({ role_name: 'admin' });
+    const moderatorRole = await roleRepository.findOneBy({ role_name: 'moderator' });
+    const memberRole = await roleRepository.findOneBy({ role_name: 'member' });
 
-    if (!adminRole || !userRole || !guestRole) {
+    if (!adminRole || !moderatorRole || !memberRole) {
       throw new Error('One or more roles not found.');
     }
 
     // seed d'utilisateur example
     const users = [
       { username: 'admin', email: 'admin@example.com', password: 'adminpass', role: adminRole },
-      { username: 'user1', email: 'user1@example.com', password: 'user1pass', role: userRole },
-      { username: 'guest1', email: 'guest1@example.com', password: 'guest1pass', role: guestRole },
+      { username: 'moderator', email: 'moderator@example.com', password: 'moderatorpass', role: moderatorRole },
+      { username: 'member', email: 'member@example.com', password: 'memberpass', role: memberRole },
     ];
 
     for (const user of users) {
