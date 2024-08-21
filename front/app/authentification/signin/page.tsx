@@ -31,8 +31,6 @@ export default function SignInPage() {
 
           // Extract the role name
           const userRole = decodedToken.role?.role_name || '';
-          console.log("User role:", userRole);
-
           if (userRole === "admin") {
             router.push("/dashboard/admin");
           } else if (userRole === "moderator") {
@@ -47,7 +45,7 @@ export default function SignInPage() {
         setError("Invalid email or password.");
       }
     } catch (error) {
-      setError("An unexpected error occurred: " + error);
+      setError("An unexpected error occurred: ");
     } finally {
       setIsLoading(false);
     }
