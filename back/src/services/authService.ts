@@ -14,7 +14,7 @@ export class AuthService {
     this.userService = userService;
   }
 
-  async login(email: string, password: string): Promise<User> {
+  public async login(email: string, password: string): Promise<User> {
     try {
       const user = await this.userService.getUserByEmail(email);
       if (!user) {
