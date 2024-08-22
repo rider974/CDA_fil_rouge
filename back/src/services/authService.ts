@@ -14,14 +14,14 @@ export class AuthService {
     this.userService = userService;
   }
 
-  async login(email: string, password: string): Promise<User> {
+  public async login(authentificationData: CreateAuthDTO): Promise<User> {
     try {
-      const user = await this.userService.getUserByEmail(email);
+      const user = await this.userService.getUserByEmail(authentificationData?.email);
       if (!user) {
         throw new Error('Identifiants invalides');
       }
 
-      const isPasswordValid = await bcrypt.compare(password, user.password);
+      const isPasswordValid = await bcrypt.compare(authentificationData?.password, user.password);
       if (!isPasswordValid) {
         throw new Error('Identifiants invalides');
       }
