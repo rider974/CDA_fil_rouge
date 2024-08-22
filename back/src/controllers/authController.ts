@@ -17,7 +17,7 @@ export class AuthController {
         res.status(400).json({ error: "Veuillez renseigner un email et un mot de passe" });
       }
       const { email, password } = req.body;
-      const user = await this.authService.login(email, password);
+      const user = await this.authService.login({email, password});
       return res.status(200).json({ user });
     } catch (error: unknown) {
       if (error instanceof Error) {
