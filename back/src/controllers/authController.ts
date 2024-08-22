@@ -18,7 +18,7 @@ export class AuthController {
       }
       const { email, password } = req.body;
       const user = await this.authService.login(email, password);
-      res.status(200).json({ user });
+      return res.status(200).json({ user });
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error("Erreur lors de la connexion :", error.message);
