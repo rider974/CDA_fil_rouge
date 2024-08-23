@@ -3,11 +3,12 @@ import { initializeDataSource } from '@/data-source';
 import { Ressources_typesController } from "@/controllers/ressources_typesController";
 import { Ressources_typesService } from "@/services/ressources_typesService";
 import { corsMiddleware } from "@/utils/corsMiddleware";
+import { authenticateToken } from "@/utils/verifToken";
 
 const ressources_typesService = new Ressources_typesService();
 const ressources_typesController = new Ressources_typesController(ressources_typesService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await initializeDataSource();
 
@@ -172,3 +173,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

@@ -3,11 +3,12 @@ import { ReferenceService } from '@/services/referenceServices';
 import { ReferenceController } from '@/controllers/referenceController';
 import { initializeDataSource } from '../../../data-source';
 import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 const referenceService = new ReferenceService();
 const referenceController = new ReferenceController(referenceService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await initializeDataSource();
 
@@ -149,3 +150,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)
