@@ -3,11 +3,12 @@ import { RoleService } from '@/services/roleService';
 import { RoleController } from '@/controllers/roleController';
 import { initializeDataSource } from '../../../data-source';
 import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 const roleService = new RoleService();
 const roleController = new RoleController(roleService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await initializeDataSource();
     await corsMiddleware (req, res);
@@ -164,3 +165,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

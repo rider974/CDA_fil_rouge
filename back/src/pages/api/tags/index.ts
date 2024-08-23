@@ -3,11 +3,12 @@ import { TagService } from '@/services/tagService';
 import { TagController } from '@/controllers/tagController';
 import { initializeDataSource } from '../../../data-source';
 import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 const tagService = new TagService();
 const tagController = new TagController(tagService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Initialise la source de données avant de traiter la requête
     await initializeDataSource();
@@ -163,3 +164,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

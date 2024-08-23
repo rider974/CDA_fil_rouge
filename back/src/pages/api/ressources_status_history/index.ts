@@ -3,12 +3,13 @@ import { RessourceStatusHistoryService } from '@/services/ressources_status_hist
 import { RessourceStatusHistoryController } from '@/controllers/ressources_status_historyController';
 import { initializeDataSource } from '../../../data-source';
 import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 // Initialize the service and controller
 const statusHistoryService = new RessourceStatusHistoryService();
 const statusHistoryController = new RessourceStatusHistoryController(statusHistoryService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Initialize the database connection
     await initializeDataSource();
@@ -216,3 +217,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

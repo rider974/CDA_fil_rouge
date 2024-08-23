@@ -3,13 +3,14 @@ import { FollowService } from '@/services/followServices';
 import { FollowController } from '@/controllers/followController';
 import { initializeDataSource } from '@/data-source';
 import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 // Initialize the services and controllers
 const followService = new FollowService();
 const followController = new FollowController(followService);
 
 // The main API handler for the follow routes
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Initialize the data source (database connection)
     await initializeDataSource();
@@ -159,3 +160,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

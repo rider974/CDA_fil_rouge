@@ -3,11 +3,12 @@ import { initializeDataSource } from '../../../data-source';
 import { SharingSessionController } from "@/controllers/sharing_sessionController";
 import { SharingSessionService } from "@/services/sharing_sessionService";
 import { corsMiddleware } from "@/utils/corsMiddleware";
+import { authenticateToken } from "@/utils/verifToken";
 
 const sharingSessionService = new SharingSessionService();
 const sharingSessionController = new SharingSessionController(sharingSessionService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         await initializeDataSource();
         await corsMiddleware(req, res);
@@ -174,3 +175,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(500).json({ error: "Internal server error" });
     }
 }
+
+export default authenticateToken(handler)
