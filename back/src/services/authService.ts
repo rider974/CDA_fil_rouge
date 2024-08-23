@@ -16,6 +16,11 @@ export class AuthService {
 
   public async login(authentificationData: CreateAuthDTO): Promise<User> {
     try {
+      if(!authentificationData)
+      {
+        throw new Error('Identifiants manquants');
+      }
+
       const user = await this.userService.getUserByEmail(authentificationData?.email);
       if (!user) {
         throw new Error('Identifiants invalides');

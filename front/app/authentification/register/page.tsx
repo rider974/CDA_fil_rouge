@@ -4,12 +4,16 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "../../utils/axios";
 import { RegisterForm } from "@/app/components/authentification/RegisterForm";
+import DOMPurify from 'dompurify';
 
 export default function RegisterPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-
   const [isLoading, setIsLoading] = useState(false);
+
+  const sanitizeInput = (input: string) => {
+    return DOMPurify.sanitize(input);
+  };
 
   const handleRegister = async (
     username: string,
@@ -19,14 +23,18 @@ export default function RegisterPage() {
     setIsLoading(true);
     setError(null);
 
+    // Sanitization des entrées utilisateur
+    const sanitizedUsername = sanitizeInput(username);
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedPassword = sanitizeInput(password);
+
     try {
       const response = await axios.post("/api/auth/register", {
-        username,
-        email,
-        password,
+        username: sanitizedUsername,
+        email: sanitizedEmail,
+        password: sanitizedPassword,
       });
 
-  
       if (response.status === 201) {
         router.push(
           "/authentification/signin?message=Inscription réussie. Veuillez vous connecter."

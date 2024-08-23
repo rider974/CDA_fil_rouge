@@ -65,7 +65,9 @@ export function CredentialsForm({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(email, password);
+    if (validateForm()) {  
+      onSubmit(email, password);
+    }
   };
 
   return (
@@ -89,6 +91,7 @@ export function CredentialsForm({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                autoComplete="off"
                 className={`inline-block w-full p-4 leading-6 text-lg border font-medium border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 ${
                   emailError ? "border-red-500" : ""
                 }`}
@@ -108,6 +111,7 @@ export function CredentialsForm({
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                autoComplete="off"
                 className={`inline-block w-full p-4 leading-6 text-lg border font-medium border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 ${
                   passwordError ? "border-red-500" : ""
                 }`}
