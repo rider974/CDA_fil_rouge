@@ -20,6 +20,7 @@ export class AuthController {
   public async login(req: NextApiRequest, res: NextApiResponse) {
     try {
 
+
       const authentificationDataToDeserialize = JSON?.parse(req?.body);
 
       if(!authentificationDataToDeserialize?.email || !authentificationDataToDeserialize?.password )
@@ -33,6 +34,7 @@ export class AuthController {
         return res.status(400).json({ error: error.details[0].message });
       }
       const user = await this.authService.login(authentificationDataToDeserialize);
+
       return res.status(200).json({ user });
     } catch (error: unknown) {
       if (error instanceof Error) {

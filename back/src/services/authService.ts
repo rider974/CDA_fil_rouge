@@ -20,6 +20,7 @@ export class AuthService {
       {
         throw new Error('Identifiants manquants');
       }
+
       const user = await this.userService.getUserByEmail(authentificationData?.email);
       if (!user) {
         throw new Error('Identifiants invalides');
