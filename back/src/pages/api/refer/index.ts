@@ -31,6 +31,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/refer:
        *   get:
        *     description: Retrieve sharing sessions by tag UUID or tags by sharing session UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - refer
        *     parameters:
@@ -89,6 +91,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/refer:
        *   post:
        *     description: Create an association between a tag and a sharing session
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - refer
        *     requestBody:
@@ -118,6 +122,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/refer:
        *   delete:
        *     description: Delete an association between a tag and a sharing session
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - refer
        *     requestBody:

@@ -30,6 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/comments:
        *   get:
        *     description: Retrieve a single comment by ID or all comments
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - comments
        *     parameters:
@@ -77,6 +79,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/comments:
        *   post:
        *     description: Create a new comment
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - comments
        *     requestBody:
@@ -106,6 +110,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/comments:
        *   put:
        *     description: Replace an existing comment by ID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - comments
        *     requestBody:
@@ -135,6 +141,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/comments:
        *   patch:
        *     description: Update specific fields of an existing comment
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - comments
        *     requestBody:
@@ -164,6 +172,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/comments:
        *   delete:
        *     description: Delete a comment by ID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - comments
        *     requestBody:

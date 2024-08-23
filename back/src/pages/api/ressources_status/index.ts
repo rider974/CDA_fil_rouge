@@ -27,6 +27,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status:
        *   get:
        *     description: Retrieve all ressource statuses or a specific status by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status
        *     parameters:
@@ -67,6 +69,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status:
        *   post:
        *     description: Create a new ressource status
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status
        *     requestBody:
@@ -93,6 +97,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status:
        *   put:
        *     description: Replace an existing ressource status by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status
        *     requestBody:
@@ -124,6 +130,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status:
        *   delete:
        *     description: Delete a ressource status by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status
        *     parameters:

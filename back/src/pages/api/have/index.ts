@@ -31,6 +31,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/have:
        *   get:
        *     description: Retrieve resources by tag UUID or tags by resource UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - have
        *     parameters:
@@ -89,6 +91,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/have:
        *   post:
        *     description: Create an association between a tag and a resource
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - have
        *     requestBody:
@@ -118,6 +122,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/have:
        *   delete:
        *     description: Delete an association between a tag and a resource
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - have
        *     requestBody:
