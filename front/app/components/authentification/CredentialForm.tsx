@@ -65,7 +65,9 @@ export function CredentialsForm({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(email, password);
+    if (validateForm()) {  
+      onSubmit(email, password);
+    }
   };
 
   return (

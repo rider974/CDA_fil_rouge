@@ -86,10 +86,8 @@ export function RegisterForm({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (password === confirmPassword) {
+    if (validateForm()) {
       onSubmit(username, email, password);
-    } else {
-      alert("Les mots de passe ne correspondent pas !");
     }
   };
 
