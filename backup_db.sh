@@ -1,5 +1,5 @@
 #!/bin/bash
-    
+
 # Variables
 BACKUP_DIR="../../backup"
 DB_CONTAINER_NAME="cda_fil_rouge_postgres_1"
