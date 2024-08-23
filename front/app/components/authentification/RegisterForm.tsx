@@ -115,6 +115,7 @@ export function RegisterForm({
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
+                autoComplete="off"
                 className={`inline-block w-full p-4 leading-6 text-lg border font-medium border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 ${
                   usernameError ? "border-red-500" : ""
                 }`}
@@ -132,6 +133,7 @@ export function RegisterForm({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                autoComplete="off"
                 className={`inline-block w-full p-4 leading-6 text-lg border font-medium border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 ${
                   emailError ? "border-red-500" : ""
                 }`}
@@ -151,6 +153,7 @@ export function RegisterForm({
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                autoComplete="off"
                 className={`inline-block w-full p-4 leading-6 text-lg border font-medium border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 ${
                   passwordError ? "border-red-500" : ""
                 }`}
@@ -170,6 +173,7 @@ export function RegisterForm({
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
+                autoComplete="off"
                 className={`inline-block w-full p-4 leading-6 text-lg border font-medium border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 ${
                   confirmPasswordError ? "border-red-500" : ""
                 }`}
