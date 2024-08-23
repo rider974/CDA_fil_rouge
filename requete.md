@@ -41,11 +41,6 @@ VALUES (
     (SELECT role_uuid FROM roles WHERE role_name = 'modérateur' ORDER BY created_at LIMIT 1)
 );
 
-INSERT INTO ressources_status (name) VALUES ('en cours de moderation'), ('publie'), ('rejete'); 
-
-INSERT INTO ressource_types (type_name) VALUES ('articles'); 
-
-INSERT INTO ressources (title) VALUES ('articles sur IA');
 
 --------------------------trigger sur ressources.status_uuid
 CREATE OR REPLACE FUNCTION log_status_update()
