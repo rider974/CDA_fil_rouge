@@ -25,6 +25,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/__tests__/tagController.test.js"  ],
   "exclude": ["node_modules"]
 }
