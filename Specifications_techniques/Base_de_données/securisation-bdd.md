@@ -63,7 +63,7 @@ Les mots de passe sont stockés de manière sécurisée, utilisant un hachage **
 
 • **Méthode de Recouvrement d’Accès**
 
-En cas de perte ou de vol des mots de passe, nous fournissons un lien de réinitialisation à usage unique (validité de 24h), assurant une récupération sécurisée.
+En cas de perte ou de vol de mot de passe, un lien de réinitialisation à usage unique, valable 24 heures, est envoyé. Une vérification supplémentaire est effectuée via une question de sécurité ou un code envoyé par SMS ou e-mail de secours.
 
 ### ORM contre les Injections SQL
 
@@ -88,6 +88,6 @@ Nous mettrons en place une stratégie de sauvegarde robuste pour protéger les d
 
 ## Conclusion
 
-En appliquant ces mesures de sécurité, nous réduisons la fuite de données, l'accés non-autorisé à ces ressources. Cette stratégie sera réévaluée régulièrement pour répondre aux Vulnérabilités exposées connues (CVE) et aux changements technologiques.. La sécurité de la base de données s'adaptera aux changements et aux ressources accumulés sur le site.
+En appliquant ces mesures de sécurité, nous réduisons la fuite de données, l'accés non-autorisé à ces ressources. Cette stratégie sera réévaluée régulièrement pour répondre aux Vulnérabilités exposées connues (CVE) et aux changements technologiques. La sécurité de la base de données s'adaptera aux changements et aux ressources accumulés sur le site.
 
 [🔙 Retour à la Table des matières](../README.md)
