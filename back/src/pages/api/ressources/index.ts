@@ -2,18 +2,16 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { RessourceService } from '@/services/ressourceService';
 import { RessourceController } from '@/controllers/ressourcesController';
 import { initializeDataSource } from '../../../data-source';
-import Cors from 'nextjs-cors';
+import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 const ressourceService = new RessourceService();
 const ressourceController = new RessourceController(ressourceService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await initializeDataSource();
-    await Cors(req, res, {
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      origin: 'http://localhost:3000'
-    });
+    await corsMiddleware(req, res);
 
     // Remove the X-Powered-By header to hide Next.js usage
     res.removeHeader('X-Powered-By');
@@ -28,6 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources:
        *   get:
        *     description: Retrieve all ressources or a specific ressource by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources
        *     parameters:
@@ -68,6 +68,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources:
        *   post:
        *     description: Create a new ressource
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources
        *     requestBody:
@@ -94,6 +96,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources:
        *   put:
        *     description: Replace an existing ressource by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources
        *     requestBody:
@@ -123,8 +127,60 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        /**
        * @swagger
        * /api/ressources:
+       *   patch:
+       *     description: Update the status of an existing ressource by UUID
+       *     security:
+       *       - bearerAuth: []
+       *     tags:
+       *       - ressources
+       *     requestBody:
+       *       required: true
+       *       content:
+       *         application/json:
+       *           schema:
+       *             type: object
+       *             properties:
+       *               ressource_uuid:
+       *                 type: string
+       *                 description: UUID of the ressource to update
+       *                 example: "aca10f08-9076-45ed-9619-d05e25d0cf79"
+       *               newStatusUuid:
+       *                 type: string
+       *                 description: UUID of the new status for the ressource
+       *                 example: "73292f30-7cb1-4c14-81d0-cd570826a859"
+       *     responses:
+       *       200:
+       *         description: Ressource status updated successfully
+       *         content:
+       *           application/json:
+       *             schema:
+       *               type: object
+       *               properties:
+       *                 ressource_uuid:
+       *                   type: string
+       *                   description: UUID of the updated ressource
+       *                 ressourceStatus:
+       *                   type: object
+       *                   properties:
+       *                     ressource_status_uuid:
+       *                       type: string
+       *                       description: UUID of the new status
+       *       400:
+       *         description: Invalid input
+       *       404:
+       *         description: Ressource or status not found
+       */
+
+      case 'PATCH':
+        return ressourceController.updateRessourceStatus(req, res);
+
+       /**
+       * @swagger
+       * /api/ressources:
        *   delete:
        *     description: Delete a ressource by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources
        *     parameters:
@@ -142,6 +198,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        *       404:
        *         description: Ressource not found
        */
+      
       case 'DELETE':
         return ressourceController.deleteRessource(req, res);
 
@@ -154,3 +211,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

@@ -15,6 +15,12 @@ const ressourceSchema = Joi.object({
   updatedBy: Joi.string().optional(),
 });
 
+// Schema for validating ressource patch
+const updateStatusSchema = Joi.object({
+  ressource_uuid: Joi.string().required(),
+  newStatusUuid: Joi.string().required()
+});
+
 export class RessourceController {
   private ressourceService: RessourceService;
 
@@ -136,6 +142,34 @@ export class RessourceController {
       return res.status(500).json({ error: "Internal server error" });
     }
   }
+
+ /**
+   * Updates the status of an existing ressource.
+   * @param req - The API request object containing the ressource UUID and new status UUID.
+   * @param res - The API response object used to send the response.
+   * @returns The updated ressource or an error response.
+   */
+ async updateRessourceStatus(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    // Validate the request body
+    const { error } = updateStatusSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const { ressource_uuid, newStatusUuid } = req.body;
+
+    // Update the ressource status
+    const updatedRessource = await this.ressourceService.updateRessourceStatus(ressource_uuid, newStatusUuid);
+    return res.status(200).json(updatedRessource);
+  } catch (error) {
+    if (error instanceof EntityNotFoundError) {
+      return res.status(404).json({ error: error.message });
+    }
+    console.error("Error updating ressource status:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
 
   /**
    * Deletes a ressource by its UUID.

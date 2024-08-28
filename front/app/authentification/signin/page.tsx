@@ -1,37 +1,74 @@
 "use client";
 
-import React from "react";
-import {
-  GoogleSignInButton,
-  GithubSignInButton,
-} from "@/app/components/authentification/SignInButtons"; 
-import { SignUpButton } from "@/app/components/authentification/SignUpButton";
 import { CredentialsForm } from "@/app/components/authentification/CredentialForm";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import DOMPurify from 'dompurify';
 
 export default function SignInPage() {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const sanitizeInput = (input: string) => {
+    return DOMPurify.sanitize(input);
+  };
+
+  const handleSubmit = async (email: string, password: string) => {
+    setIsLoading(true);
+    setError(null);
+
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedPassword = sanitizeInput(password);
+
+    try {
+      const response = await axios.post("/api/auth/signin", {
+        email: sanitizedEmail,
+        password: sanitizedPassword,
+      });
+
+      if (response.status === 200) {
+        const token = Cookies.get("authToken") || '';
+
+        if (token) {
+          const decodedToken: any = jwtDecode(token);
+
+          if (typeof decodedToken !== 'object' || !decodedToken) {
+            throw new Error("Invalid token format.");
+          }
+
+          // Extract the role name
+          const userRole = sanitizeInput(decodedToken.role?.role_name || '');
+          if (userRole === "admin") {
+            router.push("/dashboard/admin");
+          } else if (userRole === "moderator") {
+            router.push("/dashboard/moderator");
+          } else {
+            router.push("/dashboard/member");
+          }
+        } else {
+          setError("JWT token not found in cookies.");
+        }
+      } else {
+        setError("Invalid email or password.");
+      }
+    } catch (error) {
+      setError("An unexpected error occurred: ");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="w-full flex items-center min-h-screen p-4 lg:justify-center">
-      <div className="w-full max-w-md border-2 rounded-lg shadow-lg p-6">
-        <div className="flex flex-col items-center p-6 shadow-md">
-          <h1 className="text-4xl text-gray-400 font-bold">Sign In</h1>
-          
-          {/* Boutons pour se connecter via Google et GitHub */}
-          <GoogleSignInButton />
-          <GithubSignInButton />
-          
-          <span className="text-2xl text-gray-400 font-semibold text-center mt-8">
-            Or
-          </span>
-
-          {/* Formulaire d'identifiants */}
-          <CredentialsForm />
-
-          <div className="w-full mt-2 block justify-between">
-            {/* Bouton pour rediriger vers l'inscription */}
-            <SignUpButton />
-          </div>
-        </div>
-      </div>
+    <div>
+      <CredentialsForm
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+        error={error}
+      />
     </div>
   );
 }

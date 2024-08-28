@@ -2,19 +2,17 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { RessourceStatusService } from '@/services/ressources_statusService';
 import { RessourceStatusController } from '@/controllers/ressources_statusController';
 import { initializeDataSource } from '@/data-source';
-import Cors from 'nextjs-cors';
+import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 // Initialize the service and controller for RessourceStatus
 const ressourceStatusService = new RessourceStatusService();
 const ressourceStatusController = new RessourceStatusController(ressourceStatusService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await initializeDataSource();
-    await Cors(req, res, {
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      origin: 'http://localhost:3000',
-    });
+    await corsMiddleware(req, res);
 
     // Remove the X-Powered-By header to hide Next.js usage
     res.removeHeader('X-Powered-By');
@@ -30,6 +28,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status:
        *   get:
        *     description: Retrieve all ressource statuses or a specific status by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status
        *     parameters:
@@ -70,6 +70,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status:
        *   post:
        *     description: Create a new ressource status
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status
        *     requestBody:
@@ -96,6 +98,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status:
        *   put:
        *     description: Replace an existing ressource status by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status
        *     requestBody:
@@ -127,6 +131,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status:
        *   delete:
        *     description: Delete a ressource status by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status
        *     parameters:
@@ -156,3 +162,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

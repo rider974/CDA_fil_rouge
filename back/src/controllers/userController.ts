@@ -1,27 +1,83 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { UserService } from "../services/userService";
-import { sanitize } from 'sanitizer';
-import { hashPassword, comparePassword } from '../utils/authUtils';
-import Joi from 'joi';
-import { EntityNotFoundError, UniqueConstraintViolationError } from "@/errors/errors";
+import { sanitize } from "sanitizer";
+import { hashPassword, comparePassword } from "../utils/authUtils";
+import Joi from "joi";
+import {
+  EntityNotFoundError,
+  UniqueConstraintViolationError,
+} from "@/errors/errors";
+import { generateJwtToken } from "@/utils/generateToken";
 
 const userSchema = Joi.object({
   role_uuid: Joi.string().required(),
   username: Joi.string().required(),
-  email: Joi.string().email().required(),
+  email: Joi.string().email().required().messages({
+    "string.email": "Email must be a valid email",
+    "any.required": "Email is required",
+    "string.empty": "Email cannot be empty",
+  }),
   password: Joi.string()
     .min(12)
-    .pattern(/[A-Z]/, 'uppercase')
-    .pattern(/[a-z]/, 'lowercase')
-    .pattern(/[0-9]/, 'digit')
-    .pattern(/[!@#$%^&*(),.?":{}|<>]/, 'special character')
+    .pattern(/[A-Z]/, "uppercase")
+    .pattern(/[a-z]/, "lowercase")
+    .pattern(/[0-9]/, "digit")
+    .pattern(/[!@#$%^&*(),.?":{}|<>]/, "special character")
     .required()
     .messages({
-      'string.min': 'Password must be at least 12 characters long',
-      'string.pattern.base': 'Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character',
-      'string.empty': 'Password is required'
+      "string.min": "Password must be at least 12 characters long",
+      "string.pattern.base":
+        "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character",
+      "string.empty": "Password is required",
     }),
   is_active: Joi.boolean().required(),
+});
+
+
+const userRegisterSchema = Joi.object({
+
+  username: Joi.string().required(),
+  email: Joi.string().email().required().messages({
+    "string.email": "Email must be a valid email",
+    "any.required": "Email is required",
+    "string.empty": "Email cannot be empty",
+  }),
+  password: Joi.string()
+    .min(12)
+    .pattern(/[A-Z]/, "uppercase")
+    .pattern(/[a-z]/, "lowercase")
+    .pattern(/[0-9]/, "digit")
+    .pattern(/[!@#$%^&*(),.?":{}|<>]/, "special character")
+    .required()
+    .messages({
+      "string.min": "Password must be at least 12 characters long",
+      "string.pattern.base":
+        "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character",
+      "string.empty": "Password is required",
+    })
+
+});
+
+
+const userLoginSchema = Joi.object({
+  email: Joi.string().email().required().messages({
+    "string.email": "Email must be a valid email",
+    "any.required": "Email is required",
+    "string.empty": "Email cannot be empty",
+  }),
+  password: Joi.string()
+    .min(12)
+    .pattern(/[A-Z]/, "uppercase")
+    .pattern(/[a-z]/, "lowercase")
+    .pattern(/[0-9]/, "digit")
+    .pattern(/[!@#$%^&*(),.?":{}|<>]/, "special character")
+    .required()
+    .messages({
+      "string.min": "Password must be at least 12 characters long",
+      "string.pattern.base":
+      "Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character",
+      "string.empty": "Password is required",
+    }),
 });
 
 export class UserController {
@@ -31,18 +87,86 @@ export class UserController {
     this.userService = userService;
   }
 
-  // Méthode pour gérer la connexion
+  /**
+   * Handles user registration
+   * @param req - The HTTP request object, containing `username`, `email`, and `password` in the body.
+   * @param res - The HTTP response object used to send back the appropriate HTTP response.
+   * @returns
+   */
+  async register(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      const { username, email, password } = req.body;
+
+      // Validation des données
+      const { error } = userRegisterSchema.validate({ username, email, password });
+      if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+      }
+
+      // Sanitize les entrées
+      const sanitizedUsername = sanitize(username);
+      const sanitizedEmail = sanitize(email);
+
+      // Search for the "member" role
+      const memberRole = await this.userService.getRoleByName("member");
+      if (!memberRole) {
+        return res
+          .status(500)
+          .json({ error: "Default role 'member' not found" });
+      }
+
+      // Enregistrement de l'utilisateur via le service
+      const newUser = await this.userService.createUser({
+        username: sanitizedUsername,
+        email: sanitizedEmail,
+        password, 
+        role: memberRole,
+        is_active:true,
+      });
+
+      return res.status(201).json(newUser);
+    } catch (error) {
+      if (error instanceof UniqueConstraintViolationError) {
+        return res.status(409).json({ error: error.message });
+      }
+      console.error("Error during user registration:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  /**
+   * Handles user login
+   * @param req - The HTTP request object, containing the email and password in the body.
+   * @param res - The HTTP response object used to send back the desired HTTP response.
+   * @returns
+   */
   async login(req: NextApiRequest, res: NextApiResponse) {
     try {
       const { email, password } = req.body;
-      const sanitizedEmail = this.sanitizeInput(email);
-      const user = await this.userService.getUserByEmail(sanitizedEmail);
 
-      if (!user || !(await comparePassword(password, user.password))) {
-        return res.status(401).json({ error: 'Invalid email or password' });
+      // Validation des données
+      const { error } = userLoginSchema.validate({ email, password });
+      if (error) {
+        return res.status(400).json({ error: error.details[0].message });
       }
 
-      // Si l'authentification est réussie, retourner les informations de l'utilisateur
+      // Sanitize l'email
+      const sanitizedEmail = sanitize(email);
+
+      // Connexion via le service
+      const user = await this.userService.login(sanitizedEmail, password);
+      //Generate token
+      const token = generateJwtToken({
+        id: user.user_uuid,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      });
+
+      res.setHeader('Set-Cookie', `authToken=${token}; Path=/; Max-Age=3600; SameSite=Lax`);
+  
+
+      // Retourne les informations de l'utilisateur après authentification
       return res.status(200).json({
         id: user.user_uuid,
         username: user.username,
@@ -50,30 +174,15 @@ export class UserController {
         role: user.role,
       });
     } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
       console.error("Error during login:", error);
       return res.status(500).json({ error: "Internal server error" });
     }
   }
 
-  /**
-   * Validates whether the provided email follows a standard format.
-   * @param email - The email string to validate.
-   * @returns Boolean indicating whether the email is valid.
-   */
-  private isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  /**
-   * Sanitizes input strings to remove potential harmful content.
-   * @param input - The input string to sanitize.
-   * @returns The sanitized string.
-   */
-  private sanitizeInput(input: string): string {
-    return sanitize(input.trim());
-  }
-
+ 
   /**
    * Handles the creation of a new user.
    * Validates the request body, sanitizes input, and hashes the password before saving the user.
@@ -106,7 +215,6 @@ export class UserController {
       });
 
       return res.status(201).json(newUser);
-
     } catch (error) {
       if (error instanceof UniqueConstraintViolationError) {
         return res.status(409).json({ error: error.message });
@@ -146,7 +254,7 @@ export class UserController {
   async getUserById(req: NextApiRequest, res: NextApiResponse) {
     try {
       const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
-      if (typeof user_uuid !== 'string') {
+      if (typeof user_uuid !== "string") {
         return res.status(400).json({ error: "Invalid user UUID" });
       }
 
@@ -171,7 +279,7 @@ export class UserController {
   async getUserByUsername(req: NextApiRequest, res: NextApiResponse) {
     try {
       const username = this.sanitizeInput(req.query.username as string);
-      if (typeof username !== 'string') {
+      if (typeof username !== "string") {
         return res.status(400).json({ error: "Invalid username" });
       }
 
@@ -198,7 +306,7 @@ export class UserController {
       const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
       const { role_uuid, username, email, password } = req.body;
 
-      if (typeof user_uuid !== 'string') {
+      if (typeof user_uuid !== "string") {
         return res.status(400).json({ error: "Invalid user UUID" });
       }
 
@@ -217,10 +325,10 @@ export class UserController {
         const { error } = Joi.object({
           password: Joi.string()
             .min(12)
-            .pattern(/[A-Z]/, 'uppercase')
-            .pattern(/[a-z]/, 'lowercase')
-            .pattern(/[0-9]/, 'digit')
-            .pattern(/[!@#$%^&*(),.?":{}|<>]/, 'special character')
+            .pattern(/[A-Z]/, "uppercase")
+            .pattern(/[a-z]/, "lowercase")
+            .pattern(/[0-9]/, "digit")
+            .pattern(/[!@#$%^&*(),.?":{}|<>]/, "special character")
             .required(),
         }).validate({ password });
 
@@ -230,7 +338,10 @@ export class UserController {
         updatedFields.password = await hashPassword(password);
       }
 
-      const updatedUser = await this.userService.updateUserFields(user_uuid, updatedFields);
+      const updatedUser = await this.userService.updateUserFields(
+        user_uuid,
+        updatedFields
+      );
       if (updatedUser) {
         res.status(200).json(updatedUser);
       } else {
@@ -242,25 +353,29 @@ export class UserController {
     }
   }
 
-   /**
+  /**
    * Replaces a user with new data.
    * @param req - The API request object.
    * @param res - The API response object.
    * @returns The updated user or an error response if not found.
    */
-   async replaceUser(req: NextApiRequest, res: NextApiResponse) {
+  async replaceUser(req: NextApiRequest, res: NextApiResponse) {
     try {
       const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
       const { username, email, password, is_active, role } = req.body;
 
-      if (!user_uuid || typeof user_uuid !== 'string') {
-        return res.status(400).json({ error: "User UUID is required and must be a string" });
+      if (!user_uuid || typeof user_uuid !== "string") {
+        return res
+          .status(400)
+          .json({ error: "User UUID is required and must be a string" });
       }
 
-      if (!username || typeof username !== 'string') {
-        return res.status(400).json({ error: "username is required and must be a string" });
+      if (!username || typeof username !== "string") {
+        return res
+          .status(400)
+          .json({ error: "Username is required and must be a string" });
       }
-      if (!email || typeof email !== 'string' || !this.isValidEmail(email)) {
+      if (!email || typeof email !== "string" || !this.isValidEmail(email)) {
         return res.status(400).json({ error: "A valid email is required" });
       }
       if (password) {
@@ -268,10 +383,10 @@ export class UserController {
         const { error } = Joi.object({
           password: Joi.string()
             .min(12)
-            .pattern(/[A-Z]/, 'uppercase')
-            .pattern(/[a-z]/, 'lowercase')
-            .pattern(/[0-9]/, 'digit')
-            .pattern(/[!@#$%^&*(),.?":{}|<>]/, 'special character')
+            .pattern(/[A-Z]/, "uppercase")
+            .pattern(/[a-z]/, "lowercase")
+            .pattern(/[0-9]/, "digit")
+            .pattern(/[!@#$%^&*(),.?":{}|<>]/, "special character")
             .required(),
         }).validate({ password });
 
@@ -279,8 +394,10 @@ export class UserController {
           return res.status(400).json({ error: error.details[0].message });
         }
       }
-      if (typeof is_active !== 'boolean') {
-        return res.status(400).json({ error: "is_active is required and must be a boolean" });
+      if (typeof is_active !== "boolean") {
+        return res
+          .status(400)
+          .json({ error: "is_active is required and must be a boolean" });
       }
 
       if (role?.role_uuid) {
@@ -290,7 +407,7 @@ export class UserController {
         }
       }
 
-      const hashedPassword = password ? await hashPassword(password) : '';
+      const hashedPassword = password ? await hashPassword(password) : "";
 
       const updatedUser = await this.userService.replaceUser(user_uuid, {
         username: this.sanitizeInput(username),
@@ -319,7 +436,7 @@ export class UserController {
   async deleteUser(req: NextApiRequest, res: NextApiResponse) {
     try {
       const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
-      if (typeof user_uuid !== 'string') {
+      if (typeof user_uuid !== "string") {
         return res.status(400).json({ error: "Invalid user UUID" });
       }
 
@@ -335,28 +452,31 @@ export class UserController {
     }
   }
 
-   /**
+  /**
    * Toggles the active status of a user by their UUID.
    * @param req - The API request object.
    * @param res - The API response object.
    * @returns The updated user with the new active status, or an error response if not found.
    */
-   async toggleUserActiveStatus(req: NextApiRequest, res: NextApiResponse) {
+  async toggleUserActiveStatus(req: NextApiRequest, res: NextApiResponse) {
     try {
       // Sanitize and validate inputs
       const user_uuid = this.sanitizeInput(req.query.user_uuid as string);
       const is_active = req.body.is_active;
 
-      if (typeof user_uuid !== 'string') {
+      if (typeof user_uuid !== "string") {
         return res.status(400).json({ error: "Invalid user UUID" });
       }
-      
-      if (typeof is_active !== 'boolean') {
+
+      if (typeof is_active !== "boolean") {
         return res.status(400).json({ error: "is_active must be a boolean" });
       }
 
       // Call the service method
-      const updatedUser = await this.userService.toggleUserActiveStatus(user_uuid, is_active);
+      const updatedUser = await this.userService.toggleUserActiveStatus(
+        user_uuid,
+        is_active
+      );
 
       // Respond with the updated user
       if (updatedUser) {
@@ -370,8 +490,61 @@ export class UserController {
       }
 
       console.error("Error toggling user active status:", error);
-      return res.status(500).json({ error: "Internal server error" });
+      res.status(500).json({ error: "Internal server error" });
     }
+  }
+
+  /**
+   * Resets user password.
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   */
+  async resetPassword(req: NextApiRequest, res: NextApiResponse) {
+    try {
+      const { email, newPassword } = req.body;
+
+      const updatedUser = await this.userService.resetPassword(
+        email,
+        newPassword
+      );
+
+      return res.status(200).json({
+        id: updatedUser.user_uuid,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        role: updatedUser.role,
+      });
+    } catch (error: unknown) {
+      if (error instanceof EntityNotFoundError) {
+        console.error("Error during password reset:", error.message);
+        return res.status(404).json({ error: error.message });
+      } else if (error instanceof Error) {
+        console.error("Error during password reset:", error.message);
+        return res.status(400).json({ error: error.message });
+      } else {
+        console.error("Unknown error during password reset");
+        return res.status(500).json({ error: "An unknown error occurred" });
+      }
+    }
+    
+  }
+   /**
+   * Validates whether the provided email follows a standard format.
+   * @param email - The email string to validate.
+   * @returns Boolean indicating whether the email is valid.
+   */
+   private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  /**
+   * Sanitizes input strings to remove potential harmful content.
+   * @param input - The input string to sanitize.
+   * @returns The sanitized string.
+   */
+  private sanitizeInput(input: string): string {
+    return sanitize(input.trim());
   }
 
 }

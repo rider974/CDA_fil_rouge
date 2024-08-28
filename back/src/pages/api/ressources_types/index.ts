@@ -2,19 +2,17 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { initializeDataSource } from '@/data-source';
 import { Ressources_typesController } from "@/controllers/ressources_typesController";
 import { Ressources_typesService } from "@/services/ressources_typesService";
-import Cors from 'nextjs-cors';
+import { corsMiddleware } from "@/utils/corsMiddleware";
+import { authenticateToken } from "@/utils/verifToken";
 
 const ressources_typesService = new Ressources_typesService();
 const ressources_typesController = new Ressources_typesController(ressources_typesService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await initializeDataSource();
 
-    await Cors(req, res, {
-      methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
-      origin: 'http://localhost:3000',
-    });
+    await corsMiddleware(req, res);
 
     // Remove the X-Powered-By header to hide Next.js usage
     res.removeHeader('X-Powered-By');
@@ -29,6 +27,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_types:
        *   get:
        *     description: Retrieve all resource types or a specific resource type by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_types
        *     parameters:
@@ -73,6 +73,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_types:
        *   post:
        *     description: Create a new resource type
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_types
        *     requestBody:
@@ -101,9 +103,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        /**
        * @swagger
        * /api/ressources_types:
-       *   put:
        *   patch:
        *     description: Update an existing resource type by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_types
        *     requestBody:
@@ -130,7 +133,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        *       404:
        *         description: Resource type not found
        */
-      case "PUT":
       case "PATCH":
         await ressources_typesController.replaceRessources_types(req, res);
         break;
@@ -140,6 +142,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_types:
        *   delete:
        *     description: Delete a resource type by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_types
        *     parameters:
@@ -169,3 +173,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

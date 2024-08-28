@@ -2,23 +2,21 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { ReferService } from '@/services/referServices';
 import { ReferController } from '@/controllers/referControllers';
 import { initializeDataSource } from '@/data-source';
-import Cors from 'nextjs-cors';
+import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 // Initialize the services and controllers
 const referService = new ReferService();
 const referController = new ReferController(referService);
 
 // The main API handler for the 'refer' routes
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Initialize the data source (database connection)
     await initializeDataSource();
 
     // Enable CORS for cross-origin requests
-    await Cors(req, res, {
-      methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
-      origin: 'http://localhost:3000', // Adjust the origin as needed
-    });
+    await corsMiddleware(req, res);
 
     // Remove the X-Powered-By header to hide Next.js usage
      res.removeHeader('X-Powered-By');
@@ -34,6 +32,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/refer:
        *   get:
        *     description: Retrieve sharing sessions by tag UUID or tags by sharing session UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - refer
        *     parameters:
@@ -92,6 +92,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/refer:
        *   post:
        *     description: Create an association between a tag and a sharing session
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - refer
        *     requestBody:
@@ -121,6 +123,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/refer:
        *   delete:
        *     description: Delete an association between a tag and a sharing session
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - refer
        *     requestBody:
@@ -154,3 +158,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

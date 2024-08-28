@@ -6,7 +6,7 @@ import type { Relation } from 'typeorm';
 /**
  * Represents the history of status changes for a resource.
  */
-@Entity('ressources-status-history')
+@Entity('ressources_status_history')
 export class RessourceStatusHistory {
   // Unique identifier for the resource status history record
   @PrimaryGeneratedColumn('uuid')

@@ -2,18 +2,16 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { RoleService } from '@/services/roleService';
 import { RoleController } from '@/controllers/roleController';
 import { initializeDataSource } from '../../../data-source';
-import Cors from 'nextjs-cors';
+import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 const roleService = new RoleService();
 const roleController = new RoleController(roleService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await initializeDataSource();
-    await Cors(req, res, {
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      origin: 'http://localhost:3000'
-    });
+    await corsMiddleware (req, res);
 
     // Remove the X-Powered-By header to hide Next.js usage
     res.removeHeader('X-Powered-By');
@@ -28,6 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/roles:
        *   get:
        *     description: Retrieve all roles or a specific role by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - roles
        *     parameters:
@@ -70,6 +70,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/roles:
        *   post:
        *     description: Create a new role
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - roles
        *     requestBody:
@@ -98,6 +100,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/roles:
        *   put:
        *     description: Replace an existing role
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - roles
        *     requestBody:
@@ -131,6 +135,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/roles:
        *   delete:
        *     description: Delete a role by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - roles
        *     parameters:
@@ -159,3 +165,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

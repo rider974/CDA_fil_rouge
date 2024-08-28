@@ -1,18 +1,19 @@
-version: '3.8'
+# version: '3.8'
 
 services: 
   postgres: 
     image: postgres:alpine
     restart: always 
     environment:
-      POSTGRES_USER: user_beginners
-      POSTGRES_PASSWORD: pass_beginners
-      POSTGRES_DB: db_beginners
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DB}
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - postgres_logs:/var/log/postgresql
     networks:
       - network-beginners
 
@@ -22,9 +23,15 @@ services:
     ports:
       - "3001:3001"
     environment:
-      DATABASE_URL: postgres://user_beginners:password@pass_beginners:5432/db_beginners
+      DB_TYPE: ${DB_TYPE}
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DB: ${DB_DB}
     depends_on:
       - postgres
+    volumes:
+      - api_logs:/var/log/api
     networks:
       - network-beginners 
 
@@ -33,6 +40,8 @@ services:
     restart: always
     ports:
       - "3000:3000"
+    volumes:
+      - frontend_logs:/var/log/frontend
     networks:
       - network-beginners
   
@@ -41,13 +50,13 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx_logs:/var/log/nginx
     depends_on:
       - frontend
       - api
     networks:
       - network-beginners
-
 
 networks:
   network-beginners:
@@ -55,3 +64,8 @@ networks:
 
 volumes:
   postgres_data:
+  postgres_logs:
+  api_logs:
+  frontend_logs:
+  nginx_logs:
+ 

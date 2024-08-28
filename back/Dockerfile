@@ -1,15 +1,25 @@
 FROM node:20-alpine
 
+# Définir le répertoire de travail
 WORKDIR /usr/src/app
 
+# Copier les fichiers de configuration npm
 COPY package*.json ./
 
-RUN npm i 
+# Installer les dépendances
+RUN npm install
 
-COPY . .  
+# Copier le reste des fichiers du projet
+COPY . .
 
+# Installer ts-node, typescript et tsconfig-paths
+RUN npm install ts-node typescript tsconfig-paths
+
+# Compiler le code TypeScript
 RUN npm run build
 
+# Exposer le port utilisé par l'application
 EXPOSE 3001
 
-CMD ["npm" ,"run" ,"start"]
+# Exécuter la commande pour les migrations et démarrer l'application
+CMD ["sh", "-c", "npx ts-node -r tsconfig-paths/register ./run-migrations.ts && npm start"]
