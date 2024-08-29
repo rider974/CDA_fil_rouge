@@ -1,5 +1,18 @@
-## **BeginnersAppDev: Plateforme Collaborative de Veille Technologique**
+## **BeginnersAppDev: Collaborative Technology Watch Platform**
+As part of the application designer-developer qualification (CDA), our group has worked on a shared project. I am proud to introduce BeginnersAppDev, a collaborative platform for technology watch management, specifically tailored to the needs of junior developers, but not only.  
 
+Our vision is to create a dynamic space where the latest technological innovations are shared but also enhanced through collaboration.  
+
+BeginnersAppDev is designed to centralise and organise information on languages and emerging technologies. It facilitates technology watch, crucial for developers to remain abreast in their field.  
+
+As well as compiling relevant articles tutorials and case studies, our platform stimulates open-mindedness and knowledge sharing through interactive discussions and member contributions, providing direct access to reliable, community-approved resources. With a variety of reading levels, we meet the needs of all, without getting bogged down in overly complex technical details.  
+
+Our aim is not to replace traditional development environments or in-depth courses, but to provide access to the world of web development and related technologies simpler and more interactive, allowing members to follow topics they are passionate about, receiving personalised notifications and stay at the forefront of technological trends and innovations. Enhancing the platform with new content under moderated supervision, encouraging collaborative learning and active knowledge sharing are key issues.  
+
+BeginnersAppDev is more than just a tool; it's a growing community where new developers can flourish, broaden their horizons, and collaborate on innovative projects.
+We believe that through education and sharing, we can progress faster and shape the future of technology together.
+
+<details><summary>Plateforme collaborative & veille technologique</summary>
 ## **Introduction**
 
 Nous sommes ravis de vous introduire BeginnersAppDev, une plateforme collaborative destinée à la gestion de veille technologique, spécifiquement adaptée aux besoins des développeurs juniors, mais pas que 😄.  
@@ -30,3 +43,4 @@ Nous visons à simplifier l'accès à l'information technologique et à le rendr
 
 BeginnersAppDev est plus qu'un simple outil de veille; c'est une communauté en croissance où les nouveaux développeurs peuvent s'épanouir, élargir leurs horizons, et collaborer sur des projets novateurs.  
 Nous sommes convaincus que par l'éducation et le partage, nous pouvons tous progresser plus rapidement et façonner ensemble l'avenir de la technologie.
+</details>
