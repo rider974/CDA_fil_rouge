@@ -13,10 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install dependencies
+      - name: Install backend dependencies
+        working-directory: ./back
         run: npm install
 
-      - name: Run tests
+      - name: Run backend tests
+        working-directory: ./back
         run: npm run test
 
   deploy-on-vps:
