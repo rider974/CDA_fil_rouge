@@ -7,7 +7,7 @@ const { EntityNotFoundError } = require("@/errors/errors");
 jest.mock("@/services/followServices");
 
 describe("FollowController", () => {
-  let req;
+  let req; 
   let res;
   let followController;
 
