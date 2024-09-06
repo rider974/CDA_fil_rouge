@@ -73,7 +73,7 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd ~/beginnersAppDev/CDA_fil_rouge
-            sudo docker-compose up -d
+            sudo docker-compose up --build -d
         env:
           DB_TYPE: "postgres"
           DB_HOST: "postgres"
