@@ -68,9 +68,9 @@ const SocialInteractionPanel: React.FC = () => {
                   </div>
                   <a
                     href={discussion.link}
-                    className="flex items-center space-x-2 text-sm text-green-600 hover:text-green-800"
+                    className="flex items-center space-x-2 text-sm text-green-2000 hover:text-green-2500"
                   >
-                    <FaUserPlus className="text-green-500" />
+                    <FaUserPlus className="text-green-2000" />
                     <span>Join</span>
                   </a>
                 </li>
