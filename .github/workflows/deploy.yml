@@ -7,7 +7,6 @@ on:
       - main
 
 jobs:
-
   deploy-on-vps:
     runs-on: ubuntu-latest
 
@@ -43,7 +42,6 @@ jobs:
               cd ~/beginnersAppDev/CDA_fil_rouge
               # Réinitialiser les changements locaux à l'état de la branche distante
               git fetch origin
-              git pull origin develop
               git reset --hard origin/develop
             fi
 
@@ -73,10 +71,10 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd ~/beginnersAppDev/CDA_fil_rouge
-            sudo docker-compose up --build -d
+            sudo -E env "DB_TYPE=${{ secrets.DB_TYPE }}" "DB_HOST=${{ secrets.DB_HOST }}" "DB_USER=${{ secrets.DB_USER }}" "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" "DB_DB=${{ secrets.DB_DB }}" docker-compose up -d
         env:
-          DB_TYPE: "postgres"
-          DB_HOST: "postgres"
-          DB_USER: "user_beginners"
-          DB_PASSWORD: "pass_beginners"
-          DB_DB: "db_beginners"
+          DB_TYPE: ${{ secrets.DB_TYPE }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_DB: ${{ secrets.DB_DB }}
