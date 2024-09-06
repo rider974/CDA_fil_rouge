@@ -13,7 +13,7 @@ RUN npm install
 COPY . .
 
 # Installer ts-node, typescript et tsconfig-paths
-RUN npm install ts-node typescript tsconfig-paths netcat 
+RUN npm install ts-node typescript tsconfig-paths
 
 # Compiler le code TypeScript
 RUN npm run build
@@ -22,4 +22,4 @@ RUN npm run build
 EXPOSE 3001
 
 # Exécuter la commande pour les migrations et démarrer l'application
-CMD ["npm", "run", "start"]
+CMD ["sh", "-c", "npx ts-node -r tsconfig-paths/register ./run-migrations.ts && npm start"]
