@@ -3,12 +3,13 @@ import { RessourceStatusHistoryService } from '@/services/ressources_status_hist
 import { RessourceStatusHistoryController } from '@/controllers/ressources_status_historyController';
 import { initializeDataSource } from '../../../data-source';
 import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 // Initialize the service and controller
 const statusHistoryService = new RessourceStatusHistoryService();
 const statusHistoryController = new RessourceStatusHistoryController(statusHistoryService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Initialize the database connection
     await initializeDataSource();
@@ -31,6 +32,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status_history:
        *   get:
        *     description: Retrieve all status history entries or a specific entry by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status_history
        *     parameters:
@@ -75,6 +78,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status_history:
        *   post:
        *     description: Create a new status history entry
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status_history
        *     requestBody:
@@ -105,6 +110,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status_history:
        *   put:
        *     description: Replace an existing status history entry by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status_history
        *     requestBody:
@@ -140,6 +147,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status_history:
        *   patch:
        *     description: Update specific fields of an existing status history entry by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status_history
        *     requestBody:
@@ -175,6 +184,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/ressources_status_history:
        *   delete:
        *     description: Delete a status history entry by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - ressources_status_history
        *     parameters:
@@ -206,3 +217,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

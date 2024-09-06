@@ -3,11 +3,12 @@ import { ReferenceService } from '@/services/referenceServices';
 import { ReferenceController } from '@/controllers/referenceController';
 import { initializeDataSource } from '../../../data-source';
 import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 const referenceService = new ReferenceService();
 const referenceController = new ReferenceController(referenceService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await initializeDataSource();
 
@@ -22,6 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/reference:
        *   get:
        *     description: Retrieve sharing sessions by resource UUID or resources by sharing session UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - reference
        *     parameters:
@@ -81,6 +84,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/reference:
        *   post:
        *     description: Create an association between a resource and a sharing session
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - reference
        *     requestBody:
@@ -110,6 +115,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/reference:
        *   delete:
        *     description: Delete an association between a resource and a sharing session
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - reference
        *     requestBody:
@@ -143,3 +150,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

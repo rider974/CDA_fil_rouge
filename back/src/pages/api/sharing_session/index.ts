@@ -3,11 +3,12 @@ import { initializeDataSource } from '../../../data-source';
 import { SharingSessionController } from "@/controllers/sharing_sessionController";
 import { SharingSessionService } from "@/services/sharing_sessionService";
 import { corsMiddleware } from "@/utils/corsMiddleware";
+import { authenticateToken } from "@/utils/verifToken";
 
 const sharingSessionService = new SharingSessionService();
 const sharingSessionController = new SharingSessionController(sharingSessionService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         await initializeDataSource();
         await corsMiddleware(req, res);
@@ -25,6 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
              * /api/sharing_session:
              *   post:
              *     description: Create a new sharing session
+             *     security:
+             *       - bearerAuth: []
              *     tags:
              *       - sharing session
              *     requestBody:
@@ -55,6 +58,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
              * /api/sharing_session:
              *   get:
              *     description: Retrieve all sharing sessions or a specific sharing session by ID
+             *     security:
+             *       - bearerAuth: []
              *     tags:
              *       - sharing session
              *     parameters:
@@ -99,6 +104,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
              * /api/sharing_session:
              *   put:
              *     description: Replace an existing sharing session
+             *     security:
+             *       - bearerAuth: []
              *     tags:
              *       - sharing session
              *     requestBody:
@@ -134,6 +141,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
              * /api/sharing_session:
              *   delete:
              *     description: Delete a sharing session by UUID
+             *     security:
+             *       - bearerAuth: []
              *     tags:
              *       - sharing session
              *     parameters:
@@ -166,3 +175,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(500).json({ error: "Internal server error" });
     }
 }
+
+export default authenticateToken(handler)

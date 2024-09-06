@@ -3,11 +3,12 @@ import { RoleService } from '@/services/roleService';
 import { RoleController } from '@/controllers/roleController';
 import { initializeDataSource } from '../../../data-source';
 import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 const roleService = new RoleService();
 const roleController = new RoleController(roleService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     await initializeDataSource();
     await corsMiddleware (req, res);
@@ -25,6 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/roles:
        *   get:
        *     description: Retrieve all roles or a specific role by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - roles
        *     parameters:
@@ -67,6 +70,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/roles:
        *   post:
        *     description: Create a new role
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - roles
        *     requestBody:
@@ -95,6 +100,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/roles:
        *   put:
        *     description: Replace an existing role
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - roles
        *     requestBody:
@@ -128,6 +135,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/roles:
        *   delete:
        *     description: Delete a role by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - roles
        *     parameters:
@@ -156,3 +165,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

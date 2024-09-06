@@ -3,11 +3,12 @@ import { TagService } from '@/services/tagService';
 import { TagController } from '@/controllers/tagController';
 import { initializeDataSource } from '../../../data-source';
 import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 const tagService = new TagService();
 const tagController = new TagController(tagService);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Initialise la source de données avant de traiter la requête
     await initializeDataSource();
@@ -29,6 +30,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/tags:
        *   get:
        *     description: Retrieve all tags or a specific tag by ID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - tags
        *     parameters:
@@ -68,6 +71,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/tags:
        *   post:
        *     description: Create a new tag
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - tags
        *     requestBody:
@@ -94,6 +99,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/tags:
        *   put:
        *     description: Update an existing tag
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - tags
        *     requestBody:
@@ -125,6 +132,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/tags:
        *   delete:
        *     description: Delete a tag by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - tags
        *     parameters:
@@ -155,3 +164,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

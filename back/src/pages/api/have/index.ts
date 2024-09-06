@@ -3,13 +3,14 @@ import { HaveService } from '@/services/haveServices';
 import { HaveController } from '@/controllers/haveController';
 import { initializeDataSource } from '@/data-source';
 import { corsMiddleware } from '@/utils/corsMiddleware';
+import { authenticateToken } from '@/utils/verifToken';
 
 // Initialize the services and controllers
 const haveService = new HaveService();
 const haveController = new HaveController(haveService);
 
 // The main API handler for the 'have' routes
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Initialize the data source (database connection)
     await initializeDataSource();
@@ -31,6 +32,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/have:
        *   get:
        *     description: Retrieve resources by tag UUID or tags by resource UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - have
        *     parameters:
@@ -89,6 +92,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/have:
        *   post:
        *     description: Create an association between a tag and a resource
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - have
        *     requestBody:
@@ -118,6 +123,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
        * /api/have:
        *   delete:
        *     description: Delete an association between a tag and a resource
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - have
        *     requestBody:
@@ -152,3 +159,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ error: "Internal server error" });
   }
 }
+
+export default authenticateToken(handler)

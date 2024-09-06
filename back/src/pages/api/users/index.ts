@@ -13,6 +13,13 @@ const userController = new UserController(userService);
     await initializeDataSource();
     await corsMiddleware(req, res);
 
+     // Remove the X-Powered-By header to hide Next.js usage
+     res.removeHeader('X-Powered-By');
+
+     // Set additional security headers (Helmet-like)
+     res.setHeader('X-Content-Type-Options', 'nosniff');
+     //  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+
     const action = req.query.action as string | undefined;
 
     switch (req.method) {
@@ -84,6 +91,8 @@ const userController = new UserController(userService);
         * /api/users:
         *   get:
         *     summary: Retrieve all users or a specific user by UUID or username
+        *     security:
+        *       - bearerAuth: []
         *     tags:
         *       - users
         *     parameters:
@@ -160,6 +169,8 @@ const userController = new UserController(userService);
        * /api/users:
        *   put:
        *     summary: Replace an existing user
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - users
        *     requestBody:
@@ -213,6 +224,8 @@ const userController = new UserController(userService);
       * /api/users:
       *   patch:
       *     summary: Update user fields or toggle user active status
+      *     security:
+      *       - bearerAuth: []
       *     tags:
       *       - users
       *     parameters:
@@ -280,6 +293,8 @@ const userController = new UserController(userService);
        * /api/users:
        *   delete:
        *     summary: Delete a user by UUID
+       *     security:
+       *       - bearerAuth: []
        *     tags:
        *       - users
        *     parameters:
