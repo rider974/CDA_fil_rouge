@@ -1,6 +1,6 @@
 # Dossier_CDA
 
-# Introduction    
+# Introduction
 
 Ce dossier de projet a pour objectif de démontrer la maîtrise des compétences requises pour obtenir le titre de Concepteur et Développeur d'Applications. Il présente un projet complet dans lequel j'ai appliqué mes connaissances et compétences dans le domaine du développement logiciel.
 
