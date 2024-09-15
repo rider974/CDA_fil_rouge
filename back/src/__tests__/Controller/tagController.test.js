@@ -1,5 +1,5 @@
-const { TagController } = require('../controllers/tagController');
-const { TagService } = require('../services/tagService');
+const { TagController } = require('@/controllers/tagController');
+const { TagService } = require('@/services/tagService');
 const { UniqueConstraintViolationError } = require('@/errors/errors');
 
 // Mock TagService

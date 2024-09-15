@@ -35,7 +35,7 @@ const swaggerHandler = withSwagger({
         description: 'Production server (VPS Florence)'
       },
       {
-        url: 'http://45.81.84.133:9019/',
+        url: 'http://45.81.84.133:9018/',
         description: 'Production server (VPS Pascal)'
       },
       {
